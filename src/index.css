@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Sparkling Bear Design System - Rugged Automotive Aesthetic */
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Deep Crimson Primary */
+    --primary: 0 75% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Metallic Silver Secondary */
+    --secondary: 0 0% 60%;
+    --secondary-foreground: 0 0% 10%;
+
+    /* Dark Muted */
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    /* Electric Blue Accent */
+    --accent: 195 100% 50%;
+    --accent-foreground: 0 0% 10%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 75% 45%;
+
+    --radius: 0.75rem;
+
+    /* Custom Gradients */
+    --gradient-chrome: linear-gradient(135deg, hsl(0 0% 70%), hsl(0 0% 95%), hsl(0 0% 70%));
+    --gradient-red-fade: linear-gradient(180deg, hsl(0 75% 45%), hsl(0 0% 4%));
+    --gradient-metallic: linear-gradient(135deg, hsl(0 0% 30%), hsl(0 0% 50%), hsl(0 0% 30%));
+    
+    /* Glows */
+    --glow-primary: 0 0 30px hsl(0 75% 45% / 0.5);
+    --glow-accent: 0 0 30px hsl(195 100% 50% / 0.5);
+    --shadow-elevated: 0 20px 60px -15px hsl(0 0% 0% / 0.8);
+
+    /* Transitions */
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-rajdhani antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .glow-primary {
+    box-shadow: var(--glow-primary);
+  }
+  
+  .glow-accent {
+    box-shadow: var(--glow-accent);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .gradient-chrome {
+    background: var(--gradient-chrome);
+  }
+
+  .gradient-red-fade {
+    background: var(--gradient-red-fade);
+  }
+
+  .gradient-metallic {
+    background: var(--gradient-metallic);
+  }
+
+  .text-gradient-chrome {
+    background: var(--gradient-chrome);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .border-gradient {
+    border: 2px solid transparent;
+    background: linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
+                var(--gradient-chrome) border-box;
+  }
+}

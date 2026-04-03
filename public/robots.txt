@@ -1,0 +1,17 @@
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# --- Social Media Bots ---
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+# --- All Other Bots ---
+User-agent: *
+Allow: /
+Sitemap: https://thesparklingbear.com/sitemap.xml
