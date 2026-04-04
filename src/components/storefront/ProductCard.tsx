@@ -48,12 +48,27 @@ export function ProductCard({ product }: ProductCardProps) {
         <Link to={`/products/${product.slug}`} className="relative block">
           <div className="relative aspect-[4/5] bg-white overflow-hidden">
             {product.image_url ? (
-              <img
-                src={product.image_url}
-                alt={product.name}
-                className="w-full h-full object-contain p-3 md:p-4 group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
+              <>
+                <img
+                  src={product.image_url}
+                  alt={product.name}
+                  className={cn(
+                    'w-full h-full object-contain p-3 md:p-4 transition-all duration-500',
+                    product.additional_images?.length
+                      ? 'group-hover:opacity-0'
+                      : 'group-hover:scale-105'
+                  )}
+                  loading="lazy"
+                />
+                {product.additional_images?.[0] && (
+                  <img
+                    src={product.additional_images[0]}
+                    alt={`${product.name} - angle 2`}
+                    className="absolute inset-0 w-full h-full object-contain p-3 md:p-4 opacity-0 group-hover:opacity-100 transition-all duration-500"
+                    loading="lazy"
+                  />
+                )}
+              </>
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-neutral-100 text-neutral-400 text-sm">
                 No Image

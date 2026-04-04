@@ -29,6 +29,19 @@ export function SearchBar({ className }: { className?: string }) {
       : undefined
   );
 
+  // Navigate to category page when a category is selected from the dropdown
+  const handleCategoryChange = (v: string) => {
+    if (v === '__all__') {
+      setCategorySlug(undefined);
+    } else {
+      setCategorySlug(v);
+      // If no search query, navigate directly to the category
+      if (!query.trim()) {
+        navigate(`/products?category=${v}`);
+      }
+    }
+  };
+
   // Debounce
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedQuery(query), 300);
@@ -82,7 +95,7 @@ export function SearchBar({ className }: { className?: string }) {
         <div className="hidden md:block border-r border-border">
           <Select
             value={categorySlug || '__all__'}
-            onValueChange={(v) => setCategorySlug(v === '__all__' ? undefined : v)}
+            onValueChange={handleCategoryChange}
           >
             <SelectTrigger className="border-0 bg-transparent h-10 w-[160px] rounded-none focus:ring-0 text-sm">
               <SelectValue placeholder="All Categories" />

@@ -85,7 +85,7 @@ export function BrandSlider() {
               <ChevronRight className="h-4 w-4" />
             </button>
             <Link
-              to="/products"
+              to="/brands"
               className="text-sm text-primary font-semibold hover:underline ml-2"
             >
               VIEW ALL

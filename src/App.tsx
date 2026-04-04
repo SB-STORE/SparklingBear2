@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound";
 // Lazy load storefront pages
 const ProductsPage = lazy(() => import('./pages/ProductsPage'));
 const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage'));
+const BrandsPage = lazy(() => import('./pages/BrandsPage'));
 const CartPage = lazy(() => import('./pages/CartPage'));
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 const OrderConfirmationPage = lazy(() => import('./pages/OrderConfirmationPage'));
@@ -59,6 +60,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/products" element={<ProductsPage />} />
                 <Route path="/products/:slug" element={<ProductDetailPage />} />
+                <Route path="/brands" element={<BrandsPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/orders/:orderNumber" element={<OrderConfirmationPage />} />

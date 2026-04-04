@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
@@ -12,25 +12,38 @@ interface GridBannerProps {
 
 export function GridBanner({ title, image, videoUrl, link = '/products', className }: GridBannerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoFailed, setVideoFailed] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !videoUrl) return;
+
+    const handleError = () => setVideoFailed(true);
+    video.addEventListener('error', handleError);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          video.play().catch(() => {});
+          // Force load then play
+          if (video.readyState < 2) {
+            video.load();
+          }
+          video.play().catch(() => setVideoFailed(true));
         } else {
           video.pause();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     );
 
     observer.observe(video);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      video.removeEventListener('error', handleError);
+    };
   }, [videoUrl]);
+
+  const showVideo = videoUrl && !videoFailed;
 
   const content = (
     <div
@@ -40,15 +53,16 @@ export function GridBanner({ title, image, videoUrl, link = '/products', classNa
         className
       )}
     >
-      {videoUrl ? (
+      {showVideo ? (
         <video
           ref={videoRef}
           src={videoUrl}
           poster={image}
+          autoPlay
           loop
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
       ) : image ? (

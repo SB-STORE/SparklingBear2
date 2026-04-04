@@ -58,7 +58,7 @@ const NAV_ITEMS = [
   },
   {
     label: 'BRANDS',
-    href: '/products',
+    href: '/brands',
     megaKey: null, // no mega menu, just a link
   },
 ];
