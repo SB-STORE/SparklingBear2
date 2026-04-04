@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import sampleVideo from '@/assets/samplevideo1.mp4';
+const VIDEO_URL = 'https://videos.pexels.com/video-files/4922590/4922590-hd_1920_1080_30fps.mp4';
 
 export function VideoSection() {
   return (
     <section className="relative h-[300px] md:h-[400px] overflow-hidden">
       {/* Background video */}
       <video
-        src={sampleVideo}
+        src={VIDEO_URL}
         autoPlay
         muted
         loop

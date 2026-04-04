@@ -8,39 +8,34 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-import heroCarImg from '@/assets/hero-car.jpg';
-import heroBikeImg from '@/assets/hero-bike.jpg';
-import helmetImg from '@/assets/helmet.jpg';
-import ridingGearImg from '@/assets/riding-gear.jpg';
-
 const slides = [
   {
-    image: heroCarImg,
-    title: 'Premium Car Detailing',
-    subtitle: 'Ceramic coating, PPF & paint correction by experts',
-    cta: 'Explore Services',
-    link: '/products?category=bike-protection-fitments',
-  },
-  {
-    image: heroBikeImg,
+    image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1920&q=80&auto=format&fit=crop',
     title: 'Ride In Style',
     subtitle: 'Top-quality motorcycle accessories for every rider',
     cta: 'Shop Now',
     link: '/products',
   },
   {
-    image: helmetImg,
+    image: 'https://images.pexels.com/photos/4560539/pexels-photo-4560539.jpeg?auto=compress&cs=tinysrgb&w=1920',
+    title: 'Gear Up For Adventure',
+    subtitle: 'Riding jackets, gloves, boots & touring luggage',
+    cta: 'View Collection',
+    link: '/products?category=riding-gears-luggage',
+  },
+  {
+    image: 'https://images.pexels.com/photos/13446104/pexels-photo-13446104.jpeg?auto=compress&cs=tinysrgb&w=1920',
     title: 'Helmets That Protect',
     subtitle: 'LS2, Axor, SMK & more — ISI & ECE certified',
     cta: 'Browse Helmets',
     link: '/products?category=helmets',
   },
   {
-    image: ridingGearImg,
-    title: 'Gear Up For Adventure',
-    subtitle: 'Riding jackets, gloves, boots & touring luggage',
-    cta: 'View Collection',
-    link: '/products?category=riding-gears-luggage',
+    image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1920&q=80&auto=format&fit=crop',
+    title: 'Premium Car Detailing',
+    subtitle: 'Ceramic coating, PPF & paint correction by experts',
+    cta: 'Explore Services',
+    link: '/products?category=bike-protection-fitments',
   },
 ];
 

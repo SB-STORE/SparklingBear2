@@ -8,8 +8,8 @@ import { VideoSection } from '@/components/storefront/VideoSection';
 import { CustomerServiceIcons } from '@/components/storefront/CustomerServiceIcons';
 import { useCategories } from '@/hooks/use-products';
 
-import heroCarImg from '@/assets/hero-car.jpg';
-import heroBikeImg from '@/assets/hero-bike.jpg';
+const bannerMotorcycle = 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&h=600&q=80&auto=format&fit=crop';
+const bannerRidingGear = 'https://images.pexels.com/photos/6762793/pexels-photo-6762793.jpeg?auto=compress&cs=tinysrgb&w=1920';
 
 const Index = () => {
   const { data: categories } = useCategories();
@@ -20,7 +20,7 @@ const Index = () => {
       <BrandSlider />
       <GridBanner
         title="MOTORCYCLE ACCESSORIES"
-        image={heroCarImg}
+        image={bannerMotorcycle}
         link="/products?category=bike-protection-fitments"
       />
       <FeaturedCollection title="NEW ARRIVALS" featured />
@@ -30,7 +30,7 @@ const Index = () => {
       />
       <GridBanner
         title="RIDING GEARS"
-        image={heroBikeImg}
+        image={bannerRidingGear}
         link="/products?category=riding-gears-luggage"
       />
       <FeaturedCollection title="HELMETS" categorySlug="helmets" />
