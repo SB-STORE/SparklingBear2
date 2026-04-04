@@ -62,7 +62,7 @@ export function BrandSlider() {
                 to={`/products?brand=${brand.slug}`}
                 className="flex flex-col items-center gap-2 group"
               >
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white border border-border flex items-center justify-center overflow-hidden group-hover:border-primary transition-colors p-3">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center overflow-hidden group-hover:border-primary transition-colors p-3">
                   {brand.logo_url ? (
                     <img
                       src={brand.logo_url}
