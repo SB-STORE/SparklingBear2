@@ -12,13 +12,14 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { toast } from 'sonner';
 
 const quickLinks = [
   { label: 'Shop All', href: '/products' },
   { label: 'Helmets', href: '/products?category=helmets' },
   { label: 'Riding Gear', href: '/products?category=riding-gears-luggage' },
   { label: 'Accessories', href: '/products?category=bike-protection-fitments' },
-  { label: 'About Us', href: '/#about' },
+  { label: 'Brands', href: '/brands' },
 ];
 
 const policyLinks = [
@@ -33,7 +34,10 @@ const Footer = () => {
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    // UI only for now
+    if (!email.trim()) return;
+    toast.success('Thanks for subscribing!', {
+      description: 'You\'ll receive updates on new arrivals and deals.',
+    });
     setEmail('');
   };
 

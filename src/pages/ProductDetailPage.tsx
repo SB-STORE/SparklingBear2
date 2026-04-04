@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ShoppingCart,
   ChevronRight,
@@ -26,6 +26,7 @@ import { formatPrice } from '@/lib/price';
 
 export default function ProductDetailPage() {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const { data: product, isLoading } = useProduct(slug);
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
@@ -255,12 +256,23 @@ export default function ProductDetailPage() {
                     size="lg"
                     variant="outline"
                     className="flex-1 border-primary text-primary hover:bg-primary/10"
-                    asChild
+                    onClick={() => {
+                      addItem(
+                        {
+                          productId: product.id,
+                          name: product.name,
+                          price: product.price,
+                          imageUrl: product.image_url,
+                          brandName: product.brand?.name || '',
+                          slug: product.slug,
+                        },
+                        quantity
+                      );
+                      navigate('/checkout');
+                    }}
                   >
-                    <Link to="/checkout">
-                      <Zap className="mr-2 h-5 w-5" />
-                      Buy Now
-                    </Link>
+                    <Zap className="mr-2 h-5 w-5" />
+                    Buy Now
                   </Button>
                 </div>
               </div>
