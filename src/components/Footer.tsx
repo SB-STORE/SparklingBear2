@@ -136,22 +136,14 @@ const Footer = () => {
               Connect With Us
             </h4>
             <div className="space-y-3 mb-5">
-              <a
-                href="https://maps.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-              >
+              <div className="flex items-start gap-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
                 <span>RR Nagar, Bangalore, Karnataka 560098</span>
-              </a>
-              <a
-                href="tel:+919876543210"
-                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-              >
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 flex-shrink-0" />
-                <span>+91 98765 43210</span>
-              </a>
+                <span>To be updated</span>
+              </div>
               <a
                 href="mailto:info@sparklingbear.in"
                 className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -163,30 +155,16 @@ const Footer = () => {
 
             {/* Social icons */}
             <div className="flex items-center gap-3">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
-              >
+              {/* Social links — to be updated with actual URLs */}
+              <span className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground cursor-default" title="To be updated">
                 <Instagram className="h-4 w-4" />
-              </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
-              >
+              </span>
+              <span className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground cursor-default" title="To be updated">
                 <Facebook className="h-4 w-4" />
-              </a>
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
-              >
+              </span>
+              <span className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground cursor-default" title="To be updated">
                 <Youtube className="h-4 w-4" />
-              </a>
+              </span>
             </div>
           </div>
         </div>
