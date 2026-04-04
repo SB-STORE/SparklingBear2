@@ -49,7 +49,7 @@ export function GridBanner({ title, image, videoUrl, link = '/products', classNa
     <div
       className={cn(
         'relative w-full rounded-lg overflow-hidden cursor-pointer group',
-        'aspect-[2/1] md:aspect-[3/1]',
+        'aspect-[16/9] md:aspect-[21/9]',
         className
       )}
     >

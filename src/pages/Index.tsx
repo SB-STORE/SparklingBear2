@@ -8,8 +8,8 @@ import { VideoSection } from '@/components/storefront/VideoSection';
 import { CustomerServiceIcons } from '@/components/storefront/CustomerServiceIcons';
 import { useCategories } from '@/hooks/use-products';
 
-const bannerMotorcycleImg = 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&h=600&q=80&auto=format&fit=crop';
-const bannerRidingGearImg = 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1920&h=600&q=80&auto=format&fit=crop';
+const bannerMotorcycleImg = 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&q=80&auto=format&fit=crop';
+const bannerRidingGearImg = 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1920&q=80&auto=format&fit=crop';
 
 function SectionDivider() {
   return <div className="section-divider" />;

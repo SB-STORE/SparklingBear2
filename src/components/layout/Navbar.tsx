@@ -112,27 +112,53 @@ export function Navbar() {
     const brandList = brands || [];
     const relevantCatSlug = megaCategoryMap[key];
 
-    // "SHOP BY BIKE" — show all brands in a wide grid
+    // Popular bike makes for "SHOP BY BIKE"
+    const bikeList = [
+      'Royal Enfield', 'KTM', 'Bajaj', 'TVS', 'Hero',
+      'Honda', 'Yamaha', 'Suzuki', 'Kawasaki', 'BMW',
+      'Ducati', 'Triumph', 'Husqvarna', 'Jawa', 'Harley-Davidson',
+      'Aprilia', 'Benelli', 'CFMoto',
+    ];
+
+    // "SHOP BY BIKE" — show bike makes + categories + quick links
     if (key === 'bike') {
       return (
         <div className="container mx-auto px-4 py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="col-span-3">
+            <div className="col-span-2">
               <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
-                Shop By Brand
+                Select Your Bike
               </h4>
               <div className="grid grid-cols-3 gap-x-6 gap-y-2">
-                {brandList.map((brand) => (
+                {bikeList.map((bike) => (
                   <Link
-                    key={brand.id}
-                    to={`/products?brand=${brand.slug}`}
+                    key={bike}
+                    to={`/products?search=${encodeURIComponent(bike)}`}
                     className="text-sm text-muted-foreground hover:text-primary transition-colors"
                     onClick={() => setActiveMega(null)}
                   >
-                    {brand.name}
+                    {bike}
                   </Link>
                 ))}
               </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
+                Categories
+              </h4>
+              <ul className="space-y-2">
+                {cats.slice(0, 6).map((cat) => (
+                  <li key={cat.id}>
+                    <Link
+                      to={`/products?category=${cat.slug}`}
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                      onClick={() => setActiveMega(null)}
+                    >
+                      {cat.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
             <div>
               <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">

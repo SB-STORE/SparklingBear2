@@ -17,14 +17,14 @@ const slides = [
     link: '/products',
   },
   {
-    image: 'https://images.pexels.com/photos/4560539/pexels-photo-4560539.jpeg?auto=compress&cs=tinysrgb&w=1920',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1920&q=80&auto=format&fit=crop',
     title: 'Gear Up For Adventure',
     subtitle: 'Riding jackets, gloves, boots & touring luggage',
     cta: 'View Collection',
     link: '/products?category=riding-gears-luggage',
   },
   {
-    image: 'https://images.pexels.com/photos/13446104/pexels-photo-13446104.jpeg?auto=compress&cs=tinysrgb&w=1920',
+    image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=1920&q=80&auto=format&fit=crop',
     title: 'Helmets That Protect',
     subtitle: 'LS2, Axor, SMK & more — ISI & ECE certified',
     cta: 'Browse Helmets',

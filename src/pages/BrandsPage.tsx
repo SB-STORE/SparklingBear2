@@ -30,7 +30,7 @@ const localLogoMap: Record<string, string> = {
   hjg: hjgImg,
   maddog: maddogImg,
   zana: zanaImg,
-  mototorque: mototorqueImg,
+  'moto-torque': mototorqueImg,
   raida: raidaImg,
   bobo: boboImg,
   'moto-care': motocareImg,
