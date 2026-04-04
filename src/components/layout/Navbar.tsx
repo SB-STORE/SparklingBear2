@@ -98,15 +98,86 @@ export function Navbar() {
     megaTimeout.current = setTimeout(() => setActiveMega(null), 200);
   };
 
-  // Build mega menu content from categories & brands
+  // Map mega keys to their relevant category slug
+  const megaCategoryMap: Record<string, string | undefined> = {
+    accessories: 'bike-protection-fitments',
+    gear: 'riding-gears-luggage',
+    luggage: 'luggage-touring',
+    helmets: 'helmets',
+  };
+
+  // Build mega menu content based on which nav item is hovered
   const renderMegaContent = (key: string) => {
     const cats = categories || [];
     const brandList = brands || [];
+    const relevantCatSlug = megaCategoryMap[key];
 
+    // "SHOP BY BIKE" — show all brands in a wide grid
+    if (key === 'bike') {
+      return (
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="col-span-3">
+              <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
+                Shop By Brand
+              </h4>
+              <div className="grid grid-cols-3 gap-x-6 gap-y-2">
+                {brandList.map((brand) => (
+                  <Link
+                    key={brand.id}
+                    to={`/products?brand=${brand.slug}`}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    onClick={() => setActiveMega(null)}
+                  >
+                    {brand.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
+                Quick Links
+              </h4>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    to="/products"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    onClick={() => setActiveMega(null)}
+                  >
+                    View All Products
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/brands"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    onClick={() => setActiveMega(null)}
+                  >
+                    All Brands
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/products?featured=true"
+                    className="text-sm text-primary font-semibold hover:underline"
+                    onClick={() => setActiveMega(null)}
+                  >
+                    New Arrivals
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Other menus — show the specific category highlighted + relevant brands
     return (
       <div className="container mx-auto px-4 py-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {/* Categories column */}
+          {/* Categories column — highlight the relevant one */}
           <div>
             <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
               Categories
@@ -116,7 +187,11 @@ export function Navbar() {
                 <li key={cat.id}>
                   <Link
                     to={`/products?category=${cat.slug}`}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className={`text-sm transition-colors ${
+                      cat.slug === relevantCatSlug
+                        ? 'text-primary font-semibold'
+                        : 'text-muted-foreground hover:text-primary'
+                    }`}
                     onClick={() => setActiveMega(null)}
                   >
                     {cat.name}
@@ -153,11 +228,11 @@ export function Navbar() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  to="/products"
+                  to={relevantCatSlug ? `/products?category=${relevantCatSlug}` : '/products'}
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                   onClick={() => setActiveMega(null)}
                 >
-                  View All Products
+                  View All {NAV_ITEMS.find(n => n.megaKey === key)?.label || 'Products'}
                 </Link>
               </li>
               <li>
