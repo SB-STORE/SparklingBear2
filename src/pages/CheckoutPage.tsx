@@ -13,8 +13,7 @@ import { useCart } from '@/contexts/CartContext';
 import { useCreateOrder } from '@/hooks/use-orders';
 import { formatPrice } from '@/lib/price';
 import { INDIAN_STATES } from '@/types';
-import { Navbar } from '@/components/layout/Navbar';
-import Footer from '@/components/Footer';
+import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import { toast } from 'sonner';
 
 const checkoutSchema = z.object({
@@ -61,10 +60,9 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="container mx-auto px-4 pt-24 pb-12">
-        <h1 className="text-4xl font-bold text-gradient-chrome mb-8">Checkout</h1>
+    <StorefrontLayout>
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        <h1 className="text-3xl md:text-4xl font-bold text-gradient-chrome mb-8">Checkout</h1>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid lg:grid-cols-3 gap-8">
@@ -130,7 +128,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* Order Summary */}
-            <Card className="p-6 bg-card border-border h-fit sticky top-24">
+            <Card className="p-6 bg-card border-border h-fit sticky top-32">
               <h2 className="text-xl font-bold text-foreground mb-4">Order Summary</h2>
               <div className="space-y-3 mb-4">
                 {items.map((item) => (
@@ -179,7 +177,6 @@ export default function CheckoutPage() {
           </div>
         </form>
       </div>
-      <Footer />
-    </div>
+    </StorefrontLayout>
   );
 }

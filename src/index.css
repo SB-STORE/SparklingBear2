@@ -55,6 +55,12 @@ All colors MUST be HSL.
 
     /* Transitions */
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Layout Heights */
+    --announcement-height: 36px;
+    --header-height: 64px;
+    --nav-height: 44px;
+    --total-header-height: 144px;
   }
 }
 
@@ -109,4 +115,17 @@ All colors MUST be HSL.
     background: linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
                 var(--gradient-chrome) border-box;
   }
+
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }

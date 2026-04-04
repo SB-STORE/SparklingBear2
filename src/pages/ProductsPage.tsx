@@ -1,174 +1,237 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Search, ShoppingCart } from 'lucide-react';
-import { Card } from '@/components/ui/card';
+import { SlidersHorizontal, LayoutGrid, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useProducts, useCategories, useBrandsByCategory } from '@/hooks/use-products';
-import { useCart } from '@/contexts/CartContext';
-import { formatPrice } from '@/lib/price';
-import { Navbar } from '@/components/layout/Navbar';
-import Footer from '@/components/Footer';
+import { Card } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
+import { ProductCard } from '@/components/storefront/ProductCard';
+import { FilterDrawer } from '@/components/storefront/FilterDrawer';
+import { BrandSlider } from '@/components/storefront/BrandSlider';
+import { useProducts, useCategories, useCategory } from '@/hooks/use-products';
 
 export default function ProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(12);
+
   const categorySlug = searchParams.get('category') || undefined;
   const brandSlug = searchParams.get('brand') || undefined;
-  const [search, setSearch] = useState('');
+  const search = searchParams.get('search') || undefined;
+  const sortBy = searchParams.get('sort') || 'default';
 
-  const { data: categories, isLoading: catsLoading } = useCategories();
-  const { data: brands } = useBrandsByCategory(categorySlug);
-  const { data: products, isLoading } = useProducts({ categorySlug, brandSlug, search: search || undefined });
-  const { addItem } = useCart();
+  const { data: categories } = useCategories();
+  const { data: category } = useCategory(categorySlug);
+  const { data: products, isLoading } = useProducts({
+    categorySlug,
+    brandSlug,
+    search,
+  });
 
-  const setFilter = (key: string, value: string | undefined) => {
+  // Sort products client-side
+  const sortedProducts = useMemo(() => {
+    if (!products) return [];
+    const arr = [...products];
+    switch (sortBy) {
+      case 'price-asc':
+        return arr.sort((a, b) => a.price - b.price);
+      case 'price-desc':
+        return arr.sort((a, b) => b.price - a.price);
+      case 'name-asc':
+        return arr.sort((a, b) => a.name.localeCompare(b.name));
+      case 'newest':
+        return arr.reverse();
+      default:
+        return arr;
+    }
+  }, [products, sortBy]);
+
+  // Filter by price/stock from URL params
+  const filteredProducts = useMemo(() => {
+    let result = sortedProducts;
+    const inStockOnly = searchParams.get('in_stock') === '1';
+    const minPrice = searchParams.get('min_price');
+    const maxPrice = searchParams.get('max_price');
+
+    if (inStockOnly) {
+      result = result.filter((p) => p.stock_quantity > 0);
+    }
+    if (minPrice) {
+      result = result.filter((p) => p.price >= parseInt(minPrice) * 100);
+    }
+    if (maxPrice) {
+      result = result.filter((p) => p.price <= parseInt(maxPrice) * 100);
+    }
+    return result;
+  }, [sortedProducts, searchParams]);
+
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredProducts.length;
+
+  const setFilter = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams);
-    if (value) params.set(key, value);
-    else params.delete(key);
+    if (value) {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+    // Reset brand when changing category
     if (key === 'category') params.delete('brand');
     setSearchParams(params);
+    setVisibleCount(12);
   };
 
+  const pageTitle = category?.name || (search ? `Search: "${search}"` : 'All Products');
+
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="container mx-auto px-4 pt-24 pb-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-gradient-chrome mb-8">Products</h1>
+    <StorefrontLayout>
+      {/* Collection hero */}
+      <div className="bg-card border-b border-border">
+        <div className="container mx-auto px-4 py-8 md:py-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-gradient-chrome">
+            {pageTitle}
+          </h1>
+          {category?.description && (
+            <p className="text-muted-foreground mt-2 max-w-2xl text-sm md:text-base">
+              {category.description}
+            </p>
+          )}
 
-        {/* Search */}
-        <div className="relative mb-6 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search products..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 bg-card border-border"
-          />
-        </div>
-
-        {/* Category Filters */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          <Badge
-            variant={!categorySlug ? 'default' : 'outline'}
-            className="cursor-pointer text-sm px-4 py-1.5"
-            onClick={() => setFilter('category', undefined)}
-          >
-            All
-          </Badge>
-          {catsLoading
-            ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-8 w-24 rounded-full" />)
-            : categories?.map((cat) => (
-                <Badge
-                  key={cat.id}
-                  variant={categorySlug === cat.slug ? 'default' : 'outline'}
-                  className="cursor-pointer text-sm px-4 py-1.5"
-                  onClick={() => setFilter('category', cat.slug)}
-                >
-                  {cat.name}
-                </Badge>
-              ))}
-        </div>
-
-        {/* Brand Filters */}
-        {brands && brands.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-8">
+          {/* Category chips */}
+          <div className="flex flex-wrap gap-2 mt-4">
             <Badge
-              variant={!brandSlug ? 'secondary' : 'outline'}
+              variant={!categorySlug ? 'default' : 'outline'}
               className="cursor-pointer text-xs px-3 py-1"
-              onClick={() => setFilter('brand', undefined)}
+              onClick={() => setFilter('category', '')}
             >
-              All Brands
+              All
             </Badge>
-            {brands.map((brand) => (
+            {categories?.map((cat) => (
               <Badge
-                key={brand.id}
-                variant={brandSlug === brand.slug ? 'secondary' : 'outline'}
+                key={cat.id}
+                variant={categorySlug === cat.slug ? 'default' : 'outline'}
                 className="cursor-pointer text-xs px-3 py-1"
-                onClick={() => setFilter('brand', brand.slug)}
+                onClick={() => setFilter('category', cat.slug)}
               >
-                {brand.name}
+                {cat.name}
               </Badge>
             ))}
           </div>
-        )}
-
-        {/* Product Grid */}
-        {isLoading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <Card key={i} className="overflow-hidden">
-                <Skeleton className="h-64 w-full" />
-                <div className="p-4 space-y-2">
-                  <Skeleton className="h-5 w-3/4" />
-                  <Skeleton className="h-4 w-1/2" />
-                  <Skeleton className="h-8 w-full" />
-                </div>
-              </Card>
-            ))}
-          </div>
-        ) : products && products.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <Card
-                key={product.id}
-                className="bg-card border border-border overflow-hidden hover:shadow-elevated transition-all duration-300 group"
-              >
-                <Link to={`/products/${product.slug}`}>
-                  <div className="relative h-64 overflow-hidden bg-muted">
-                    {product.image_url ? (
-                      <img
-                        src={product.image_url}
-                        alt={product.name}
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                        No Image
-                      </div>
-                    )}
-                    {product.is_featured && (
-                      <Badge className="absolute top-2 right-2 bg-primary">Featured</Badge>
-                    )}
-                  </div>
-                </Link>
-                <div className="p-4">
-                  <p className="text-xs text-muted-foreground mb-1">{product.brand?.name}</p>
-                  <Link to={`/products/${product.slug}`}>
-                    <h3 className="font-semibold text-foreground hover:text-primary transition-colors mb-1 line-clamp-1">
-                      {product.name}
-                    </h3>
-                  </Link>
-                  <p className="text-lg font-bold text-primary mb-3">{formatPrice(product.price)}</p>
-                  <Button
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                    onClick={() =>
-                      addItem({
-                        productId: product.id,
-                        name: product.name,
-                        price: product.price,
-                        imageUrl: product.image_url,
-                        brandName: product.brand?.name || '',
-                        slug: product.slug,
-                      })
-                    }
-                  >
-                    <ShoppingCart className="mr-2 h-4 w-4" />
-                    Add to Cart
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20">
-            <p className="text-xl text-muted-foreground">No products found</p>
-            <p className="text-muted-foreground mt-2">Try adjusting your filters or search</p>
-          </div>
-        )}
+        </div>
       </div>
-      <Footer />
-    </div>
+
+      <div className="container mx-auto px-4 py-6">
+        {/* Toolbar */}
+        <div className="flex items-center justify-between mb-6 gap-4">
+          <div className="flex items-center gap-3">
+            {/* Filter button (mobile) */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="lg:hidden"
+              onClick={() => setFilterOpen(true)}
+            >
+              <SlidersHorizontal className="h-4 w-4 mr-2" />
+              Filters
+            </Button>
+            <span className="text-sm text-muted-foreground hidden sm:inline">
+              {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''}
+            </span>
+          </div>
+
+          {/* Sort */}
+          <Select
+            value={sortBy}
+            onValueChange={(v) => setFilter('sort', v === 'default' ? '' : v)}
+          >
+            <SelectTrigger className="w-[180px] h-9 text-sm bg-card border-border">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="default">Default</SelectItem>
+              <SelectItem value="price-asc">Price: Low to High</SelectItem>
+              <SelectItem value="price-desc">Price: High to Low</SelectItem>
+              <SelectItem value="name-asc">Name: A-Z</SelectItem>
+              <SelectItem value="newest">Newest</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Content: filter sidebar + product grid */}
+        <div className="flex gap-8">
+          <FilterDrawer
+            open={filterOpen}
+            onClose={() => setFilterOpen(false)}
+            filters={searchParams}
+            onFilterChange={setFilter}
+          />
+
+          <div className="flex-1 min-w-0">
+            {isLoading ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <Card key={i} className="overflow-hidden">
+                    <Skeleton className="aspect-square w-full" />
+                    <div className="p-4 space-y-2">
+                      <Skeleton className="h-3 w-2/3" />
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-5 w-1/3" />
+                      <Skeleton className="h-9 w-full" />
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            ) : visibleProducts.length > 0 ? (
+              <>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {visibleProducts.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+
+                {/* Show more */}
+                {hasMore && (
+                  <div className="text-center mt-8">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={() => setVisibleCount((prev) => prev + 12)}
+                    >
+                      Show More
+                      <ChevronDown className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-20">
+                <p className="text-xl text-muted-foreground">No products found</p>
+                <p className="text-muted-foreground mt-2">
+                  Try adjusting your filters or search
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-4"
+                  onClick={() => {
+                    setSearchParams(new URLSearchParams());
+                    setVisibleCount(12);
+                  }}
+                >
+                  Clear All Filters
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </StorefrontLayout>
   );
 }

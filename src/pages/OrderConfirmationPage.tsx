@@ -6,8 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useOrderByNumber } from '@/hooks/use-orders';
 import { formatPrice } from '@/lib/price';
-import { Navbar } from '@/components/layout/Navbar';
-import Footer from '@/components/Footer';
+import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import type { OrderStatus } from '@/types';
 
 const STATUS_STEPS: { key: OrderStatus; label: string; icon: React.ElementType }[] = [
@@ -33,36 +32,33 @@ export default function OrderConfirmationPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <div className="container mx-auto px-4 pt-24 pb-12 max-w-3xl">
+      <StorefrontLayout>
+        <div className="container mx-auto px-4 py-8 max-w-3xl">
           <Skeleton className="h-10 w-64 mb-8" />
           <Skeleton className="h-48 w-full mb-6" />
           <Skeleton className="h-64 w-full" />
         </div>
-      </div>
+      </StorefrontLayout>
     );
   }
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <div className="container mx-auto px-4 pt-24 text-center">
+      <StorefrontLayout>
+        <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-3xl font-bold text-foreground mb-4">Order Not Found</h1>
           <p className="text-muted-foreground mb-6">We couldn't find an order with that number.</p>
           <Button asChild><Link to="/">Go Home</Link></Button>
         </div>
-      </div>
+      </StorefrontLayout>
     );
   }
 
   const currentStepIndex = STATUS_STEPS.findIndex((s) => s.key === order.status);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="container mx-auto px-4 pt-24 pb-12 max-w-3xl">
+    <StorefrontLayout>
+      <div className="container mx-auto px-4 py-8 md:py-12 max-w-3xl">
         {/* Header */}
         <div className="text-center mb-8">
           <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
@@ -158,7 +154,6 @@ export default function OrderConfirmationPage() {
           </Button>
         </div>
       </div>
-      <Footer />
-    </div>
+    </StorefrontLayout>
   );
 }

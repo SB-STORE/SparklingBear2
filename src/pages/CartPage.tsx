@@ -4,17 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useCart } from '@/contexts/CartContext';
 import { formatPrice } from '@/lib/price';
-import { Navbar } from '@/components/layout/Navbar';
-import Footer from '@/components/Footer';
+import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 
 export default function CartPage() {
   const { items, subtotal, updateQuantity, removeItem, clearCart } = useCart();
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="container mx-auto px-4 pt-24 pb-12">
-        <h1 className="text-4xl font-bold text-gradient-chrome mb-8">Shopping Cart</h1>
+    <StorefrontLayout>
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        <h1 className="text-3xl md:text-4xl font-bold text-gradient-chrome mb-8">Shopping Cart</h1>
 
         {items.length === 0 ? (
           <div className="text-center py-20">
@@ -89,7 +87,7 @@ export default function CartPage() {
             </div>
 
             {/* Summary */}
-            <Card className="p-6 bg-card border-border h-fit sticky top-24">
+            <Card className="p-6 bg-card border-border h-fit sticky top-32">
               <h2 className="text-xl font-bold text-foreground mb-4">Order Summary</h2>
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-muted-foreground">
@@ -115,7 +113,6 @@ export default function CartPage() {
           </div>
         )}
       </div>
-      <Footer />
-    </div>
+    </StorefrontLayout>
   );
 }

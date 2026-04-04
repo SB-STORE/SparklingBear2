@@ -1,68 +1,216 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Facebook,
+  Instagram,
+  Youtube,
+  MapPin,
+  Phone,
+  Mail,
+  Send,
+} from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+
+const quickLinks = [
+  { label: 'Shop All', href: '/products' },
+  { label: 'Helmets', href: '/products?category=helmets' },
+  { label: 'Riding Gear', href: '/products?category=riding-gears-luggage' },
+  { label: 'Accessories', href: '/products?category=bike-protection-fitments' },
+  { label: 'About Us', href: '/#about' },
+];
+
+const policyLinks = [
+  { label: 'Shipping Policy', href: '#' },
+  { label: 'Return & Refund', href: '#' },
+  { label: 'Privacy Policy', href: '#' },
+  { label: 'Terms of Service', href: '#' },
+  { label: 'Track Order', href: '#' },
+];
+
 const Footer = () => {
+  const [email, setEmail] = useState('');
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    // UI only for now
+    setEmail('');
+  };
+
   return (
-    <footer className="bg-background border-t border-border py-12">
-      <div className="container mx-auto px-4">
-        <div className="text-center space-y-6">
-          {/* Logo and tagline */}
+    <footer className="bg-background border-t border-border">
+      {/* Newsletter bar */}
+      <div className="bg-card">
+        <div className="container mx-auto px-4 py-8 md:py-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-center md:text-left">
+              <h3 className="text-lg md:text-xl font-bold text-foreground">
+                Subscribe to Our Newsletter
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Get updates on new arrivals, deals & exclusive offers.
+              </p>
+            </div>
+            <form
+              onSubmit={handleSubscribe}
+              className="flex w-full md:w-auto max-w-md gap-2"
+            >
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="bg-background border-border flex-1 md:w-64"
+              />
+              <Button
+                type="submit"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <Send className="h-4 w-4 mr-2" />
+                Subscribe
+              </Button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Main footer */}
+      <div className="container mx-auto px-4 py-10 md:py-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+          {/* Brand info */}
           <div>
-            <h3 className="text-3xl font-bold text-gradient-chrome mb-2">
+            <Link to="/" className="text-2xl font-bold text-gradient-chrome">
               SPARKLING BEAR
-            </h3>
-            <p className="text-primary font-semibold text-lg">
+            </Link>
+            <p className="text-primary font-semibold text-sm mt-1 mb-4">
               Ride Bold. Shine Hard. Rule the Road.
             </p>
-          </div>
-
-          {/* Description */}
-          <div className="text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-            <p className="mb-4">
-              Are you looking for{" "}
-              <span className="text-accent font-semibold">
-                Bike Accessories & Car Detailing Near me RR Nagar
-              </span>
-              ? Sparkling Bear is your ultimate choice — offering a premium range
-              of{" "}
-              <span className="text-accent font-semibold">
-                Riding Gear, LS2 & Axor Helmets near RR Nagar, Bangalore
-              </span>
-              . Our experts deliver flawless{" "}
-              <span className="text-accent font-semibold">
-                Paint Protection Film
-              </span>
-              , advanced{" "}
-              <span className="text-accent font-semibold">Ceramic Coating</span>,
-              and professional{" "}
-              <span className="text-accent font-semibold">car detailing</span>.
-            </p>
-            <p>
-              We also stock high-quality motorcycle clothing, riding shoes, and
-              accessories — making us your one-stop destination for{" "}
-              <span className="text-accent font-semibold">
-                car detailing near me, LS2 helmet near me, Axor helmet near me,
-                ceramic coating near me, riding gears near me, paint protection
-                film near me, and bike accessories near me
-              </span>
-              .
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Your one-stop destination for premium motorcycle accessories, riding gear,
+              helmets, and professional car detailing services in Bangalore.
             </p>
           </div>
 
-          {/* Footer bottom */}
-          <div className="pt-6 border-t border-border">
-            <p className="text-muted-foreground text-sm">
-              © {new Date().getFullYear()} Sparkling Bear. All rights reserved.
-            </p>
-            <p className="text-muted-foreground text-sm mt-2">
-              Made with ❤️ by{" "}
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-4">
+              Quick Links
+            </h4>
+            <ul className="space-y-2.5">
+              {quickLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.href}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Customer Policies */}
+          <div>
+            <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-4">
+              Customer Policies
+            </h4>
+            <ul className="space-y-2.5">
+              {policyLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.href}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Connect */}
+          <div>
+            <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-4">
+              Connect With Us
+            </h4>
+            <div className="space-y-3 mb-5">
               <a
-                href="https://www.instagram.com/trivision_group?igsh=cXA4a2VhZDNjbTNi"
+                href="https://maps.google.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-accent font-medium hover:underline hover:text-primary transition-colors duration-200"
+                className="flex items-start gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
               >
-                Trivision Group
+                <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                <span>RR Nagar, Bangalore, Karnataka 560098</span>
               </a>
-            </p>
+              <a
+                href="tel:+919876543210"
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Phone className="h-4 w-4 flex-shrink-0" />
+                <span>+91 98765 43210</span>
+              </a>
+              <a
+                href="mailto:info@sparklingbear.in"
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Mail className="h-4 w-4 flex-shrink-0" />
+                <span>info@sparklingbear.in</span>
+              </a>
+            </div>
+
+            {/* Social icons */}
+            <div className="flex items-center gap-3">
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+              >
+                <Instagram className="h-4 w-4" />
+              </a>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+              >
+                <Facebook className="h-4 w-4" />
+              </a>
+              <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+              >
+                <Youtube className="h-4 w-4" />
+              </a>
+            </div>
           </div>
+        </div>
+      </div>
+
+      {/* Copyright bar */}
+      <Separator />
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-muted-foreground">
+          <p>
+            &copy; {new Date().getFullYear()} Sparkling Bear. All rights reserved.
+          </p>
+          <p>
+            Made with care by{' '}
+            <a
+              href="https://www.instagram.com/trivision_group"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent font-medium hover:underline hover:text-primary transition-colors"
+            >
+              Trivision Group
+            </a>
+          </p>
         </div>
       </div>
     </footer>
