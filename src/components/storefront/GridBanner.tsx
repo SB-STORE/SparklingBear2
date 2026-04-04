@@ -4,11 +4,12 @@ import { cn } from '@/lib/utils';
 interface GridBannerProps {
   title?: string;
   image?: string;
+  videoUrl?: string;
   link?: string;
   className?: string;
 }
 
-export function GridBanner({ title, image, link = '/products', className }: GridBannerProps) {
+export function GridBanner({ title, image, videoUrl, link = '/products', className }: GridBannerProps) {
   const content = (
     <div
       className={cn(
@@ -17,7 +18,16 @@ export function GridBanner({ title, image, link = '/products', className }: Grid
         className
       )}
     >
-      {image ? (
+      {videoUrl ? (
+        <video
+          src={videoUrl}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+        />
+      ) : image ? (
         <img
           src={image}
           alt={title || 'Banner'}

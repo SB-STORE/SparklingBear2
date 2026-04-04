@@ -8,8 +8,10 @@ import { VideoSection } from '@/components/storefront/VideoSection';
 import { CustomerServiceIcons } from '@/components/storefront/CustomerServiceIcons';
 import { useCategories } from '@/hooks/use-products';
 
-const bannerMotorcycle = 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&h=600&q=80&auto=format&fit=crop';
-const bannerRidingGear = 'https://images.pexels.com/photos/6762793/pexels-photo-6762793.jpeg?auto=compress&cs=tinysrgb&w=1920';
+const bannerMotorcycleVideo = 'https://videos.pexels.com/video-files/2519660/2519660-hd_1920_1080_24fps.mp4';
+const bannerRidingGearVideo = 'https://videos.pexels.com/video-files/4500154/4500154-hd_1920_1080_30fps.mp4';
+const bannerMotorcycleImg = 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&h=600&q=80&auto=format&fit=crop';
+const bannerRidingGearImg = 'https://images.pexels.com/photos/6762793/pexels-photo-6762793.jpeg?auto=compress&cs=tinysrgb&w=1920';
 
 const Index = () => {
   const { data: categories } = useCategories();
@@ -20,7 +22,8 @@ const Index = () => {
       <BrandSlider />
       <GridBanner
         title="MOTORCYCLE ACCESSORIES"
-        image={bannerMotorcycle}
+        videoUrl={bannerMotorcycleVideo}
+        image={bannerMotorcycleImg}
         link="/products?category=bike-protection-fitments"
       />
       <FeaturedCollection title="NEW ARRIVALS" featured />
@@ -30,7 +33,8 @@ const Index = () => {
       />
       <GridBanner
         title="RIDING GEARS"
-        image={bannerRidingGear}
+        videoUrl={bannerRidingGearVideo}
+        image={bannerRidingGearImg}
         link="/products?category=riding-gears-luggage"
       />
       <FeaturedCollection title="HELMETS" categorySlug="helmets" />
