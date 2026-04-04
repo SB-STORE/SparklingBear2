@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
@@ -10,6 +11,27 @@ interface GridBannerProps {
 }
 
 export function GridBanner({ title, image, videoUrl, link = '/products', className }: GridBannerProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [videoUrl]);
+
   const content = (
     <div
       className={cn(
@@ -20,11 +42,13 @@ export function GridBanner({ title, image, videoUrl, link = '/products', classNa
     >
       {videoUrl ? (
         <video
+          ref={videoRef}
           src={videoUrl}
-          autoPlay
+          poster={image}
           loop
           muted
           playsInline
+          preload="auto"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
       ) : image ? (
