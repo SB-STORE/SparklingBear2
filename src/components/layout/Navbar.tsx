@@ -381,9 +381,9 @@ export function Navbar() {
               )}
             </Button>
 
-            {/* User icon */}
+            {/* User icon — links to products, not admin */}
             <Button variant="ghost" size="icon" asChild>
-              <Link to="/admin/login">
+              <Link to="/products">
                 <User className="h-5 w-5" />
               </Link>
             </Button>

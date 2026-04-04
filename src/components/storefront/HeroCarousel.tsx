@@ -34,8 +34,8 @@ const slides = [
     image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1920&q=80&auto=format&fit=crop',
     title: 'Premium Car Detailing',
     subtitle: 'Ceramic coating, PPF & paint correction by experts',
-    cta: 'Explore Services',
-    link: '/products?category=bike-protection-fitments',
+    cta: 'Contact Us',
+    link: '/products',
   },
 ];
 

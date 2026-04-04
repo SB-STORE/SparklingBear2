@@ -22,11 +22,10 @@ const quickLinks = [
 ];
 
 const policyLinks = [
-  { label: 'Shipping Policy', href: '#' },
-  { label: 'Return & Refund', href: '#' },
-  { label: 'Privacy Policy', href: '#' },
-  { label: 'Terms of Service', href: '#' },
-  { label: 'Track Order', href: '#' },
+  { label: 'Shipping Policy', href: '/shipping-policy' },
+  { label: 'Return & Refund', href: '/return-refund' },
+  { label: 'Privacy Policy', href: '/privacy-policy' },
+  { label: 'Terms of Service', href: '/terms-of-service' },
 ];
 
 const Footer = () => {

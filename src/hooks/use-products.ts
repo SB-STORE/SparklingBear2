@@ -100,7 +100,7 @@ export function useProducts(filters?: ProductFilters) {
       }
 
       if (filters?.search) {
-        query = query.ilike('name', `%${filters.search}%`);
+        query = query.or(`name.ilike.%${filters.search}%,brand.name.ilike.%${filters.search}%`);
       }
 
       const { data, error } = await query;
