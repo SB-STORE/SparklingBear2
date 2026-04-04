@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-const VIDEO_URL = 'https://videos.pexels.com/video-files/4922590/4922590-hd_1920_1080_30fps.mp4';
+const VIDEO_URL = 'https://cdn.pixabay.com/video/2025/07/19/292284_large.mp4';
 
 export function VideoSection() {
   return (
