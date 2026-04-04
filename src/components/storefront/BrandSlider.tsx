@@ -18,6 +18,12 @@ import hjgImg from '@/assets/hjg.webp';
 import maddogImg from '@/assets/maddog.jpg';
 import zanaImg from '@/assets/zana.webp';
 import mototorqueImg from '@/assets/mototorque.webp';
+import raidaImg from '@/assets/raida.webp';
+import boboImg from '@/assets/bobo.webp';
+import motocareImg from '@/assets/motocare.webp';
+import futureeyesImg from '@/assets/future eyes.webp';
+import viaterraImg from '@/assets/viaterra.jpg';
+import autoEnginaImg from '@/assets/autoengina.png';
 
 const fallbackBrands = [
   { name: 'LS2', slug: 'ls2', logo_url: ls2Img },
@@ -44,6 +50,12 @@ const localLogoMap: Record<string, string> = {
   maddog: maddogImg,
   zana: zanaImg,
   mototorque: mototorqueImg,
+  raida: raidaImg,
+  bobo: boboImg,
+  'moto-care': motocareImg,
+  'future-eyes': futureeyesImg,
+  viaterra: viaterraImg,
+  'auto-engina': autoEnginaImg,
 };
 
 export function BrandSlider() {
