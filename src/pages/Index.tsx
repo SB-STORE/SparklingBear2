@@ -9,7 +9,7 @@ import { CustomerServiceIcons } from '@/components/storefront/CustomerServiceIco
 import { useCategories } from '@/hooks/use-products';
 
 const bannerMotorcycleImg = 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&q=80&auto=format&fit=crop';
-const bannerRidingGearImg = 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1920&q=80&auto=format&fit=crop';
+const bannerRidingGearImg = 'https://images.unsplash.com/photo-1580310614729-ccd69652491d?w=1920&q=80&auto=format&fit=crop';
 
 function SectionDivider() {
   return <div className="section-divider" />;
@@ -40,7 +40,6 @@ const Index = () => {
         image={bannerRidingGearImg}
         link="/products?category=riding-gears-luggage"
       />
-      <FeaturedCollection title="HELMETS" categorySlug="helmets" />
       <SectionDivider />
       <VideoSection />
       <CustomerServiceIcons />

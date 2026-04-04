@@ -1,15 +1,45 @@
+import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
-const BG_IMAGE = 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1920&q=80&auto=format&fit=crop';
+const VIDEO_URL = 'https://cdn.pixabay.com/video/2021/05/20/74578-552712232_large.mp4';
+const POSTER_URL = 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1920&q=80&auto=format&fit=crop';
 
 export function VideoSection() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (video.readyState < 2) video.load();
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className="relative h-[300px] md:h-[400px] overflow-hidden">
-      <img
-        src={BG_IMAGE}
-        alt="Open road riding"
+      <video
+        ref={videoRef}
+        src={VIDEO_URL}
+        poster={POSTER_URL}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
         className="absolute inset-0 w-full h-full object-cover"
       />
 
