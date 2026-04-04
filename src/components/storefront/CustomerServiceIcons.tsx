@@ -8,7 +8,7 @@ const items = [
   },
   {
     icon: Truck,
-    title: 'Free Shipping \u20B9999+',
+    title: 'Free Shipping ₹999+',
     subtitle: 'All Over India',
   },
   {
@@ -25,14 +25,14 @@ const items = [
 
 export function CustomerServiceIcons() {
   return (
-    <section className="bg-card py-8 md:py-10">
+    <section className="bg-card/50 border-t border-b border-border/50 py-8 md:py-10">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-          {items.map((item) => {
+          {items.map((item, i) => {
             const Icon = item.icon;
             return (
-              <div key={item.title} className="flex flex-col items-center text-center">
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+              <div key={item.title} className="flex flex-col items-center text-center group">
+                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mb-3 group-hover:bg-primary/20 group-hover:border-primary/40 transition-all duration-300">
                   <Icon className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                 </div>
                 <h3 className="text-sm md:text-base font-semibold text-foreground">

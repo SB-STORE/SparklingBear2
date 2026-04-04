@@ -13,6 +13,10 @@ const bannerRidingGearVideo = 'https://cdn.pixabay.com/video/2026/02/18/335314_l
 const bannerMotorcycleImg = 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&h=600&q=80&auto=format&fit=crop';
 const bannerRidingGearImg = 'https://images.pexels.com/photos/6762793/pexels-photo-6762793.jpeg?auto=compress&cs=tinysrgb&w=1920';
 
+function SectionDivider() {
+  return <div className="section-divider" />;
+}
+
 const Index = () => {
   const { data: categories } = useCategories();
 
@@ -20,6 +24,7 @@ const Index = () => {
     <StorefrontLayout>
       <HeroCarousel />
       <BrandSlider />
+      <SectionDivider />
       <GridBanner
         title="MOTORCYCLE ACCESSORIES"
         videoUrl={bannerMotorcycleVideo}
@@ -27,10 +32,12 @@ const Index = () => {
         link="/products?category=bike-protection-fitments"
       />
       <FeaturedCollection title="NEW ARRIVALS" featured />
+      <SectionDivider />
       <CategoryIconSlider
         title="SHOP BY CATEGORY"
         categories={categories || []}
       />
+      <SectionDivider />
       <GridBanner
         title="RIDING GEARS"
         videoUrl={bannerRidingGearVideo}
@@ -38,6 +45,7 @@ const Index = () => {
         link="/products?category=riding-gears-luggage"
       />
       <FeaturedCollection title="HELMETS" categorySlug="helmets" />
+      <SectionDivider />
       <VideoSection />
       <CustomerServiceIcons />
     </StorefrontLayout>

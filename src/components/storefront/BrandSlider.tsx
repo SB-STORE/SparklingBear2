@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode } from 'swiper/modules';
+import { FreeMode, Navigation } from 'swiper/modules';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useBrands } from '@/hooks/use-products';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
 
 import ls2Img from '@/assets/ls2.png';
 import axorImg from '@/assets/axor.webp';
@@ -30,44 +32,78 @@ const fallbackBrands = [
   { name: 'MotoTorque', slug: 'mototorque', logo_url: mototorqueImg },
 ];
 
+// Map slug -> local asset for high-quality logos
+const localLogoMap: Record<string, string> = {
+  ls2: ls2Img,
+  axor: axorImg,
+  smk: smkImg,
+  studds: studdsImg,
+  rynox: rynoxImg,
+  cramster: cramsterImg,
+  hjg: hjgImg,
+  maddog: maddogImg,
+  zana: zanaImg,
+  mototorque: mototorqueImg,
+};
+
 export function BrandSlider() {
   const { data: dbBrands } = useBrands();
-  const brands = dbBrands && dbBrands.length > 0 ? dbBrands : fallbackBrands;
+
+  // Use DB brands but override logos with local high-quality versions where available
+  const brands = dbBrands && dbBrands.length > 0
+    ? dbBrands.map((b: any) => ({
+        ...b,
+        logo_url: localLogoMap[b.slug] || b.logo_url,
+      }))
+    : fallbackBrands;
 
   return (
-    <section className="py-8 md:py-12">
+    <section className="py-8 md:py-12 brand-slider-section">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-gradient-chrome">
             Shop By Brand
           </h2>
-          <Link
-            to="/products"
-            className="text-sm text-primary font-semibold hover:underline"
-          >
-            VIEW ALL
-          </Link>
+          <div className="flex items-center gap-3">
+            {/* Custom nav buttons */}
+            <button className="brand-prev w-8 h-8 rounded-full border border-neutral-600 flex items-center justify-center text-neutral-400 hover:border-primary hover:text-primary transition-colors">
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button className="brand-next w-8 h-8 rounded-full border border-neutral-600 flex items-center justify-center text-neutral-400 hover:border-primary hover:text-primary transition-colors">
+              <ChevronRight className="h-4 w-4" />
+            </button>
+            <Link
+              to="/products"
+              className="text-sm text-primary font-semibold hover:underline ml-2"
+            >
+              VIEW ALL
+            </Link>
+          </div>
         </div>
 
         <Swiper
-          modules={[FreeMode]}
+          modules={[FreeMode, Navigation]}
           freeMode
+          navigation={{
+            prevEl: '.brand-prev',
+            nextEl: '.brand-next',
+          }}
           slidesPerView="auto"
-          spaceBetween={16}
+          spaceBetween={20}
           className="brand-slider"
         >
-          {brands.map((brand) => (
+          {brands.map((brand: any) => (
             <SwiperSlide key={brand.slug} style={{ width: 'auto' }}>
               <Link
                 to={`/products?brand=${brand.slug}`}
-                className="flex flex-col items-center gap-2 group"
+                className="flex flex-col items-center gap-3 group"
               >
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center overflow-hidden group-hover:border-primary transition-colors p-3">
+                <div className="w-20 h-20 md:w-[100px] md:h-[100px] rounded-full bg-neutral-800/80 border-2 border-neutral-700/50 flex items-center justify-center overflow-hidden group-hover:border-primary/60 group-hover:shadow-[0_0_20px_hsl(0_75%_45%/0.3)] transition-all duration-300 p-3 md:p-4">
                   {brand.logo_url ? (
                     <img
                       src={brand.logo_url}
                       alt={brand.name}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain filter brightness-110"
                     />
                   ) : (
                     <span className="text-xs text-muted-foreground font-semibold">
