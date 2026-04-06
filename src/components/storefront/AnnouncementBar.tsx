@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -11,13 +11,14 @@ const ANNOUNCEMENTS = [
 const STORAGE_KEY = 'sb-announcement-dismissed';
 
 export function AnnouncementBar() {
-  const [dismissed, setDismissed] = useState(false);
-
-  useEffect(() => {
-    if (sessionStorage.getItem(STORAGE_KEY) === '1') {
-      setDismissed(true);
+  // Read sessionStorage synchronously to avoid flash on reload
+  const [dismissed, setDismissed] = useState(() => {
+    try {
+      return sessionStorage.getItem(STORAGE_KEY) === '1';
+    } catch {
+      return false;
     }
-  }, []);
+  });
 
   const handleDismiss = () => {
     setDismissed(true);
