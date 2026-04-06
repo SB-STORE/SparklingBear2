@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
 const bikes = [
-  { name: 'Royal Enfield Classic 350', slug: 'RE Classic 350', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/165561/classic-350-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'RE Himalayan 450', slug: 'RE Himalayan 450', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/156139/himalayan-450-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'KTM 390 Adventure', slug: 'KTM 390 Adventure', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/124109/390-adventure-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'KTM Duke 390', slug: 'KTM Duke 390', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/146429/390-duke-right-front-three-quarter-2.jpeg?isig=0' },
-  { name: 'Yamaha R15 V4', slug: 'Yamaha R15 V4', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/106815/yzf-r15-v4-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'TVS Apache RTX 300', slug: 'TVS Apache RTX 300', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/177505/apache-rtx-300-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'Hero Xpulse 210', slug: 'Hero Xpulse 210', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/177645/xpulse-210-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'Bajaj Dominar 400', slug: 'Bajaj Dominar 400', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/47095/dominar-400-right-front-three-quarter.jpeg?isig=0' },
+  { name: 'Royal Enfield', slug: 'Royal Enfield', image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600&q=80&auto=format&fit=crop' },
+  { name: 'KTM', slug: 'KTM', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600&q=80&auto=format&fit=crop' },
+  { name: 'Yamaha', slug: 'Yamaha', image: 'https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=600&q=80&auto=format&fit=crop' },
+  { name: 'Honda', slug: 'Honda', image: 'https://images.unsplash.com/photo-1580310614729-ccd69652491d?w=600&q=80&auto=format&fit=crop' },
+  { name: 'Bajaj', slug: 'Bajaj', image: 'https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=600&q=80&auto=format&fit=crop' },
+  { name: 'TVS', slug: 'TVS', image: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=600&q=80&auto=format&fit=crop' },
+  { name: 'Hero', slug: 'Hero', image: 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=600&q=80&auto=format&fit=crop' },
+  { name: 'Suzuki', slug: 'Suzuki', image: 'https://images.unsplash.com/photo-1558981285-6f0c94958bb6?w=600&q=80&auto=format&fit=crop' },
 ];
 
 export function ShopByBike() {
