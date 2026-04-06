@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
 const bikes = [
-  { name: 'Royal Enfield Classic 350', slug: 'RE Classic 350', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/165561/classic-350-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'RE Himalayan 450', slug: 'RE Himalayan 450', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/156139/himalayan-450-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'KTM 390 Adventure', slug: 'KTM 390 Adventure', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/124109/390-adventure-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'KTM Duke 390', slug: 'KTM Duke 390', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/146429/390-duke-right-front-three-quarter-2.jpeg?isig=0' },
-  { name: 'Yamaha R15 V4', slug: 'Yamaha R15 V4', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/106815/yzf-r15-v4-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'TVS Apache RTX 300', slug: 'TVS Apache RTX 300', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/177505/apache-rtx-300-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'Hero Xpulse 210', slug: 'Hero Xpulse 210', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/177645/xpulse-210-right-front-three-quarter.jpeg?isig=0' },
-  { name: 'Bajaj Dominar 400', slug: 'Bajaj Dominar 400', image: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/47095/dominar-400-right-front-three-quarter.jpeg?isig=0' },
+  { name: 'Royal Enfield Classic 350', slug: 'RE Classic 350', image: 'https://images.unsplash.com/photo-1622185135505-2d795003994a?w=800&q=80&auto=format&fit=crop' },
+  { name: 'RE Himalayan 450', slug: 'RE Himalayan 450', image: 'https://images.pexels.com/photos/19547825/pexels-photo-19547825.jpeg?auto=compress&cs=tinysrgb&w=800' },
+  { name: 'KTM 390 Adventure', slug: 'KTM 390 Adventure', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&q=80&auto=format&fit=crop' },
+  { name: 'KTM Duke 390', slug: 'KTM Duke 390', image: 'https://images.unsplash.com/photo-1635073908681-64534f1ac68b?w=800&q=80&auto=format&fit=crop' },
+  { name: 'Yamaha R15 V4', slug: 'Yamaha R15 V4', image: 'https://images.pexels.com/photos/19435684/pexels-photo-19435684.jpeg?auto=compress&cs=tinysrgb&w=800' },
+  { name: 'TVS Apache', slug: 'TVS Apache', image: 'https://images.pexels.com/photos/17227166/pexels-photo-17227166.jpeg?auto=compress&cs=tinysrgb&w=800' },
+  { name: 'Hero Xpulse', slug: 'Hero Xpulse', image: 'https://images.pexels.com/photos/12992447/pexels-photo-12992447.jpeg?auto=compress&cs=tinysrgb&w=800' },
+  { name: 'Bajaj Dominar 400', slug: 'Bajaj Dominar 400', image: 'https://images.pexels.com/photos/27100142/pexels-photo-27100142.jpeg?auto=compress&cs=tinysrgb&w=800' },
 ];
 
 export function ShopByBike() {
