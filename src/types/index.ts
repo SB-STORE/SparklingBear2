@@ -14,6 +14,7 @@ export type CustomerRow = Tables['customers']['Row'];
 export type OrderRow = Tables['orders']['Row'];
 export type OrderItemRow = Tables['order_items']['Row'];
 export type SiteSettingRow = Tables['site_settings']['Row'];
+export type TicketRow = Tables['tickets']['Row'];
 
 // Domain types with joins
 export interface Product extends ProductRow {

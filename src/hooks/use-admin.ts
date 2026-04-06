@@ -246,3 +246,76 @@ export function useAdminStats() {
     },
   });
 }
+
+// ── Tickets ──
+
+export function useAdminTickets(status?: string) {
+  return useQuery({
+    queryKey: ['admin', 'tickets', status],
+    queryFn: async () => {
+      let query = supabase
+        .from('tickets')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (status) query = query.eq('status', status);
+      const { data, error } = await query;
+      if (error) throw error;
+      return data;
+    },
+  });
+}
+
+export function useOpenTicketCount() {
+  return useQuery({
+    queryKey: ['admin', 'tickets', 'open-count'],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('tickets')
+        .select('*', { count: 'exact', head: true })
+        .in('status', ['open', 'in_progress']);
+      if (error) throw error;
+      return count || 0;
+    },
+    refetchInterval: 30000, // poll every 30s
+  });
+}
+
+export function useUpdateTicket() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: { id: string; status?: string; admin_notes?: string }) => {
+      const { error } = await supabase
+        .from('tickets')
+        .update({ ...updates, updated_at: new Date().toISOString() })
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin', 'tickets'] });
+    },
+  });
+}
+
+// Customer-facing: create a ticket
+export function useCreateTicket() {
+  return useMutation({
+    mutationFn: async (ticket: {
+      type: 'complaint' | 'feedback';
+      customer_name: string;
+      customer_email?: string;
+      customer_phone?: string;
+      order_id?: string;
+      order_number?: string;
+      subject: string;
+      message: string;
+    }) => {
+      const { data, error } = await supabase
+        .from('tickets')
+        .insert(ticket)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+  });
+}

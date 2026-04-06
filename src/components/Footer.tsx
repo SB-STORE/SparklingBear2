@@ -27,6 +27,7 @@ const policyLinks = [
   { label: 'Return & Refund', href: '/return-refund' },
   { label: 'Privacy Policy', href: '/privacy-policy' },
   { label: 'Terms of Service', href: '/terms-of-service' },
+  { label: 'Feedback', href: '/feedback' },
 ];
 
 const Footer = () => {

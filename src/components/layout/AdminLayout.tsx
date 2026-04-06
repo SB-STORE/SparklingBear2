@@ -1,13 +1,16 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, Image, MessageSquare, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, Image, MessageSquare, LogOut, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
+import { useOpenTicketCount } from '@/hooks/use-admin';
 import { cn } from '@/lib/utils';
 
 const sidebarLinks = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/products', label: 'Products', icon: Package },
   { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
+  { href: '/admin/tickets', label: 'Tickets', icon: Bell },
   { href: '/admin/gallery', label: 'Gallery', icon: Image },
   { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquare },
 ];
@@ -15,6 +18,7 @@ const sidebarLinks = [
 export function AdminLayout() {
   const { user, signOut } = useAuth();
   const location = useLocation();
+  const { data: openTickets } = useOpenTicketCount();
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -30,6 +34,7 @@ export function AdminLayout() {
           {sidebarLinks.map((link) => {
             const active = location.pathname === link.href ||
               (link.href !== '/admin' && location.pathname.startsWith(link.href));
+            const isTickets = link.href === '/admin/tickets';
             return (
               <Link
                 key={link.href}
@@ -43,6 +48,11 @@ export function AdminLayout() {
               >
                 <link.icon className="h-4 w-4" />
                 {link.label}
+                {isTickets && openTickets && openTickets > 0 && (
+                  <Badge className="ml-auto bg-red-600 text-white text-[10px] px-1.5 py-0 h-5 min-w-5 flex items-center justify-center">
+                    {openTickets}
+                  </Badge>
+                )}
               </Link>
             );
           })}

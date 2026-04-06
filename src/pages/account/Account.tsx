@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Package, LogOut, User, ChevronRight } from 'lucide-react';
+import { Package, LogOut, User, ChevronRight, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
+import { ComplaintModal } from '@/components/storefront/ComplaintModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCustomerOrders } from '@/hooks/use-orders';
 import { formatPrice } from '@/lib/price';
@@ -23,6 +25,7 @@ export default function AccountPage() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { data: orders, isLoading } = useCustomerOrders(user?.email);
+  const [complaintOrder, setComplaintOrder] = useState<any>(null);
 
   const handleSignOut = async () => {
     await signOut();
@@ -93,6 +96,18 @@ export default function AccountPage() {
                         </p>
                       </div>
                       <div className="flex items-center gap-3">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs text-muted-foreground hover:text-red-400"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setComplaintOrder(order);
+                          }}
+                        >
+                          <AlertCircle className="h-3 w-3 mr-1" />
+                          Report
+                        </Button>
                         <span className="text-lg font-bold text-primary">
                           {formatPrice(order.total)}
                         </span>
@@ -114,6 +129,19 @@ export default function AccountPage() {
           )}
         </div>
       </div>
+
+      {/* Complaint modal */}
+      {complaintOrder && (
+        <ComplaintModal
+          open={!!complaintOrder}
+          onClose={() => setComplaintOrder(null)}
+          orderNumber={complaintOrder.order_number}
+          orderId={complaintOrder.id}
+          customerName={user?.user_metadata?.full_name || user?.email || ''}
+          customerEmail={user?.email}
+          customerPhone={user?.user_metadata?.phone}
+        />
+      )}
     </StorefrontLayout>
   );
 }

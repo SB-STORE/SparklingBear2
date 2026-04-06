@@ -200,6 +200,30 @@ export interface Database {
         };
         Update: Partial<Database['public']['Tables']['order_items']['Insert']>;
       };
+      tickets: {
+        Row: {
+          id: string;
+          type: 'complaint' | 'feedback';
+          status: 'open' | 'in_progress' | 'resolved' | 'closed';
+          customer_name: string;
+          customer_email: string | null;
+          customer_phone: string | null;
+          order_id: string | null;
+          order_number: string | null;
+          subject: string;
+          message: string;
+          admin_notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['tickets']['Row'], 'id' | 'created_at' | 'updated_at' | 'status'> & {
+          id?: string;
+          status?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['public']['Tables']['tickets']['Insert']>;
+      };
       site_settings: {
         Row: {
           key: string;
