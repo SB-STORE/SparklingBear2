@@ -90,32 +90,27 @@ export function SearchBar({ className }: { className?: string }) {
         : undefined
   );
 
-  // Navigate to category page when a category is selected from the dropdown
+  // Navigate to products page when a category is selected from the dropdown
   const handleCategoryChange = (v: string) => {
     if (v === '__all__') {
       setCategorySlug(undefined);
       setSearchOverride(undefined);
-    } else {
-      // Parse the value — format is "index" into SEARCH_CATEGORIES
-      const idx = parseInt(v, 10);
-      if (!isNaN(idx) && SEARCH_CATEGORIES[idx]) {
-        const cat = SEARCH_CATEGORIES[idx];
-        setCategorySlug(cat.value);
-        setSearchOverride(cat.search);
-        // If no search query, navigate directly
-        if (!query.trim()) {
-          const params = new URLSearchParams();
-          params.set('category', cat.value);
-          if (cat.search) params.set('search', cat.search);
-          navigate(`/products?${params.toString()}`);
-        }
-      } else {
-        setCategorySlug(v);
-        setSearchOverride(undefined);
-        if (!query.trim()) {
-          navigate(`/products?category=${v}`);
-        }
-      }
+      return;
+    }
+
+    const idx = parseInt(v, 10);
+    if (!isNaN(idx) && SEARCH_CATEGORIES[idx]) {
+      const cat = SEARCH_CATEGORIES[idx];
+      setCategorySlug(cat.value);
+      setSearchOverride(cat.search);
+
+      // Always navigate immediately when a category is picked
+      const params = new URLSearchParams();
+      params.set('category', cat.value);
+      if (cat.search) params.set('search', cat.search);
+      navigate(`/products?${params.toString()}`);
+      setOpen(false);
+      setQuery('');
     }
   };
 
