@@ -61,6 +61,7 @@ export interface Database {
           features: string[];
           sku: string | null;
           stock_quantity: number;
+          has_variants: boolean;
           is_active: boolean;
           is_featured: boolean;
           display_order: number;
@@ -192,6 +193,8 @@ export interface Database {
           product_price: number;
           quantity: number;
           line_total: number;
+          variant_id: string | null;
+          variant_size: string | null;
           created_at: string;
         };
         Insert: Omit<Database['public']['Tables']['order_items']['Row'], 'id' | 'created_at'> & {
@@ -199,6 +202,20 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database['public']['Tables']['order_items']['Insert']>;
+      };
+      product_variants: {
+        Row: {
+          id: string;
+          product_id: string;
+          size: string;
+          stock_quantity: number;
+          sku_suffix: string | null;
+          display_order: number;
+        };
+        Insert: Omit<Database['public']['Tables']['product_variants']['Row'], 'id'> & {
+          id?: string;
+        };
+        Update: Partial<Database['public']['Tables']['product_variants']['Insert']>;
       };
       tickets: {
         Row: {

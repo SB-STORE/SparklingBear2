@@ -15,11 +15,17 @@ export type OrderRow = Tables['orders']['Row'];
 export type OrderItemRow = Tables['order_items']['Row'];
 export type SiteSettingRow = Tables['site_settings']['Row'];
 export type TicketRow = Tables['tickets']['Row'];
+export type ProductVariantRow = Tables['product_variants']['Row'];
+
+// Size constants
+export const PRODUCT_SIZES = ['S', 'M', 'L', 'XL', 'XXL'] as const;
+export type ProductSize = typeof PRODUCT_SIZES[number];
 
 // Domain types with joins
 export interface Product extends ProductRow {
   brand?: BrandRow;
   category?: CategoryRow;
+  variants?: ProductVariantRow[];
 }
 
 export interface Order extends OrderRow {
@@ -30,6 +36,8 @@ export interface Order extends OrderRow {
 // Cart types
 export interface CartItem {
   productId: string;
+  variantId: string | null;
+  size: string | null;
   name: string;
   price: number;
   imageUrl: string | null;

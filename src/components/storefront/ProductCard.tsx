@@ -19,7 +19,9 @@ export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
   const [quickView, setQuickView] = useState(false);
 
-  const inStock = product.stock_quantity > 0;
+  const inStock = product.has_variants
+    ? (product.variants?.some(v => v.stock_quantity > 0) ?? product.stock_quantity > 0)
+    : product.stock_quantity > 0;
   const hasDiscount =
     product.compare_at_price && product.compare_at_price > product.price;
   const discountPercent = hasDiscount
@@ -31,8 +33,15 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    // For variant products, redirect to product page to select size
+    if (product.has_variants) {
+      window.location.href = `/products/${product.slug}`;
+      return;
+    }
     addItem({
       productId: product.id,
+      variantId: null,
+      size: null,
       name: product.name,
       price: product.price,
       imageUrl: product.image_url,
@@ -144,7 +153,7 @@ export function ProductCard({ product }: ProductCardProps) {
               onClick={handleAddToCart}
             >
               <ShoppingCart className="mr-2 h-4 w-4" />
-              Add to Cart
+              {product.has_variants ? 'Select Size' : 'Add to Cart'}
             </Button>
           ) : (
             <Button

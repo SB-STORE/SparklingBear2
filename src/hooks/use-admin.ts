@@ -57,6 +57,47 @@ export function useUpdateProduct() {
   });
 }
 
+// ---- PRODUCT VARIANTS ----
+export function useProductVariants(productId: string | undefined) {
+  return useQuery({
+    queryKey: ['admin', 'product-variants', productId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('product_variants')
+        .select('*')
+        .eq('product_id', productId!)
+        .order('display_order');
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!productId,
+  });
+}
+
+export function useUpsertVariants() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ productId, variants }: {
+      productId: string;
+      variants: { size: string; stock_quantity: number }[];
+    }) => {
+      const rows = variants.map((v, i) => ({
+        product_id: productId,
+        size: v.size,
+        stock_quantity: v.stock_quantity,
+        display_order: i,
+      }));
+      const { error } = await supabase
+        .from('product_variants')
+        .upsert(rows, { onConflict: 'product_id,size' });
+      if (error) throw error;
+    },
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: ['admin', 'product-variants', vars.productId] });
+    },
+  });
+}
+
 export function useDeleteProduct() {
   const qc = useQueryClient();
   return useMutation({

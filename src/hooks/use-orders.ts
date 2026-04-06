@@ -58,10 +58,12 @@ export function useCreateOrder() {
 
       if (orderError) throw orderError;
 
-      // 3. Create order items
+      // 3. Create order items (with variant info)
       const orderItems = items.map((item) => ({
         order_id: order.id,
         product_id: item.productId,
+        variant_id: item.variantId || null,
+        variant_size: item.size || null,
         product_name: item.name,
         product_price: item.price,
         quantity: item.quantity,
@@ -73,6 +75,19 @@ export function useCreateOrder() {
         .insert(orderItems);
 
       if (itemsError) throw itemsError;
+
+      // 4. Decrement stock for each item
+      for (const item of items) {
+        try {
+          await supabase.rpc('decrement_stock', {
+            p_variant_id: item.variantId || null,
+            p_product_id: item.variantId ? null : item.productId,
+            p_quantity: item.quantity,
+          });
+        } catch (stockErr) {
+          console.error('Stock decrement failed for', item.name, stockErr);
+        }
+      }
 
       return order;
     },

@@ -29,9 +29,17 @@ export function QuickViewModal({ product, open, onClose }: QuickViewModalProps) 
     product.compare_at_price && product.compare_at_price > product.price;
 
   const handleAdd = () => {
+    // For variant products, redirect to detail page for size selection
+    if (product.has_variants) {
+      onClose();
+      window.location.href = `/products/${product.slug}`;
+      return;
+    }
     addItem(
       {
         productId: product.id,
+        variantId: null,
+        size: null,
         name: product.name,
         price: product.price,
         imageUrl: product.image_url,

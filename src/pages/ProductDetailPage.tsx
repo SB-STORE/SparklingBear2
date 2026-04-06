@@ -23,6 +23,7 @@ import { RelatedProducts } from '@/components/storefront/RelatedProducts';
 import { useProduct } from '@/hooks/use-products';
 import { useCart } from '@/contexts/CartContext';
 import { formatPrice } from '@/lib/price';
+import { SizeSelector } from '@/components/storefront/SizeSelector';
 
 export default function ProductDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -31,12 +32,20 @@ export default function ProductDetailPage() {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState<{
+    id: string;
+    size: string;
+    stock: number;
+  } | null>(null);
 
   const handleAdd = () => {
     if (!product) return;
+    if (product.has_variants && !selectedVariant) return;
     addItem(
       {
         productId: product.id,
+        variantId: selectedVariant?.id ?? null,
+        size: selectedVariant?.size ?? null,
         name: product.name,
         price: product.price,
         imageUrl: product.image_url,
@@ -84,7 +93,10 @@ export default function ProductDetailPage() {
     );
   }
 
-  const inStock = product.stock_quantity > 0;
+  const inStock = product.has_variants
+    ? (product.variants?.some(v => v.stock_quantity > 0) ?? false)
+    : product.stock_quantity > 0;
+  const maxQty = selectedVariant?.stock ?? product.stock_quantity;
   const hasDiscount =
     product.compare_at_price && product.compare_at_price > product.price;
   const discountPercent = hasDiscount
@@ -191,7 +203,10 @@ export default function ProductDetailPage() {
                   variant="outline"
                   className="text-green-500 border-green-500"
                 >
-                  In Stock ({product.stock_quantity})
+                  {product.has_variants
+                    ? selectedVariant ? `In Stock (${selectedVariant.stock})` : 'Select a size'
+                    : `In Stock (${product.stock_quantity})`
+                  }
                 </Badge>
               ) : (
                 <Badge
@@ -202,6 +217,18 @@ export default function ProductDetailPage() {
                 </Badge>
               )}
             </div>
+
+            {/* Size Selector (for variant products) */}
+            {product.has_variants && product.variants && product.variants.length > 0 && (
+              <SizeSelector
+                variants={product.variants}
+                selectedSize={selectedVariant?.size ?? null}
+                onSelect={(size, variantId, stock) => {
+                  setSelectedVariant({ id: variantId, size, stock });
+                  setQuantity(1);
+                }}
+              />
+            )}
 
             {/* Quantity + Add to Cart */}
             {inStock && (
@@ -225,7 +252,7 @@ export default function ProductDetailPage() {
                       className="h-10 w-10"
                       onClick={() =>
                         setQuantity(
-                          Math.min(product.stock_quantity, quantity + 1)
+                          Math.min(maxQty, quantity + 1)
                         )
                       }
                     >
@@ -239,6 +266,7 @@ export default function ProductDetailPage() {
                     size="lg"
                     className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
                     onClick={handleAdd}
+                    disabled={product.has_variants && !selectedVariant}
                   >
                     {added ? (
                       <>
@@ -256,10 +284,14 @@ export default function ProductDetailPage() {
                     size="lg"
                     variant="outline"
                     className="flex-1 border-primary text-primary hover:bg-primary/10"
+                    disabled={product.has_variants && !selectedVariant}
                     onClick={() => {
+                      if (product.has_variants && !selectedVariant) return;
                       addItem(
                         {
                           productId: product.id,
+                          variantId: selectedVariant?.id ?? null,
+                          size: selectedVariant?.size ?? null,
                           name: product.name,
                           price: product.price,
                           imageUrl: product.image_url,

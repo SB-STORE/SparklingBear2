@@ -78,7 +78,10 @@ export function CartDrawer({ onClose }: CartDrawerProps) {
                       {item.name}
                     </p>
                   </Link>
-                  <p className="text-xs text-muted-foreground">{item.brandName}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {item.brandName}
+                    {item.size && <span className="ml-1.5 text-primary/80 font-semibold">• Size: {item.size}</span>}
+                  </p>
                   <p className="text-sm text-primary font-bold mt-1">
                     {formatPrice(item.price)}
                   </p>
@@ -88,7 +91,7 @@ export function CartDrawer({ onClose }: CartDrawerProps) {
                       size="icon"
                       className="h-7 w-7"
                       onClick={() =>
-                        updateQuantity(item.productId, item.quantity - 1)
+                        updateQuantity(item.productId, item.variantId, item.quantity - 1)
                       }
                     >
                       <Minus className="h-3 w-3" />
@@ -101,7 +104,7 @@ export function CartDrawer({ onClose }: CartDrawerProps) {
                       size="icon"
                       className="h-7 w-7"
                       onClick={() =>
-                        updateQuantity(item.productId, item.quantity + 1)
+                        updateQuantity(item.productId, item.variantId, item.quantity + 1)
                       }
                     >
                       <Plus className="h-3 w-3" />
@@ -110,7 +113,7 @@ export function CartDrawer({ onClose }: CartDrawerProps) {
                       variant="ghost"
                       size="icon"
                       className="h-7 w-7 ml-auto text-destructive hover:text-destructive"
-                      onClick={() => removeItem(item.productId)}
+                      onClick={() => removeItem(item.productId, item.variantId)}
                     >
                       <Trash2 className="h-3 w-3" />
                     </Button>
@@ -157,6 +160,8 @@ export function CartDrawer({ onClose }: CartDrawerProps) {
                         onClick={() =>
                           addItem({
                             productId: product.id,
+                            variantId: null,
+                            size: null,
                             name: product.name,
                             price: product.price,
                             imageUrl: product.image_url,

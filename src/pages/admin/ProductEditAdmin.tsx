@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,8 +12,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useAdminProduct, useCreateProduct, useUpdateProduct } from '@/hooks/use-admin';
+import { useAdminProduct, useCreateProduct, useUpdateProduct, useProductVariants, useUpsertVariants } from '@/hooks/use-admin';
 import { useCategories, useBrands } from '@/hooks/use-products';
+import { SizeInventoryGrid, type VariantState } from '@/components/admin/SizeInventoryGrid';
+import { PRODUCT_SIZES } from '@/types';
 import { toast } from 'sonner';
 
 const productSchema = z.object({
@@ -27,6 +29,7 @@ const productSchema = z.object({
   image_url: z.string().optional().nullable(),
   sku: z.string().optional().nullable(),
   stock_quantity: z.coerce.number().int().min(0).default(0),
+  has_variants: z.boolean().default(false),
   is_active: z.boolean().default(true),
   is_featured: z.boolean().default(false),
 });
@@ -41,8 +44,13 @@ export default function ProductEditAdmin() {
   const { data: product, isLoading } = useAdminProduct(isNew ? undefined : id);
   const { data: categories } = useCategories();
   const { data: brands } = useBrands();
+  const { data: existingVariants } = useProductVariants(isNew ? undefined : id);
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct();
+  const upsertVariants = useUpsertVariants();
+  const [sizeVariants, setSizeVariants] = useState<VariantState[]>(
+    PRODUCT_SIZES.map(s => ({ size: s, stock_quantity: 0 }))
+  );
 
   const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<ProductForm>({
     resolver: zodResolver(productSchema),
@@ -64,11 +72,24 @@ export default function ProductEditAdmin() {
         image_url: product.image_url,
         sku: product.sku,
         stock_quantity: product.stock_quantity,
+        has_variants: product.has_variants ?? false,
         is_active: product.is_active,
         is_featured: product.is_featured,
       });
     }
   }, [product, isNew, reset]);
+
+  // Load existing variant stock when available
+  useEffect(() => {
+    if (existingVariants && existingVariants.length > 0) {
+      setSizeVariants(
+        PRODUCT_SIZES.map(s => {
+          const existing = existingVariants.find((v: any) => v.size === s);
+          return { size: s, stock_quantity: existing?.stock_quantity ?? 0 };
+        })
+      );
+    }
+  }, [existingVariants]);
 
   const nameValue = watch('name');
   useEffect(() => {
@@ -91,13 +112,24 @@ export default function ProductEditAdmin() {
         display_order: 0,
       };
 
+      let savedProductId = id;
       if (isNew) {
-        await createProduct.mutateAsync(payload);
+        const created = await createProduct.mutateAsync(payload);
+        savedProductId = created.id;
         toast.success('Product created');
       } else {
         await updateProduct.mutateAsync({ id: id!, ...payload });
         toast.success('Product updated');
       }
+
+      // Save size variants if has_variants is enabled
+      if (data.has_variants && savedProductId) {
+        await upsertVariants.mutateAsync({
+          productId: savedProductId,
+          variants: sizeVariants,
+        });
+      }
+
       navigate('/admin/products');
     } catch (err: any) {
       toast.error(err.message || 'Failed to save product');
@@ -170,9 +202,19 @@ export default function ProductEditAdmin() {
               <Label>SKU</Label>
               <Input {...register('sku')} className="bg-background border-border mt-1" />
             </div>
-            <div>
-              <Label>Stock Quantity</Label>
-              <Input type="number" {...register('stock_quantity')} className="bg-background border-border mt-1" />
+            <div className="md:col-span-2 pt-2">
+              <div className="flex items-center gap-2 mb-3">
+                <Switch checked={watch('has_variants')} onCheckedChange={(v) => setValue('has_variants', v)} />
+                <Label>This product has sizes (S/M/L/XL/XXL)</Label>
+              </div>
+              {watch('has_variants') ? (
+                <SizeInventoryGrid variants={sizeVariants} onChange={setSizeVariants} />
+              ) : (
+                <div>
+                  <Label>Stock Quantity</Label>
+                  <Input type="number" {...register('stock_quantity')} className="bg-background border-border mt-1 max-w-xs" />
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-6 md:col-span-2 pt-2">
               <div className="flex items-center gap-2">

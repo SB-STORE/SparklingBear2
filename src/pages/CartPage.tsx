@@ -43,7 +43,10 @@ export default function CartPage() {
                       <Link to={`/products/${item.slug}`} className="hover:text-primary transition-colors">
                         <h3 className="font-semibold text-foreground">{item.name}</h3>
                       </Link>
-                      <p className="text-sm text-muted-foreground">{item.brandName}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {item.brandName}
+                        {item.size && <span className="ml-1.5 text-primary/80 font-semibold">• Size: {item.size}</span>}
+                      </p>
                       <p className="text-lg font-bold text-primary mt-1">{formatPrice(item.price)}</p>
                     </div>
                     <div className="flex flex-col items-end justify-between">
@@ -51,7 +54,7 @@ export default function CartPage() {
                         variant="ghost"
                         size="icon"
                         className="text-destructive h-8 w-8"
-                        onClick={() => removeItem(item.productId)}
+                        onClick={() => removeItem(item.productId, item.variantId)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -60,7 +63,7 @@ export default function CartPage() {
                           variant="ghost"
                           size="icon"
                           className="h-8 w-8"
-                          onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.productId, item.variantId, item.quantity - 1)}
                         >
                           <Minus className="h-3 w-3" />
                         </Button>
@@ -69,7 +72,7 @@ export default function CartPage() {
                           variant="ghost"
                           size="icon"
                           className="h-8 w-8"
-                          onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.productId, item.variantId, item.quantity + 1)}
                         >
                           <Plus className="h-3 w-3" />
                         </Button>

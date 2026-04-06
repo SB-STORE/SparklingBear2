@@ -153,7 +153,17 @@ export function useProduct(slug: string | undefined) {
         .eq('slug', slug!)
         .single();
       if (error) throw error;
-      return data as Product;
+      const product = data as Product;
+      // Fetch variants if product has them
+      if (product.has_variants) {
+        const { data: variants } = await supabase
+          .from('product_variants')
+          .select('*')
+          .eq('product_id', product.id)
+          .order('display_order');
+        product.variants = variants || [];
+      }
+      return product;
     },
     enabled: !!slug,
   });
