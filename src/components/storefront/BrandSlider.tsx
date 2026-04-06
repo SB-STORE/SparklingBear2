@@ -108,17 +108,17 @@ export function BrandSlider() {
             <SwiperSlide key={brand.slug} style={{ width: 'auto' }}>
               <Link
                 to={`/products?brand=${brand.slug}`}
-                className="flex flex-col items-center gap-2 group w-24 md:w-28"
+                className="flex flex-col items-center gap-2 group"
               >
-                <div className="w-20 h-14 md:w-24 md:h-16 flex items-center justify-center group-hover:opacity-100 opacity-80 transition-all duration-300">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl bg-white flex items-center justify-center p-3 group-hover:shadow-[0_0_20px_hsl(0_75%_45%/0.3)] transition-all duration-300">
                   {brand.logo_url ? (
                     <img
                       src={brand.logo_url}
                       alt={brand.name}
-                      className="max-w-full max-h-full object-contain filter brightness-0 invert group-hover:brightness-100 group-hover:invert-0 group-hover:drop-shadow-[0_0_8px_hsl(0_75%_45%/0.5)] transition-all duration-300"
+                      className="max-w-full max-h-full object-contain"
                     />
                   ) : (
-                    <span className="text-sm text-muted-foreground font-bold uppercase tracking-wider">
+                    <span className="text-sm text-neutral-800 font-bold uppercase tracking-wider">
                       {brand.name}
                     </span>
                   )}
