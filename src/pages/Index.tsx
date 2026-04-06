@@ -1,7 +1,7 @@
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import { HeroCarousel } from '@/components/storefront/HeroCarousel';
 import { TrustStrip } from '@/components/storefront/TrustStrip';
-import { CategoryGrid } from '@/components/storefront/CategoryGrid';
+import { MosaicPromoGrid } from '@/components/storefront/MosaicPromoGrid';
 import { BrandSlider } from '@/components/storefront/BrandSlider';
 import { FeaturedCollection } from '@/components/storefront/FeaturedCollection';
 import { PromoBanner } from '@/components/storefront/PromoBanner';
@@ -9,7 +9,6 @@ import { ShopByBike } from '@/components/storefront/ShopByBike';
 import { WhyChooseUs } from '@/components/storefront/WhyChooseUs';
 import { TestimonialsSection } from '@/components/storefront/TestimonialsSection';
 import { StoreLocation } from '@/components/storefront/StoreLocation';
-import { CustomerServiceIcons } from '@/components/storefront/CustomerServiceIcons';
 import { FloatingButtons } from '@/components/storefront/FloatingButtons';
 
 const Index = () => {
@@ -17,7 +16,7 @@ const Index = () => {
     <StorefrontLayout>
       <HeroCarousel />
       <TrustStrip />
-      <CategoryGrid />
+      <MosaicPromoGrid />
       <FeaturedCollection title="BEST SELLERS" featured />
       <PromoBanner />
       <ShopByBike />
@@ -26,7 +25,6 @@ const Index = () => {
       <WhyChooseUs />
       <TestimonialsSection />
       <StoreLocation />
-      <CustomerServiceIcons />
       <FloatingButtons />
     </StorefrontLayout>
   );

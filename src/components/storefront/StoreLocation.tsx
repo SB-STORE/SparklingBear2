@@ -6,11 +6,12 @@ export function StoreLocation() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="py-10 md:py-14" ref={ref as React.RefObject<HTMLElement>}>
+    <section className="py-14 md:py-20" ref={ref as React.RefObject<HTMLElement>}>
       <div className="container mx-auto px-4">
-        <h2 className={`text-xl md:text-2xl font-bold uppercase tracking-wider text-center mb-10 text-gradient-chrome transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <h2 className={`text-2xl md:text-3xl lg:text-4xl font-bold uppercase tracking-wider text-center mb-4 text-gradient-chrome transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           Visit Our Store
         </h2>
+        <div className="w-16 h-0.5 bg-primary mx-auto mb-8 md:mb-12" />
         <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 rounded-xl overflow-hidden border border-border/30 transition-all duration-700 ease-out delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           {/* Map */}
           <div className="h-[300px] lg:h-auto min-h-[350px] bg-muted">

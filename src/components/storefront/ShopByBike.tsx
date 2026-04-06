@@ -17,10 +17,10 @@ export function ShopByBike() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="py-10 md:py-14" ref={ref as React.RefObject<HTMLElement>}>
+    <section className="py-14 md:py-20 bg-surface-elevated" ref={ref as React.RefObject<HTMLElement>}>
       <div className="container mx-auto px-4">
         <div className={`flex items-center justify-between mb-8 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-          <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-gradient-chrome">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold uppercase tracking-wider text-gradient-chrome">
             Shop By Bike
           </h2>
           <Link
@@ -47,8 +47,8 @@ export function ShopByBike() {
                   loading="lazy"
                 />
               </div>
-              <div className="p-3 text-center border-t border-border/20">
-                <h3 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+              <div className="p-3 text-center border-t border-primary/10">
+                <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
                   {bike.name}
                 </h3>
                 <span className="text-xs text-muted-foreground group-hover:text-primary/70 transition-colors flex items-center justify-center gap-1 mt-1">

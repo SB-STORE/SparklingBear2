@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
     /* Sparkling Bear Design System - Rugged Automotive Aesthetic */
@@ -43,11 +39,15 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
+    /* Surface tones for section variety */
+    --surface-elevated: 0 0% 7%;
+    --surface-recessed: 0 0% 3%;
+
     /* Custom Gradients */
     --gradient-chrome: linear-gradient(135deg, hsl(0 0% 70%), hsl(0 0% 95%), hsl(0 0% 70%));
     --gradient-red-fade: linear-gradient(180deg, hsl(0 75% 45%), hsl(0 0% 4%));
     --gradient-metallic: linear-gradient(135deg, hsl(0 0% 30%), hsl(0 0% 50%), hsl(0 0% 30%));
-    
+
     /* Glows */
     --glow-primary: 0 0 30px hsl(0 75% 45% / 0.5);
     --glow-accent: 0 0 30px hsl(195 100% 50% / 0.5);
@@ -82,7 +82,7 @@ All colors MUST be HSL.
   .glow-primary {
     box-shadow: var(--glow-primary);
   }
-  
+
   .glow-accent {
     box-shadow: var(--glow-accent);
   }
@@ -123,6 +123,14 @@ All colors MUST be HSL.
   .animate-marquee:hover {
     animation-play-state: paused;
   }
+
+  /* Surface tones */
+  .bg-surface-elevated {
+    background-color: hsl(var(--surface-elevated));
+  }
+  .bg-surface-recessed {
+    background-color: hsl(var(--surface-recessed));
+  }
 }
 
 @keyframes marquee {
@@ -145,6 +153,21 @@ All colors MUST be HSL.
   max-width: 80%;
 }
 
+/* Wide section divider variant */
+.section-divider-wide {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(0 75% 45% / 0.15) 30%,
+    hsl(0 75% 45% / 0.4) 50%,
+    hsl(0 75% 45% / 0.15) 70%,
+    transparent
+  );
+  margin: 0 auto;
+  max-width: 60%;
+}
+
 /* Brand slider custom arrows */
 .brand-slider-section .brand-prev.swiper-button-disabled,
 .brand-slider-section .brand-next.swiper-button-disabled {
@@ -152,7 +175,7 @@ All colors MUST be HSL.
   cursor: not-allowed;
 }
 
-/* Smooth scroll behavior */
+/* Smooth scroll */
 html {
   scroll-behavior: smooth;
 }
@@ -161,8 +184,7 @@ html {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-
-/* Featured collection arrow styling tweaks */
+/* Featured collection arrow styling */
 .featured-collection .swiper-button-disabled {
   opacity: 0.3 !important;
 }

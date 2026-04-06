@@ -65,12 +65,12 @@ export function HeroCarousel() {
         pagination={{ clickable: true }}
         navigation
         onSlideChange={onSlideChange}
-        className="h-[400px] sm:h-[500px] lg:h-[650px] xl:h-[700px]"
+        className="h-[450px] sm:h-[550px] lg:h-[700px] xl:h-[800px]"
       >
         {slides.map((slide, i) => (
           <SwiperSlide key={i}>
             <div className="relative w-full h-full overflow-hidden">
-              {/* Ken Burns slow zoom effect on active slide */}
+              {/* Ken Burns slow zoom effect */}
               <img
                 src={slide.image}
                 alt={slide.title}
@@ -80,29 +80,36 @@ export function HeroCarousel() {
                 style={{ objectPosition: slide.position }}
                 loading={i === 0 ? 'eager' : 'lazy'}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />
+              {/* Stronger gradients for left-aligned text */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/5" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
 
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-                <span
-                  className="text-primary font-semibold text-xs sm:text-sm uppercase tracking-[0.3em] mb-3 hero-stagger-1"
+              {/* Left-aligned editorial content */}
+              <div className="absolute inset-0 flex flex-col items-start justify-center text-left px-6 md:px-12 lg:px-20">
+                {/* Red accent bar */}
+                <div
+                  className="w-12 h-1 bg-primary mb-5 hero-stagger-1"
                   style={{ animationDelay: '0.1s' }}
+                />
+                <span
+                  className="text-primary font-semibold text-xs sm:text-sm uppercase tracking-[0.3em] mb-3 opacity-90 hero-stagger-2"
+                  style={{ animationDelay: '0.2s' }}
                 >
                   Sparkling Bear
                 </span>
                 <h2
-                  className="text-3xl sm:text-5xl lg:text-7xl font-bold text-white mb-3 sm:mb-4 drop-shadow-2xl hero-stagger-2"
-                  style={{ animationDelay: '0.3s' }}
+                  className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-3 sm:mb-4 drop-shadow-2xl max-w-3xl leading-[0.95] hero-stagger-3"
+                  style={{ animationDelay: '0.4s' }}
                 >
                   {slide.title}
                 </h2>
                 <p
-                  className="text-sm sm:text-lg lg:text-xl text-white/75 mb-6 sm:mb-8 max-w-2xl hero-stagger-3"
-                  style={{ animationDelay: '0.5s' }}
+                  className="text-sm sm:text-lg lg:text-xl text-white/70 mb-6 sm:mb-8 max-w-xl hero-stagger-4"
+                  style={{ animationDelay: '0.6s' }}
                 >
                   {slide.subtitle}
                 </p>
-                <div className="flex gap-3 hero-stagger-4" style={{ animationDelay: '0.7s' }}>
+                <div className="flex gap-3 hero-stagger-5" style={{ animationDelay: '0.8s' }}>
                   <Button
                     asChild
                     size="lg"
@@ -129,6 +136,17 @@ export function HeroCarousel() {
       </Swiper>
 
       <style>{`
+        .hero-carousel .swiper-pagination {
+          text-align: left !important;
+          padding-left: 1.5rem !important;
+          bottom: 20px !important;
+        }
+        @media (min-width: 768px) {
+          .hero-carousel .swiper-pagination {
+            padding-left: 3rem !important;
+            bottom: 30px !important;
+          }
+        }
         .hero-carousel .swiper-pagination-bullet {
           background: hsl(0 0% 100% / 0.4);
           width: 10px;
@@ -168,18 +186,18 @@ export function HeroCarousel() {
           background: hsl(0 75% 45% / 0.8);
           transform: scale(1.1);
         }
-
-        /* Staggered text entrance per slide */
         .swiper-slide-active .hero-stagger-1,
         .swiper-slide-active .hero-stagger-2,
         .swiper-slide-active .hero-stagger-3,
-        .swiper-slide-active .hero-stagger-4 {
+        .swiper-slide-active .hero-stagger-4,
+        .swiper-slide-active .hero-stagger-5 {
           animation: heroFadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .hero-stagger-1,
         .hero-stagger-2,
         .hero-stagger-3,
-        .hero-stagger-4 {
+        .hero-stagger-4,
+        .hero-stagger-5 {
           opacity: 0;
           transform: translateY(30px);
         }

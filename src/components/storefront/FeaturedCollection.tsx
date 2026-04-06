@@ -58,7 +58,7 @@ export function FeaturedCollection({
 
   return (
     <section
-      className="py-8 md:py-12 featured-collection bg-background"
+      className="py-14 md:py-20 featured-collection bg-surface-recessed"
       ref={ref as React.RefObject<HTMLElement>}
     >
       <div className="container mx-auto px-4">
@@ -68,15 +68,15 @@ export function FeaturedCollection({
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
         >
-          <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-gradient-chrome">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold uppercase tracking-wider text-gradient-chrome">
             {title}
           </h2>
           <Link
             to={resolvedLink}
-            className="text-sm text-primary font-semibold hover:underline flex items-center gap-1 group"
+            className="text-sm text-primary font-semibold hover:underline flex items-center gap-1 group/link"
           >
             VIEW ALL
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/link:translate-x-1" />
           </Link>
         </div>
 

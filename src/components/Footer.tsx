@@ -44,15 +44,15 @@ const Footer = () => {
 
   return (
     <footer className="bg-background border-t border-border">
-      {/* Newsletter bar */}
-      <div className="bg-card">
-        <div className="container mx-auto px-4 py-8 md:py-10">
+      {/* Newsletter bar — crimson accent band */}
+      <div className="bg-primary">
+        <div className="container mx-auto px-4 py-10 md:py-14">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-center md:text-left">
-              <h3 className="text-lg md:text-xl font-bold text-foreground">
+              <h3 className="text-xl md:text-2xl font-bold text-white">
                 Subscribe to Our Newsletter
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-white/80">
                 Get updates on new arrivals, deals & exclusive offers.
               </p>
             </div>
@@ -66,11 +66,11 @@ const Footer = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="bg-background border-border flex-1 md:w-64"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 flex-1 md:w-64"
               />
               <Button
                 type="submit"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                className="bg-white text-primary hover:bg-white/90 font-bold"
               >
                 <Send className="h-4 w-4 mr-2" />
                 Subscribe

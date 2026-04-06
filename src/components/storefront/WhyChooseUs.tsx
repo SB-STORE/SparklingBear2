@@ -28,17 +28,17 @@ export function WhyChooseUs() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="py-10 md:py-14" ref={ref as React.RefObject<HTMLElement>}>
+    <section className="py-14 md:py-20 bg-[radial-gradient(ellipse_at_center,hsl(0_75%_45%/0.04)_0%,transparent_70%)]" ref={ref as React.RefObject<HTMLElement>}>
       <div className="container mx-auto px-4">
         <h2
-          className={`text-xl md:text-2xl font-bold uppercase tracking-wider text-center mb-3 text-gradient-chrome transition-all duration-700 ease-out ${
+          className={`text-2xl md:text-3xl lg:text-4xl font-bold uppercase tracking-wider text-center mb-3 text-gradient-chrome transition-all duration-700 ease-out ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
         >
           Why Choose Sparkling Bear?
         </h2>
         <p
-          className={`text-center text-muted-foreground mb-10 max-w-xl mx-auto transition-all duration-700 ease-out delay-100 ${
+          className={`text-center text-muted-foreground mb-12 max-w-xl mx-auto transition-all duration-700 ease-out delay-100 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
         >

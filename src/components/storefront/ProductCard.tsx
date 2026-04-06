@@ -43,17 +43,17 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <Card className="bg-card border border-border overflow-hidden group hover:shadow-elevated hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+      <Card className="bg-card border border-border/50 hover:border-primary/40 overflow-hidden group hover:shadow-[0_8px_40px_-12px_rgba(204,34,51,0.25)] hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
         {/* Image area */}
         <Link to={`/products/${product.slug}`} className="relative block">
-          <div className="relative aspect-[4/5] bg-white overflow-hidden">
+          <div className="relative aspect-[4/5] bg-gradient-to-b from-white to-neutral-200 overflow-hidden border-b border-border/30">
             {product.image_url ? (
               <>
                 <img
                   src={product.image_url}
                   alt={product.name}
                   className={cn(
-                    'w-full h-full object-contain p-3 md:p-4 transition-all duration-500',
+                    'w-full h-full object-contain p-2 md:p-3 transition-all duration-500',
                     product.additional_images?.length
                       ? 'group-hover:opacity-0'
                       : 'group-hover:scale-105'
@@ -64,7 +64,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   <img
                     src={product.additional_images[0]}
                     alt={`${product.name} - angle 2`}
-                    className="absolute inset-0 w-full h-full object-contain p-3 md:p-4 opacity-0 group-hover:opacity-100 transition-all duration-500"
+                    className="absolute inset-0 w-full h-full object-contain p-2 md:p-3 opacity-0 group-hover:opacity-100 transition-all duration-500"
                     loading="lazy"
                   />
                 )}
@@ -78,17 +78,17 @@ export function ProductCard({ product }: ProductCardProps) {
             {/* Badges */}
             <div className="absolute top-2 left-2 flex flex-col gap-1">
               {product.is_featured && (
-                <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0.5">
+                <Badge className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
                   NEW
                 </Badge>
               )}
               {hasDiscount && (
-                <Badge className="bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5">
+                <Badge className="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
                   SALE -{discountPercent}%
                 </Badge>
               )}
               {!inStock && (
-                <Badge className="bg-red-600 text-white text-[10px] px-1.5 py-0.5">
+                <Badge className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
                   SOLD OUT
                 </Badge>
               )}
@@ -117,7 +117,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Info area */}
         <div className="p-3 md:p-4 flex flex-col flex-1">
           {product.brand?.name && (
-            <p className="text-[11px] md:text-xs text-muted-foreground uppercase tracking-wider mb-1">
+            <p className="text-[11px] md:text-xs text-primary/70 uppercase tracking-widest font-bold mb-1">
               {product.brand.name}
             </p>
           )}
@@ -128,7 +128,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </Link>
 
           <div className="flex items-center gap-2 mt-auto mb-3">
-            <span className="text-base md:text-lg font-bold text-primary">
+            <span className="text-lg md:text-xl font-bold text-primary">
               {formatPrice(product.price)}
             </span>
             {hasDiscount && (
@@ -140,7 +140,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
           {inStock ? (
             <Button
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-sm h-9 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(204,34,51,0.3)] active:scale-95 transition-all duration-200"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-sm h-10 rounded-full hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(204,34,51,0.3)] active:scale-95 transition-all duration-200"
               onClick={handleAddToCart}
             >
               <ShoppingCart className="mr-2 h-4 w-4" />
@@ -149,7 +149,7 @@ export function ProductCard({ product }: ProductCardProps) {
           ) : (
             <Button
               variant="outline"
-              className="w-full text-sm h-9"
+              className="w-full text-sm h-10 rounded-full"
               asChild
             >
               <Link to={`/products/${product.slug}`}>View Details</Link>

@@ -8,34 +8,42 @@ export function PromoBanner() {
 
   return (
     <section
-      className="relative h-[300px] md:h-[400px] overflow-hidden"
+      className="relative h-[350px] md:h-[500px] overflow-hidden"
       ref={ref as React.RefObject<HTMLElement>}
     >
       <div
-        className="absolute inset-0 bg-cover bg-center scale-[1.05] transition-transform duration-[2s]"
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-[2s]"
         style={{
           backgroundImage: `url('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=1920&q=80&auto=format&fit=crop')`,
           transform: isVisible ? 'scale(1)' : 'scale(1.1)',
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30" />
       <div className="relative h-full container mx-auto px-4 flex flex-col items-start justify-center">
+        {/* Red accent bar */}
+        <div
+          className={`w-12 h-1 bg-primary mb-5 transition-all duration-700 ${
+            isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+          }`}
+        />
         <span
-          className={`text-primary font-semibold text-sm uppercase tracking-widest mb-2 transition-all duration-700 ${
+          className={`text-primary font-semibold text-sm uppercase tracking-widest mb-3 transition-all duration-700 delay-100 ${
             isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
           }`}
         >
           Premium Collection
         </span>
         <h2
-          className={`text-3xl md:text-5xl font-bold text-white mb-3 max-w-lg leading-tight transition-all duration-700 delay-150 ${
+          className={`text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 max-w-2xl leading-[0.95] transition-all duration-700 delay-200 ${
             isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
           }`}
         >
-          Gear Up This Riding Season
+          Gear Up This{' '}
+          <span className="text-primary">Riding</span>{' '}
+          Season
         </h2>
         <p
-          className={`text-white/70 text-base md:text-lg mb-6 max-w-md transition-all duration-700 delay-300 ${
+          className={`text-white/70 text-base md:text-lg mb-8 max-w-md transition-all duration-700 delay-300 ${
             isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
           }`}
         >

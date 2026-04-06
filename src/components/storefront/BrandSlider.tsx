@@ -66,10 +66,10 @@ export function BrandSlider() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="py-8 md:py-12 overflow-hidden" ref={ref as React.RefObject<HTMLElement>}>
+    <section className="py-14 md:py-20 overflow-hidden" ref={ref as React.RefObject<HTMLElement>}>
       <div className="container mx-auto px-4 mb-6">
         <div className={`flex items-center justify-between transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-          <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-gradient-chrome">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold uppercase tracking-wider text-gradient-chrome">
             Shop By Brand
           </h2>
           <Link
@@ -90,7 +90,7 @@ export function BrandSlider() {
               to={`/products?brand=${brand.slug}`}
               className="flex-shrink-0 flex flex-col items-center gap-2 group/item mx-3 md:mx-4"
             >
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-white flex items-center justify-center p-4 md:p-5 group-hover/item:scale-110 group-hover/item:shadow-[0_0_25px_hsl(0_75%_45%/0.4)] transition-all duration-300">
+              <div className="w-20 h-20 md:w-28 md:h-28 rounded-2xl bg-white/95 flex items-center justify-center p-4 md:p-5 group-hover/item:scale-110 group-hover/item:shadow-[0_0_25px_hsl(0_75%_45%/0.4)] transition-all duration-300">
                 {brand.logo_url ? (
                   <img
                     src={brand.logo_url}
