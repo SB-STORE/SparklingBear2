@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
+import { usePageTitle } from '@/hooks/use-page-title';
 
 const policies: Record<string, { title: string; content: string }> = {
   'shipping-policy': {
@@ -86,6 +87,7 @@ export default function PolicyPage() {
   const location = useLocation();
   const slug = location.pathname.replace('/', '');
   const policy = policies[slug] || null;
+  usePageTitle(policy?.title);
 
   if (!policy) {
     return (

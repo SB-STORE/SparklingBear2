@@ -1,6 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import { Star, Quote } from 'lucide-react';
+import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 import 'swiper/css';
 
 const fallbackTestimonials = [
@@ -13,11 +14,12 @@ const fallbackTestimonials = [
 
 export function TestimonialsSection() {
   const testimonials = fallbackTestimonials;
+  const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="py-10 md:py-14 bg-card/30 border-y border-border/20">
+    <section className="py-10 md:py-14 bg-card/30 border-y border-border/20" ref={ref as React.RefObject<HTMLElement>}>
       <div className="container mx-auto px-4">
-        <div className="text-center mb-10">
+        <div className={`text-center mb-10 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-gradient-chrome mb-2">
             What Riders Say
           </h2>

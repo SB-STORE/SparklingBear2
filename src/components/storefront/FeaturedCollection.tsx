@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card } from '@/components/ui/card';
 import { useProducts, useFeaturedProducts } from '@/hooks/use-products';
 import { ProductCard } from './ProductCard';
+import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 import type { Product } from '@/types';
 
 import 'swiper/css';
@@ -36,6 +37,8 @@ export function FeaturedCollection({
     isLoading: featLoading,
   } = useFeaturedProducts();
 
+  const { ref, isVisible } = useScrollAnimation();
+
   let products: Product[] | undefined;
   let isLoading = false;
 
@@ -54,59 +57,72 @@ export function FeaturedCollection({
     (categorySlug ? `/products?category=${categorySlug}` : '/products');
 
   return (
-    <section className="py-8 md:py-12 featured-collection bg-background">
+    <section
+      className="py-8 md:py-12 featured-collection bg-background"
+      ref={ref as React.RefObject<HTMLElement>}
+    >
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div
+          className={`flex items-center justify-between mb-6 transition-all duration-700 ease-out ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+          }`}
+        >
           <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-gradient-chrome">
             {title}
           </h2>
           <Link
             to={resolvedLink}
-            className="text-sm text-primary font-semibold hover:underline flex items-center gap-1"
+            className="text-sm text-primary font-semibold hover:underline flex items-center gap-1 group"
           >
             VIEW ALL
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
 
         {/* Swiper or Loading */}
-        {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <Card key={i} className="overflow-hidden">
-                <Skeleton className="aspect-square w-full" />
-                <div className="p-4 space-y-2">
-                  <Skeleton className="h-3 w-2/3" />
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-5 w-1/3" />
-                  <Skeleton className="h-9 w-full" />
-                </div>
-              </Card>
-            ))}
-          </div>
-        ) : products && products.length > 0 ? (
-          <Swiper
-            modules={[Navigation]}
-            navigation
-            slidesPerView={2}
-            spaceBetween={16}
-            breakpoints={{
-              768: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
-            }}
-          >
-            {products.map((product) => (
-              <SwiperSlide key={product.id}>
-                <ProductCard product={product} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : (
-          <p className="text-center text-muted-foreground py-8">
-            No products found
-          </p>
-        )}
+        <div
+          className={`transition-all duration-700 ease-out delay-200 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+        >
+          {isLoading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <Card key={i} className="overflow-hidden">
+                  <Skeleton className="aspect-square w-full" />
+                  <div className="p-4 space-y-2">
+                    <Skeleton className="h-3 w-2/3" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-5 w-1/3" />
+                    <Skeleton className="h-9 w-full" />
+                  </div>
+                </Card>
+              ))}
+            </div>
+          ) : products && products.length > 0 ? (
+            <Swiper
+              modules={[Navigation]}
+              navigation
+              slidesPerView={2}
+              spaceBetween={16}
+              breakpoints={{
+                768: { slidesPerView: 3 },
+                1024: { slidesPerView: 4 },
+              }}
+            >
+              {products.map((product) => (
+                <SwiperSlide key={product.id}>
+                  <ProductCard product={product} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            <p className="text-center text-muted-foreground py-8">
+              No products found
+            </p>
+          )}
+        </div>
       </div>
 
       <style>{`
@@ -117,6 +133,7 @@ export function FeaturedCollection({
           width: 36px;
           height: 36px;
           border-radius: 50%;
+          transition: all 0.3s ease;
         }
         .featured-collection .swiper-button-next::after,
         .featured-collection .swiper-button-prev::after {
@@ -126,6 +143,7 @@ export function FeaturedCollection({
         .featured-collection .swiper-button-next:hover,
         .featured-collection .swiper-button-prev:hover {
           background: hsl(0 75% 45% / 0.8);
+          transform: scale(1.1);
         }
         @media (max-width: 640px) {
           .featured-collection .swiper-button-next,

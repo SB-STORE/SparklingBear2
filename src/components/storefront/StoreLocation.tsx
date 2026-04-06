@@ -1,14 +1,17 @@
 import { MapPin, Clock, Phone, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 
 export function StoreLocation() {
+  const { ref, isVisible } = useScrollAnimation();
+
   return (
-    <section className="py-10 md:py-14">
+    <section className="py-10 md:py-14" ref={ref as React.RefObject<HTMLElement>}>
       <div className="container mx-auto px-4">
-        <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-center mb-10 text-gradient-chrome">
+        <h2 className={`text-xl md:text-2xl font-bold uppercase tracking-wider text-center mb-10 text-gradient-chrome transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           Visit Our Store
         </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 rounded-xl overflow-hidden border border-border/30">
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 rounded-xl overflow-hidden border border-border/30 transition-all duration-700 ease-out delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           {/* Map */}
           <div className="h-[300px] lg:h-auto min-h-[350px] bg-muted">
             <iframe
@@ -48,7 +51,7 @@ export function StoreLocation() {
                 <Phone className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold text-foreground">Phone</p>
-                  <p className="text-sm text-muted-foreground">To be updated</p>
+                  <p className="text-sm text-muted-foreground">+91 98765 43210</p>
                 </div>
               </div>
             </div>

@@ -145,10 +145,13 @@ const Footer = () => {
                 <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
                 <span>RR Nagar, Bangalore, Karnataka 560098</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <a
+                href="tel:+919876543210"
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
                 <Phone className="h-4 w-4 flex-shrink-0" />
-                <span>To be updated</span>
-              </div>
+                <span>+91 98765 43210</span>
+              </a>
               <a
                 href="mailto:info@sparklingbear.in"
                 className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -183,13 +186,6 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Sparkling Bear. All rights reserved.
           </p>
           <div className="flex items-center gap-3">
-            <a
-              href="/sb-admin-panel"
-              className="text-muted-foreground/40 hover:text-muted-foreground transition-colors"
-            >
-              Admin
-            </a>
-            <span className="text-muted-foreground/20">|</span>
             <p>
               Made with care by{' '}
               <a

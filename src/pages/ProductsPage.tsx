@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { SlidersHorizontal, LayoutGrid, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,6 +20,7 @@ import { BrandSlider } from '@/components/storefront/BrandSlider';
 import { useProducts, useCategories, useCategory } from '@/hooks/use-products';
 
 export default function ProductsPage() {
+  usePageTitle('All Products');
   const [searchParams, setSearchParams] = useSearchParams();
   const [filterOpen, setFilterOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);

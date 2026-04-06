@@ -1,4 +1,5 @@
 import { MapPin, Users, Award, Wrench } from 'lucide-react';
+import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 
 const features = [
   {
@@ -24,24 +25,39 @@ const features = [
 ];
 
 export function WhyChooseUs() {
+  const { ref, isVisible } = useScrollAnimation();
+
   return (
-    <section className="py-10 md:py-14">
+    <section className="py-10 md:py-14" ref={ref as React.RefObject<HTMLElement>}>
       <div className="container mx-auto px-4">
-        <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-center mb-3 text-gradient-chrome">
+        <h2
+          className={`text-xl md:text-2xl font-bold uppercase tracking-wider text-center mb-3 text-gradient-chrome transition-all duration-700 ease-out ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+          }`}
+        >
           Why Choose Sparkling Bear?
         </h2>
-        <p className="text-center text-muted-foreground mb-10 max-w-xl mx-auto">
+        <p
+          className={`text-center text-muted-foreground mb-10 max-w-xl mx-auto transition-all duration-700 ease-out delay-100 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+        >
           More than just an online store — we're riders who understand what you need.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {features.map((feature) => {
+          {features.map((feature, i) => {
             const Icon = feature.icon;
             return (
               <div
                 key={feature.title}
-                className="group p-6 rounded-xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-primary/30 hover:bg-white/[0.06] transition-all duration-300"
+                className={`group p-6 rounded-xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-primary/30 hover:bg-white/[0.06] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(204,34,51,0.15)] ${
+                  isVisible
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: isVisible ? `${i * 100 + 200}ms` : '0ms' }}
               >
-                <div className="w-12 h-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
                   <Icon className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-base font-bold text-foreground mb-2">

@@ -153,9 +153,14 @@ All colors MUST be HSL.
 }
 
 /* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
 .swiper-wrapper {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
+
 
 /* Featured collection arrow styling tweaks */
 .featured-collection .swiper-button-disabled {

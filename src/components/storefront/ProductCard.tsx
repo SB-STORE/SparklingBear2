@@ -43,7 +43,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <Card className="bg-card border border-border overflow-hidden group hover:shadow-elevated transition-all duration-300 flex flex-col h-full">
+      <Card className="bg-card border border-border overflow-hidden group hover:shadow-elevated hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
         {/* Image area */}
         <Link to={`/products/${product.slug}`} className="relative block">
           <div className="relative aspect-[4/5] bg-white overflow-hidden">
@@ -140,7 +140,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
           {inStock ? (
             <Button
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-sm h-9"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-sm h-9 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(204,34,51,0.3)] active:scale-95 transition-all duration-200"
               onClick={handleAddToCart}
             >
               <ShoppingCart className="mr-2 h-4 w-4" />

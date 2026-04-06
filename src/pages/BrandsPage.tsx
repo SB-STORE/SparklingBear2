@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import { useBrands } from '@/hooks/use-products';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import ls2Img from '@/assets/ls2.png';
@@ -40,6 +41,7 @@ const localLogoMap: Record<string, string> = {
 };
 
 export default function BrandsPage() {
+  usePageTitle('Our Brands');
   const { data: brands, isLoading } = useBrands();
 
   const brandsWithLogos = brands?.map((b) => ({

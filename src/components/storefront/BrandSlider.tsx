@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useBrands } from '@/hooks/use-products';
+import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 
 import ls2Img from '@/assets/ls2.png';
 import axorImg from '@/assets/axor.webp';
@@ -62,11 +63,12 @@ export function BrandSlider() {
 
   // Duplicate the list for seamless infinite scroll
   const doubledBrands = [...brands, ...brands];
+  const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="py-8 md:py-12 overflow-hidden">
+    <section className="py-8 md:py-12 overflow-hidden" ref={ref as React.RefObject<HTMLElement>}>
       <div className="container mx-auto px-4 mb-6">
-        <div className="flex items-center justify-between">
+        <div className={`flex items-center justify-between transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-gradient-chrome">
             Shop By Brand
           </h2>

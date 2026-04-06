@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 
 const bikes = [
   { name: 'Royal Enfield', slug: 'Royal Enfield', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Royal_Enfield_Classic_350_%282017_Model_Year%29.jpg/800px-Royal_Enfield_Classic_350_%282017_Model_Year%29.jpg' },
@@ -13,10 +14,12 @@ const bikes = [
 ];
 
 export function ShopByBike() {
+  const { ref, isVisible } = useScrollAnimation();
+
   return (
-    <section className="py-10 md:py-14">
+    <section className="py-10 md:py-14" ref={ref as React.RefObject<HTMLElement>}>
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
+        <div className={`flex items-center justify-between mb-8 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-gradient-chrome">
             Shop By Bike
           </h2>
@@ -29,11 +32,12 @@ export function ShopByBike() {
           </Link>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {bikes.map((bike) => (
+          {bikes.map((bike, i) => (
             <Link
               key={bike.slug}
               to={`/products?search=${encodeURIComponent(bike.slug)}`}
-              className="group relative bg-card rounded-xl overflow-hidden border border-border/30 hover:border-primary/50 transition-all duration-300"
+              className={`group relative bg-card rounded-xl overflow-hidden border border-border/30 hover:border-primary/50 transition-all duration-500 hover:-translate-y-1 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              style={{ transitionDelay: isVisible ? `${i * 80 + 150}ms` : '0ms' }}
             >
               <div className="aspect-[4/3] overflow-hidden bg-gradient-to-b from-card to-muted/30">
                 <img

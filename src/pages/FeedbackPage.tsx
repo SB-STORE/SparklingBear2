@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { MessageSquare, Send } from 'lucide-react';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,6 +10,7 @@ import { useCreateTicket } from '@/hooks/use-admin';
 import { toast } from 'sonner';
 
 export default function FeedbackPage() {
+  usePageTitle('Share Your Feedback');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
