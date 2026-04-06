@@ -116,36 +116,59 @@ export function Navbar() {
     bike: {
       columns: [
         {
-          title: 'Popular Bikes',
+          title: 'Royal Enfield',
           links: [
-            { label: 'Royal Enfield', href: '/products?search=Royal+Enfield' },
-            { label: 'KTM', href: '/products?search=KTM' },
-            { label: 'Bajaj', href: '/products?search=Bajaj' },
-            { label: 'TVS', href: '/products?search=TVS' },
-            { label: 'Hero', href: '/products?search=Hero' },
-            { label: 'Honda', href: '/products?search=Honda' },
+            { label: 'Himalayan 450', href: '/products?search=Himalayan+450' },
+            { label: 'Classic 350', href: '/products?search=Classic+350' },
+            { label: 'Hunter 350', href: '/products?search=Hunter+350' },
+            { label: 'Interceptor 650', href: '/products?search=Interceptor+650' },
+            { label: 'Meteor 350', href: '/products?search=Meteor+350' },
+            { label: 'Continental GT 650', href: '/products?search=Continental+GT+650' },
+            { label: 'Guerrilla 450', href: '/products?search=Guerrilla+450' },
+            { label: 'Shotgun 650', href: '/products?search=Shotgun+650' },
+            { label: 'SCRAM 440', href: '/products?search=SCRAM+440' },
+            { label: 'Super Meteor 650', href: '/products?search=Super+Meteor+650' },
+            { label: 'Bear 650', href: '/products?search=Bear+650' },
           ],
         },
         {
-          title: 'More Bikes',
+          title: 'KTM',
           links: [
-            { label: 'Yamaha', href: '/products?search=Yamaha' },
-            { label: 'Suzuki', href: '/products?search=Suzuki' },
-            { label: 'Kawasaki', href: '/products?search=Kawasaki' },
-            { label: 'BMW', href: '/products?search=BMW' },
-            { label: 'Ducati', href: '/products?search=Ducati' },
-            { label: 'Triumph', href: '/products?search=Triumph' },
+            { label: '390 Adventure', href: '/products?search=KTM+390+Adventure' },
+            { label: 'Duke 390', href: '/products?search=KTM+Duke+390' },
+            { label: 'Duke 250', href: '/products?search=KTM+Duke+250' },
+            { label: 'RC 390', href: '/products?search=KTM+RC+390' },
+            { label: '250 Adventure', href: '/products?search=KTM+250+Adventure' },
           ],
         },
         {
-          title: 'Also Available',
+          title: 'Honda',
           links: [
-            { label: 'Husqvarna', href: '/products?search=Husqvarna' },
-            { label: 'Jawa', href: '/products?search=Jawa' },
-            { label: 'Harley-Davidson', href: '/products?search=Harley' },
-            { label: 'Aprilia', href: '/products?search=Aprilia' },
-            { label: 'Benelli', href: '/products?search=Benelli' },
-            { label: 'CFMoto', href: '/products?search=CFMoto' },
+            { label: 'CB300R', href: '/products?search=Honda+CB300R' },
+            { label: "H'ness CB350", href: '/products?search=Honda+Hness' },
+            { label: 'CB350 RS', href: '/products?search=Honda+CB350+RS' },
+            { label: 'CB300F', href: '/products?search=Honda+CB300F' },
+            { label: 'NX500', href: '/products?search=Honda+NX500' },
+            { label: 'CB200X', href: '/products?search=Honda+CB200X' },
+          ],
+        },
+        {
+          title: 'More Brands',
+          links: [
+            { label: 'Triumph Speed 400', href: '/products?search=Triumph+Speed+400' },
+            { label: 'Triumph Scrambler 400X', href: '/products?search=Triumph+Scrambler+400X' },
+            { label: 'Yamaha MT-15', href: '/products?search=Yamaha+MT+15' },
+            { label: 'Yamaha FZ', href: '/products?search=Yamaha+FZ' },
+            { label: 'BMW G310 GS', href: '/products?search=BMW+G310+GS' },
+            { label: 'Hero Xpulse 210', href: '/products?search=Hero+Xpulse+210' },
+            { label: 'TVS Apache RTR 200', href: '/products?search=TVS+Apache+RTR' },
+            { label: 'TVS Ronin', href: '/products?search=TVS+Ronin' },
+            { label: 'Bajaj Dominar', href: '/products?search=Bajaj+Dominar' },
+            { label: 'Bajaj Pulsar NS400', href: '/products?search=Bajaj+Pulsar+NS400' },
+            { label: 'Suzuki V-Strom SX 250', href: '/products?search=Suzuki+V+Strom' },
+            { label: 'Kawasaki Versys 650', href: '/products?search=Kawasaki+Versys+650' },
+            { label: 'Harley-Davidson X440', href: '/products?search=Harley+X440' },
+            { label: 'Jawa/Yezdi Adventure', href: '/products?search=Yezdi+Adventure' },
           ],
         },
       ],
@@ -282,10 +305,13 @@ export function Navbar() {
 
     return (
       <div className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+        <div className={cn(
+          'grid gap-8',
+          menuData.columns.length > 3 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-2 md:grid-cols-3'
+        )}>
           {menuData.columns.map((col) => (
             <div key={col.title}>
-              <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
+              <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-3">
                 {col.title}
               </h4>
               <ul className="space-y-2">
@@ -349,7 +375,7 @@ export function Navbar() {
                             {item.label}
                           </AccordionTrigger>
                           <AccordionContent>
-                            <div className="pl-2 space-y-2">
+                            <div className="pl-2 space-y-1">
                               <Link
                                 to={item.href}
                                 className="block text-sm text-primary font-semibold py-1"
@@ -357,16 +383,34 @@ export function Navbar() {
                               >
                                 View All
                               </Link>
-                              {categories?.slice(0, 6).map((cat) => (
-                                <Link
-                                  key={cat.id}
-                                  to={`/products?category=${cat.slug}`}
-                                  className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                                  onClick={() => setMobileOpen(false)}
-                                >
-                                  {cat.name}
-                                </Link>
-                              ))}
+                              {item.megaKey && megaMenuData[item.megaKey] ? (
+                                megaMenuData[item.megaKey].columns.map((col) => (
+                                  <div key={col.title} className="mt-2">
+                                    <p className="text-xs font-bold text-primary/70 uppercase tracking-wider py-1">{col.title}</p>
+                                    {col.links.slice(0, 6).map((link) => (
+                                      <Link
+                                        key={link.label}
+                                        to={link.href}
+                                        className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                                        onClick={() => setMobileOpen(false)}
+                                      >
+                                        {link.label}
+                                      </Link>
+                                    ))}
+                                  </div>
+                                ))
+                              ) : (
+                                categories?.slice(0, 6).map((cat) => (
+                                  <Link
+                                    key={cat.id}
+                                    to={`/products?category=${cat.slug}`}
+                                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                                    onClick={() => setMobileOpen(false)}
+                                  >
+                                    {cat.name}
+                                  </Link>
+                                ))
+                              )}
                             </div>
                           </AccordionContent>
                         </AccordionItem>
