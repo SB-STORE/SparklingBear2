@@ -70,8 +70,8 @@ const App = () => (
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/orders/:orderNumber" element={<OrderConfirmationPage />} />
 
-                {/* Admin Auth */}
-                <Route path="/admin/login" element={<AdminLogin />} />
+                {/* Admin Auth — hidden URL, not linked anywhere in UI */}
+                <Route path="/sb-admin-panel" element={<AdminLogin />} />
 
                 {/* Admin Panel (Protected) */}
                 <Route

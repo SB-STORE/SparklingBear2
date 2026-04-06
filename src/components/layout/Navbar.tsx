@@ -278,6 +278,7 @@ export function Navbar() {
   };
 
   return (
+    <>
     <header className="relative z-40">
       {/* Tier 2: Main header bar */}
       <div
@@ -381,29 +382,20 @@ export function Navbar() {
               )}
             </Button>
 
-            {/* User icon — links to products, not admin */}
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/products">
-                <User className="h-5 w-5" />
-              </Link>
+            {/* Cart button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative"
+              onClick={() => setCartOpen(true)}
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {itemCount > 0 && (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
+                  {itemCount}
+                </Badge>
+              )}
             </Button>
-
-            {/* Cart */}
-            <Sheet open={cartOpen} onOpenChange={setCartOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative">
-                  <ShoppingCart className="h-5 w-5" />
-                  {itemCount > 0 && (
-                    <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
-                      {itemCount}
-                    </Badge>
-                  )}
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="w-full sm:max-w-md bg-background border-border">
-                <CartDrawer onClose={() => setCartOpen(false)} />
-              </SheetContent>
-            </Sheet>
           </div>
         </div>
 
@@ -460,6 +452,15 @@ export function Navbar() {
 
       {/* Spacer for fixed header when scrolled */}
       {scrolled && <div className="h-16 lg:h-[108px]" />}
+
     </header>
+
+    {/* Cart drawer — rendered outside header to avoid Sheet nesting issues */}
+    <Sheet open={cartOpen} onOpenChange={setCartOpen}>
+      <SheetContent side="right" className="w-full sm:max-w-md bg-background border-border">
+        <CartDrawer onClose={() => setCartOpen(false)} />
+      </SheetContent>
+    </Sheet>
+    </>
   );
 }

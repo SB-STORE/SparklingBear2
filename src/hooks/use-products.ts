@@ -100,7 +100,39 @@ export function useProducts(filters?: ProductFilters) {
       }
 
       if (filters?.search) {
-        query = query.or(`name.ilike.%${filters.search}%,brand.name.ilike.%${filters.search}%`);
+        // Search by product name OR description
+        query = query.or(`name.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
+
+        // Also try to find by brand name — look up matching brand IDs first
+        const { data: matchingBrands } = await supabase
+          .from('brands')
+          .select('id')
+          .ilike('name', `%${filters.search}%`);
+
+        if (matchingBrands && matchingBrands.length > 0) {
+          const brandIds = matchingBrands.map(b => b.id);
+          // Re-run query to include brand matches
+          const brandQuery = supabase
+            .from('products')
+            .select('*, brand:brands(*), category:categories(*)')
+            .in('brand_id', brandIds)
+            .order('display_order');
+
+          const { data: brandProducts } = await brandQuery;
+
+          // Get name-matched products
+          const { data: nameProducts, error: nameError } = await query;
+          if (nameError) throw nameError;
+
+          // Merge and deduplicate
+          const allProducts = [...(nameProducts || []), ...(brandProducts || [])];
+          const seen = new Set<string>();
+          return allProducts.filter(p => {
+            if (seen.has(p.id)) return false;
+            seen.add(p.id);
+            return true;
+          }) as Product[];
+        }
       }
 
       const { data, error } = await query;

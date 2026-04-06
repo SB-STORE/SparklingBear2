@@ -21,7 +21,7 @@ const slides = [
     title: 'Gear Up For Adventure',
     subtitle: 'Riding jackets, gloves, boots & touring luggage',
     cta: 'View Collection',
-    link: '/products?category=riding-gears-luggage',
+    link: '/products',
   },
   {
     image: 'https://images.pexels.com/photos/30888535/pexels-photo-30888535.jpeg?auto=compress&cs=tinysrgb&w=1920',
@@ -29,13 +29,6 @@ const slides = [
     subtitle: 'LS2, Axor, SMK & more — ISI & ECE certified',
     cta: 'Browse Helmets',
     link: '/products?category=helmets',
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1920&q=80&auto=format&fit=crop',
-    title: 'Premium Car Detailing',
-    subtitle: 'Ceramic coating, PPF & paint correction by experts',
-    cta: 'Contact Us',
-    link: '/products',
   },
 ];
 
@@ -56,7 +49,8 @@ export function HeroCarousel() {
               <img
                 src={slide.image}
                 alt={slide.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center"
+                style={{ objectPosition: 'center 30%' }}
               />
               {/* Dark gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
