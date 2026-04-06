@@ -54,7 +54,7 @@ export function FeaturedCollection({
     (categorySlug ? `/products?category=${categorySlug}` : '/products');
 
   return (
-    <section className="py-6 md:py-10 featured-collection">
+    <section className="py-8 md:py-12 featured-collection bg-background">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
