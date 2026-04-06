@@ -6,8 +6,10 @@ interface AuthContextValue {
   user: User | null;
   session: Session | null;
   isAdmin: boolean;
+  isCustomer: boolean;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, metadata?: { full_name?: string; phone?: string }) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -40,10 +42,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const isAdmin = user?.user_metadata?.role === 'admin';
+  const isCustomer = !!user && !isAdmin;
 
   const signIn = async (email: string, password: string) => {
     if (!isSupabaseConfigured) throw new Error('Supabase not configured');
     const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+  };
+
+  const signUp = async (email: string, password: string, metadata?: { full_name?: string; phone?: string }) => {
+    if (!isSupabaseConfigured) throw new Error('Supabase not configured');
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: metadata?.full_name || '',
+          phone: metadata?.phone || '',
+        },
+      },
+    });
     if (error) throw error;
   };
 
@@ -54,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, isAdmin, isLoading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, session, isAdmin, isCustomer, isLoading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );

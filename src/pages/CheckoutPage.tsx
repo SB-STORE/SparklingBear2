@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useCreateOrder } from '@/hooks/use-orders';
 import { formatPrice } from '@/lib/price';
 import { INDIAN_STATES } from '@/types';
@@ -32,12 +33,19 @@ type CheckoutForm = z.infer<typeof checkoutSchema>;
 
 export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const createOrder = useCreateOrder();
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<CheckoutForm>({
     resolver: zodResolver(checkoutSchema),
-    defaultValues: { email: '', addressLine2: '', notes: '' },
+    defaultValues: {
+      name: user?.user_metadata?.full_name || '',
+      email: user?.email || '',
+      phone: user?.user_metadata?.phone || '',
+      addressLine2: '',
+      notes: '',
+    },
   });
 
   if (items.length === 0) {

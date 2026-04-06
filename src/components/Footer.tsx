@@ -181,17 +181,26 @@ const Footer = () => {
           <p>
             &copy; {new Date().getFullYear()} Sparkling Bear. All rights reserved.
           </p>
-          <p>
-            Made with care by{' '}
+          <div className="flex items-center gap-3">
             <a
-              href="https://www.instagram.com/trivision_group"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent font-medium hover:underline hover:text-primary transition-colors"
+              href="/sb-admin-panel"
+              className="text-muted-foreground/40 hover:text-muted-foreground transition-colors"
             >
-              Trivision Group
+              Admin
             </a>
-          </p>
+            <span className="text-muted-foreground/20">|</span>
+            <p>
+              Made with care by{' '}
+              <a
+                href="https://www.instagram.com/trivision_group"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent font-medium hover:underline hover:text-primary transition-colors"
+              >
+                Trivision Group
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

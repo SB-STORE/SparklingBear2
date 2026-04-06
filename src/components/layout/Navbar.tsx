@@ -24,6 +24,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useCategories, useBrands } from '@/hooks/use-products';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { SearchBar } from '@/components/storefront/SearchBar';
@@ -71,6 +72,7 @@ export function Navbar() {
   const [activeMega, setActiveMega] = useState<string | null>(null);
   const megaTimeout = useRef<ReturnType<typeof setTimeout>>();
   const { itemCount } = useCart();
+  const { user } = useAuth();
   const { data: categories } = useCategories();
   const { data: brands } = useBrands();
   const location = useLocation();
@@ -400,6 +402,13 @@ export function Navbar() {
               ) : (
                 <Search className="h-5 w-5" />
               )}
+            </Button>
+
+            {/* Account icon */}
+            <Button variant="ghost" size="icon" asChild>
+              <Link to={user ? '/account' : '/account/login'}>
+                <User className="h-5 w-5" />
+              </Link>
             </Button>
 
             {/* Cart button */}

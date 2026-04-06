@@ -82,6 +82,23 @@ export function useCreateOrder() {
   });
 }
 
+export function useCustomerOrders(email: string | undefined) {
+  return useQuery({
+    queryKey: ['customer-orders', email],
+    queryFn: async () => {
+      if (!email) return [];
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('shipping_email', email)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!email,
+  });
+}
+
 export function useOrderByNumber(orderNumber: string | undefined) {
   return useQuery({
     queryKey: ['order', orderNumber],

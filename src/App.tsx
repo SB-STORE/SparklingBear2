@@ -16,6 +16,9 @@ const ProductsPage = lazy(() => import('./pages/ProductsPage'));
 const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage'));
 const BrandsPage = lazy(() => import('./pages/BrandsPage'));
 const PolicyPage = lazy(() => import('./pages/PolicyPage'));
+const CustomerLogin = lazy(() => import('./pages/account/Login'));
+const CustomerRegister = lazy(() => import('./pages/account/Register'));
+const AccountPage = lazy(() => import('./pages/account/Account'));
 const CartPage = lazy(() => import('./pages/CartPage'));
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 const OrderConfirmationPage = lazy(() => import('./pages/OrderConfirmationPage'));
@@ -66,6 +69,9 @@ const App = () => (
                 <Route path="/return-refund" element={<PolicyPage />} />
                 <Route path="/privacy-policy" element={<PolicyPage />} />
                 <Route path="/terms-of-service" element={<PolicyPage />} />
+                <Route path="/account/login" element={<CustomerLogin />} />
+                <Route path="/account/register" element={<CustomerRegister />} />
+                <Route path="/account" element={<AccountPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/orders/:orderNumber" element={<OrderConfirmationPage />} />
