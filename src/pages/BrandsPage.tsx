@@ -78,15 +78,15 @@ export default function BrandsPage() {
                 to={`/products?brand=${brand.slug}`}
                 className="group flex flex-col items-center gap-3"
               >
-                <div className="w-full aspect-square bg-white rounded-lg border border-border flex items-center justify-center p-6 group-hover:border-primary/60 group-hover:shadow-[0_0_20px_hsl(0_75%_45%/0.15)] transition-all duration-300">
+                <div className="w-full aspect-[4/3] bg-card rounded-lg border border-border/50 flex items-center justify-center p-6 group-hover:border-primary/40 group-hover:bg-card/80 transition-all duration-300">
                   {brand.logo_url ? (
                     <img
                       src={brand.logo_url}
                       alt={brand.name}
-                      className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                      className="max-w-full max-h-full object-contain filter brightness-0 invert opacity-70 group-hover:opacity-100 group-hover:brightness-100 group-hover:invert-0 group-hover:drop-shadow-[0_0_12px_hsl(0_75%_45%/0.4)] transition-all duration-300"
                     />
                   ) : (
-                    <span className="text-lg font-bold text-neutral-800">
+                    <span className="text-lg font-bold text-muted-foreground">
                       {brand.name}
                     </span>
                   )}
