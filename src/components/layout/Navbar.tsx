@@ -98,180 +98,200 @@ export function Navbar() {
     megaTimeout.current = setTimeout(() => setActiveMega(null), 200);
   };
 
-  // Map mega keys to their relevant category slug
-  const megaCategoryMap: Record<string, string | undefined> = {
-    accessories: 'bike-protection-fitments',
-    gear: 'riding-gears-luggage',
-    luggage: 'luggage-touring',
-    helmets: 'helmets',
+  // ── Contextual mega menu data per nav item ──
+  const megaMenuData: Record<string, {
+    columns: { title: string; links: { label: string; href: string }[] }[];
+  }> = {
+    bike: {
+      columns: [
+        {
+          title: 'Popular Bikes',
+          links: [
+            { label: 'Royal Enfield', href: '/products?search=Royal+Enfield' },
+            { label: 'KTM', href: '/products?search=KTM' },
+            { label: 'Bajaj', href: '/products?search=Bajaj' },
+            { label: 'TVS', href: '/products?search=TVS' },
+            { label: 'Hero', href: '/products?search=Hero' },
+            { label: 'Honda', href: '/products?search=Honda' },
+          ],
+        },
+        {
+          title: 'More Bikes',
+          links: [
+            { label: 'Yamaha', href: '/products?search=Yamaha' },
+            { label: 'Suzuki', href: '/products?search=Suzuki' },
+            { label: 'Kawasaki', href: '/products?search=Kawasaki' },
+            { label: 'BMW', href: '/products?search=BMW' },
+            { label: 'Ducati', href: '/products?search=Ducati' },
+            { label: 'Triumph', href: '/products?search=Triumph' },
+          ],
+        },
+        {
+          title: 'Also Available',
+          links: [
+            { label: 'Husqvarna', href: '/products?search=Husqvarna' },
+            { label: 'Jawa', href: '/products?search=Jawa' },
+            { label: 'Harley-Davidson', href: '/products?search=Harley' },
+            { label: 'Aprilia', href: '/products?search=Aprilia' },
+            { label: 'Benelli', href: '/products?search=Benelli' },
+            { label: 'CFMoto', href: '/products?search=CFMoto' },
+          ],
+        },
+      ],
+    },
+    accessories: {
+      columns: [
+        {
+          title: 'Sub-Categories',
+          links: [
+            { label: 'Crash Guards', href: '/products?category=bike-protection-fitments' },
+            { label: 'Frame Sliders', href: '/products?category=bike-protection-fitments' },
+            { label: 'Phone Mounts', href: '/products?category=bike-protection-fitments' },
+            { label: 'Aux Lights', href: '/products?category=aux-lights' },
+            { label: 'Mirrors & Levers', href: '/products?category=bike-protection-fitments' },
+          ],
+        },
+        {
+          title: 'Brands',
+          links: [
+            { label: 'Zana', href: '/products?brand=zana' },
+            { label: 'MADDOG', href: '/products?brand=maddog' },
+            { label: 'Moto Care', href: '/products?brand=moto-care' },
+            { label: 'HJG', href: '/products?brand=hjg' },
+            { label: 'FUTURE EYES', href: '/products?brand=future-eyes' },
+            { label: 'Auto Engina', href: '/products?brand=auto-engina' },
+          ],
+        },
+        {
+          title: 'Quick Links',
+          links: [
+            { label: 'View All Accessories', href: '/products?category=bike-protection-fitments' },
+            { label: 'All Brands', href: '/brands' },
+          ],
+        },
+      ],
+    },
+    gear: {
+      columns: [
+        {
+          title: 'Riding Gear',
+          links: [
+            { label: 'Riding Jackets', href: '/products?category=riding-gears-luggage' },
+            { label: 'Riding Gloves', href: '/products?category=riding-gears-luggage' },
+            { label: 'Riding Boots', href: '/products?category=riding-gears-luggage' },
+            { label: 'Riding Pants', href: '/products?category=riding-gears-luggage' },
+            { label: 'Rain Gear', href: '/products?category=riding-gears-luggage' },
+          ],
+        },
+        {
+          title: 'Brands',
+          links: [
+            { label: 'Rynox', href: '/products?brand=rynox' },
+            { label: 'Cramster', href: '/products?brand=cramster' },
+            { label: 'Viaterra', href: '/products?brand=viaterra' },
+            { label: 'Raida', href: '/products?brand=raida' },
+            { label: 'Moto Torque', href: '/products?brand=moto-torque' },
+          ],
+        },
+        {
+          title: 'Quick Links',
+          links: [
+            { label: 'View All Riding Gear', href: '/products?category=riding-gears-luggage' },
+            { label: 'All Brands', href: '/brands' },
+          ],
+        },
+      ],
+    },
+    luggage: {
+      columns: [
+        {
+          title: 'Luggage Types',
+          links: [
+            { label: 'Saddle Bags', href: '/products?category=riding-gears-luggage' },
+            { label: 'Tank Bags', href: '/products?category=riding-gears-luggage' },
+            { label: 'Tail Bags', href: '/products?category=riding-gears-luggage' },
+            { label: 'Panniers', href: '/products?category=riding-gears-luggage' },
+            { label: 'Top Boxes', href: '/products?category=riding-gears-luggage' },
+          ],
+        },
+        {
+          title: 'Brands',
+          links: [
+            { label: 'Viaterra', href: '/products?brand=viaterra' },
+            { label: 'Rynox', href: '/products?brand=rynox' },
+            { label: 'Cramster', href: '/products?brand=cramster' },
+            { label: 'BOBO', href: '/products?brand=bobo' },
+          ],
+        },
+        {
+          title: 'Quick Links',
+          links: [
+            { label: 'View All Luggage', href: '/products?category=riding-gears-luggage' },
+            { label: 'All Brands', href: '/brands' },
+          ],
+        },
+      ],
+    },
+    helmets: {
+      columns: [
+        {
+          title: 'Helmet Types',
+          links: [
+            { label: 'Full Face Helmets', href: '/products?category=helmets' },
+            { label: 'Half Face Helmets', href: '/products?category=helmets' },
+            { label: 'Modular Helmets', href: '/products?category=helmets' },
+            { label: 'Off-Road Helmets', href: '/products?category=helmets' },
+            { label: 'Visors & Accessories', href: '/products?category=helmets' },
+          ],
+        },
+        {
+          title: 'Brands',
+          links: [
+            { label: 'LS2', href: '/products?brand=ls2' },
+            { label: 'Axor', href: '/products?brand=axor' },
+            { label: 'SMK', href: '/products?brand=smk' },
+            { label: 'Studds', href: '/products?brand=studds' },
+          ],
+        },
+        {
+          title: 'Quick Links',
+          links: [
+            { label: 'View All Helmets', href: '/products?category=helmets' },
+            { label: 'All Brands', href: '/brands' },
+          ],
+        },
+      ],
+    },
   };
 
-  // Build mega menu content based on which nav item is hovered
+  // Build mega menu content — each nav item gets unique, contextual content
   const renderMegaContent = (key: string) => {
-    const cats = categories || [];
-    const brandList = brands || [];
-    const relevantCatSlug = megaCategoryMap[key];
+    const menuData = megaMenuData[key];
+    if (!menuData) return null;
 
-    // Popular bike makes for "SHOP BY BIKE"
-    const bikeList = [
-      'Royal Enfield', 'KTM', 'Bajaj', 'TVS', 'Hero',
-      'Honda', 'Yamaha', 'Suzuki', 'Kawasaki', 'BMW',
-      'Ducati', 'Triumph', 'Husqvarna', 'Jawa', 'Harley-Davidson',
-      'Aprilia', 'Benelli', 'CFMoto',
-    ];
-
-    // "SHOP BY BIKE" — show bike makes + categories + quick links
-    if (key === 'bike') {
-      return (
-        <div className="container mx-auto px-4 py-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="col-span-2">
+    return (
+      <div className="container mx-auto px-4 py-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+          {menuData.columns.map((col) => (
+            <div key={col.title}>
               <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
-                Select Your Bike
-              </h4>
-              <div className="grid grid-cols-3 gap-x-6 gap-y-2">
-                {bikeList.map((bike) => (
-                  <Link
-                    key={bike}
-                    to={`/products?search=${encodeURIComponent(bike)}`}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                    onClick={() => setActiveMega(null)}
-                  >
-                    {bike}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
-                Categories
+                {col.title}
               </h4>
               <ul className="space-y-2">
-                {cats.slice(0, 6).map((cat) => (
-                  <li key={cat.id}>
+                {col.links.map((link) => (
+                  <li key={link.label}>
                     <Link
-                      to={`/products?category=${cat.slug}`}
+                      to={link.href}
                       className="text-sm text-muted-foreground hover:text-primary transition-colors"
                       onClick={() => setActiveMega(null)}
                     >
-                      {cat.name}
+                      {link.label}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
-            <div>
-              <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
-                Quick Links
-              </h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    to="/products"
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                    onClick={() => setActiveMega(null)}
-                  >
-                    View All Products
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/brands"
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                    onClick={() => setActiveMega(null)}
-                  >
-                    All Brands
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/products?featured=true"
-                    className="text-sm text-primary font-semibold hover:underline"
-                    onClick={() => setActiveMega(null)}
-                  >
-                    New Arrivals
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    // Other menus — show the specific category highlighted + relevant brands
-    return (
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {/* Categories column — highlight the relevant one */}
-          <div>
-            <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
-              Categories
-            </h4>
-            <ul className="space-y-2">
-              {cats.slice(0, 8).map((cat) => (
-                <li key={cat.id}>
-                  <Link
-                    to={`/products?category=${cat.slug}`}
-                    className={`text-sm transition-colors ${
-                      cat.slug === relevantCatSlug
-                        ? 'text-primary font-semibold'
-                        : 'text-muted-foreground hover:text-primary'
-                    }`}
-                    onClick={() => setActiveMega(null)}
-                  >
-                    {cat.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Popular Brands columns */}
-          <div className="col-span-2">
-            <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
-              Popular Brands
-            </h4>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-              {brandList.slice(0, 12).map((brand) => (
-                <Link
-                  key={brand.id}
-                  to={`/products?brand=${brand.slug}`}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  onClick={() => setActiveMega(null)}
-                >
-                  {brand.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick link */}
-          <div>
-            <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
-              Quick Links
-            </h4>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to={relevantCatSlug ? `/products?category=${relevantCatSlug}` : '/products'}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  onClick={() => setActiveMega(null)}
-                >
-                  View All {NAV_ITEMS.find(n => n.megaKey === key)?.label || 'Products'}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products?featured=true"
-                  className="text-sm text-primary font-semibold hover:underline"
-                  onClick={() => setActiveMega(null)}
-                >
-                  New Arrivals
-                </Link>
-              </li>
-            </ul>
-          </div>
+          ))}
         </div>
       </div>
     );
