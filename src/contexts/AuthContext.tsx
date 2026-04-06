@@ -10,6 +10,8 @@ interface AuthContextValue {
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, metadata?: { full_name?: string; phone?: string }) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -65,6 +67,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) throw error;
   };
 
+  const signInWithGoogle = async () => {
+    if (!isSupabaseConfigured) throw new Error('Supabase not configured');
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/account`,
+      },
+    });
+    if (error) throw error;
+  };
+
+  const resetPassword = async (email: string) => {
+    if (!isSupabaseConfigured) throw new Error('Supabase not configured');
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/account/login`,
+    });
+    if (error) throw error;
+  };
+
   const signOut = async () => {
     if (!isSupabaseConfigured) return;
     const { error } = await supabase.auth.signOut();
@@ -72,7 +93,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, isAdmin, isCustomer, isLoading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{
+      user, session, isAdmin, isCustomer, isLoading,
+      signIn, signUp, signInWithGoogle, resetPassword, signOut,
+    }}>
       {children}
     </AuthContext.Provider>
   );

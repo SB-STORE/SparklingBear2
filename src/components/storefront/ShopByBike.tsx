@@ -1,15 +1,24 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
+import bikeRE from '@/assets/bike-royal-enfield.jpg';
+import bikeKTM from '@/assets/bike-ktm.jpg';
+import bikeYamaha from '@/assets/bike-yamaha.jpg';
+import bikeHonda from '@/assets/bike-honda.jpg';
+import bikeBajaj from '@/assets/bike-bajaj.jpg';
+import bikeTVS from '@/assets/bike-tvs.jpg';
+import bikeHero from '@/assets/bike-hero.jpg';
+import bikeSuzuki from '@/assets/bike-suzuki.jpg';
+
 const bikes = [
-  { name: 'Royal Enfield Classic 350', slug: 'RE Classic 350', image: 'https://images.unsplash.com/photo-1622185135505-2d795003994a?w=800&q=80&auto=format&fit=crop' },
-  { name: 'RE Himalayan 450', slug: 'RE Himalayan 450', image: 'https://images.pexels.com/photos/19547825/pexels-photo-19547825.jpeg?auto=compress&cs=tinysrgb&w=800' },
-  { name: 'KTM 390 Adventure', slug: 'KTM 390 Adventure', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&q=80&auto=format&fit=crop' },
-  { name: 'KTM Duke 390', slug: 'KTM Duke 390', image: 'https://images.unsplash.com/photo-1635073908681-64534f1ac68b?w=800&q=80&auto=format&fit=crop' },
-  { name: 'Yamaha R15 V4', slug: 'Yamaha R15 V4', image: 'https://images.pexels.com/photos/19435684/pexels-photo-19435684.jpeg?auto=compress&cs=tinysrgb&w=800' },
-  { name: 'TVS Apache', slug: 'TVS Apache', image: 'https://images.pexels.com/photos/17227166/pexels-photo-17227166.jpeg?auto=compress&cs=tinysrgb&w=800' },
-  { name: 'Hero Xpulse', slug: 'Hero Xpulse', image: 'https://images.pexels.com/photos/12992447/pexels-photo-12992447.jpeg?auto=compress&cs=tinysrgb&w=800' },
-  { name: 'Bajaj Dominar 400', slug: 'Bajaj Dominar 400', image: 'https://images.pexels.com/photos/27100142/pexels-photo-27100142.jpeg?auto=compress&cs=tinysrgb&w=800' },
+  { name: 'Royal Enfield', slug: 'Royal Enfield', image: bikeRE },
+  { name: 'KTM', slug: 'KTM', image: bikeKTM },
+  { name: 'Yamaha', slug: 'Yamaha', image: bikeYamaha },
+  { name: 'Honda', slug: 'Honda', image: bikeHonda },
+  { name: 'Bajaj', slug: 'Bajaj', image: bikeBajaj },
+  { name: 'TVS', slug: 'TVS', image: bikeTVS },
+  { name: 'Hero', slug: 'Hero', image: bikeHero },
+  { name: 'Suzuki', slug: 'Suzuki', image: bikeSuzuki },
 ];
 
 export function ShopByBike() {
@@ -39,7 +48,7 @@ export function ShopByBike() {
                 <img
                   src={bike.image}
                   alt={bike.name}
-                  className="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
               </div>

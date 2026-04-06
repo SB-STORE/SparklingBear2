@@ -72,7 +72,7 @@ export function StoreLocation() {
                 className="border-green-600 text-green-500 hover:bg-green-600/10"
               >
                 <a
-                  href="https://wa.me/919876543210"
+                  href="https://wa.me/91XXXXXXXXXX"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
