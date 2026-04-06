@@ -1,12 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Navigation } from 'swiper/modules';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useBrands } from '@/hooks/use-products';
-
-import 'swiper/css';
-import 'swiper/css/free-mode';
-import 'swiper/css/navigation';
 
 import ls2Img from '@/assets/ls2.png';
 import axorImg from '@/assets/axor.webp';
@@ -38,7 +31,6 @@ const fallbackBrands = [
   { name: 'MotoTorque', slug: 'mototorque', logo_url: mototorqueImg },
 ];
 
-// Map slug -> local asset for high-quality logos
 const localLogoMap: Record<string, string> = {
   ls2: ls2Img,
   axor: axorImg,
@@ -61,7 +53,6 @@ const localLogoMap: Record<string, string> = {
 export function BrandSlider() {
   const { data: dbBrands } = useBrands();
 
-  // Use DB brands but override logos with local high-quality versions where available
   const brands = dbBrands && dbBrands.length > 0
     ? dbBrands.map((b: any) => ({
         ...b,
@@ -69,68 +60,75 @@ export function BrandSlider() {
       }))
     : fallbackBrands;
 
+  // Duplicate the list for seamless infinite scroll
+  const doubledBrands = [...brands, ...brands];
+
   return (
-    <section className="py-8 md:py-12 brand-slider-section">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-6">
+    <section className="py-8 md:py-12 overflow-hidden">
+      <div className="container mx-auto px-4 mb-6">
+        <div className="flex items-center justify-between">
           <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-gradient-chrome">
             Shop By Brand
           </h2>
-          <div className="flex items-center gap-3">
-            {/* Custom nav buttons */}
-            <button className="brand-prev w-8 h-8 rounded-full border border-neutral-600 flex items-center justify-center text-neutral-400 hover:border-primary hover:text-primary transition-colors">
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <button className="brand-next w-8 h-8 rounded-full border border-neutral-600 flex items-center justify-center text-neutral-400 hover:border-primary hover:text-primary transition-colors">
-              <ChevronRight className="h-4 w-4" />
-            </button>
-            <Link
-              to="/brands"
-              className="text-sm text-primary font-semibold hover:underline ml-2"
-            >
-              VIEW ALL
-            </Link>
-          </div>
+          <Link
+            to="/brands"
+            className="text-sm text-primary font-semibold hover:underline"
+          >
+            VIEW ALL
+          </Link>
         </div>
-
-        <Swiper
-          modules={[FreeMode, Navigation]}
-          freeMode
-          navigation={{
-            prevEl: '.brand-prev',
-            nextEl: '.brand-next',
-          }}
-          slidesPerView="auto"
-          spaceBetween={20}
-          className="brand-slider"
-        >
-          {brands.map((brand: any) => (
-            <SwiperSlide key={brand.slug} style={{ width: 'auto' }}>
-              <Link
-                to={`/products?brand=${brand.slug}`}
-                className="flex flex-col items-center gap-2 group"
-              >
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl bg-white flex items-center justify-center p-3 group-hover:shadow-[0_0_20px_hsl(0_75%_45%/0.3)] transition-all duration-300">
-                  {brand.logo_url ? (
-                    <img
-                      src={brand.logo_url}
-                      alt={brand.name}
-                      className="max-w-full max-h-full object-contain"
-                    />
-                  ) : (
-                    <span className="text-sm text-neutral-800 font-bold uppercase tracking-wider">
-                      {brand.name}
-                    </span>
-                  )}
-                </div>
-                <span className="text-[11px] md:text-xs text-muted-foreground group-hover:text-primary transition-colors font-medium text-center uppercase tracking-wider">
-                  {brand.name}
-                </span>
-              </Link>
-            </SwiperSlide>
-          ))}
-        </Swiper>
       </div>
+
+      {/* Marquee container */}
+      <div className="brand-marquee-wrapper group/marquee">
+        <div className="brand-marquee">
+          {doubledBrands.map((brand: any, i: number) => (
+            <Link
+              key={`${brand.slug}-${i}`}
+              to={`/products?brand=${brand.slug}`}
+              className="flex-shrink-0 flex flex-col items-center gap-2 group/item mx-3 md:mx-4"
+            >
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-white flex items-center justify-center p-4 md:p-5 group-hover/item:scale-110 group-hover/item:shadow-[0_0_25px_hsl(0_75%_45%/0.4)] transition-all duration-300">
+                {brand.logo_url ? (
+                  <img
+                    src={brand.logo_url}
+                    alt={brand.name}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                ) : (
+                  <span className="text-sm text-neutral-800 font-bold uppercase tracking-wider">
+                    {brand.name}
+                  </span>
+                )}
+              </div>
+              <span className="text-[11px] md:text-xs text-muted-foreground group-hover/item:text-primary transition-colors font-medium text-center uppercase tracking-wider">
+                {brand.name}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <style>{`
+        .brand-marquee-wrapper {
+          width: 100%;
+          overflow: hidden;
+          mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+        .brand-marquee {
+          display: flex;
+          width: max-content;
+          animation: brand-scroll 30s linear infinite;
+        }
+        .brand-marquee-wrapper:hover .brand-marquee {
+          animation-play-state: paused;
+        }
+        @keyframes brand-scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
     </section>
   );
 }
