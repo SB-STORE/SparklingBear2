@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
 const bikes = [
-  { name: 'Royal Enfield', slug: 'Royal Enfield', image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600&q=80&auto=format&fit=crop' },
-  { name: 'KTM', slug: 'KTM', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600&q=80&auto=format&fit=crop' },
-  { name: 'Yamaha', slug: 'Yamaha', image: 'https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=600&q=80&auto=format&fit=crop' },
-  { name: 'Honda', slug: 'Honda', image: 'https://images.unsplash.com/photo-1580310614729-ccd69652491d?w=600&q=80&auto=format&fit=crop' },
-  { name: 'Bajaj', slug: 'Bajaj', image: 'https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=600&q=80&auto=format&fit=crop' },
-  { name: 'TVS', slug: 'TVS', image: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=600&q=80&auto=format&fit=crop' },
-  { name: 'Hero', slug: 'Hero', image: 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=600&q=80&auto=format&fit=crop' },
-  { name: 'Suzuki', slug: 'Suzuki', image: 'https://images.unsplash.com/photo-1558981285-6f0c94958bb6?w=600&q=80&auto=format&fit=crop' },
+  { name: 'Royal Enfield', slug: 'Royal Enfield', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Royal_Enfield_Classic_350_%282017_Model_Year%29.jpg/800px-Royal_Enfield_Classic_350_%282017_Model_Year%29.jpg' },
+  { name: 'KTM', slug: 'KTM', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Ktm_duke_390.jpg/800px-Ktm_duke_390.jpg' },
+  { name: 'Yamaha', slug: 'Yamaha', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Yamaha_R15_V3.0.jpg/800px-Yamaha_R15_V3.0.jpg' },
+  { name: 'Honda', slug: 'Honda', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Honda_CB600F_Hornet_2011.JPG/800px-Honda_CB600F_Hornet_2011.JPG' },
+  { name: 'Bajaj', slug: 'Bajaj', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Bajaj-NS400Z.jpg/800px-Bajaj-NS400Z.jpg' },
+  { name: 'TVS', slug: 'TVS', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Apache_rtr_310.jpg/800px-Apache_rtr_310.jpg' },
+  { name: 'Hero', slug: 'Hero', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Hero_Splendor_Plus_i3s_and_IBS_2018.jpg' },
+  { name: 'Suzuki', slug: 'Suzuki', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Osaka_Motor_Show_2015_%28136%29_-_Suzuki_GIXXER.JPG/800px-Osaka_Motor_Show_2015_%28136%29_-_Suzuki_GIXXER.JPG' },
 ];
 
 export function ShopByBike() {
