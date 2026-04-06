@@ -5,7 +5,6 @@ import { MosaicPromoGrid } from '@/components/storefront/MosaicPromoGrid';
 import { BrandSlider } from '@/components/storefront/BrandSlider';
 import { FeaturedCollection } from '@/components/storefront/FeaturedCollection';
 import { PromoBanner } from '@/components/storefront/PromoBanner';
-import { ShopByBike } from '@/components/storefront/ShopByBike';
 import { WhyChooseUs } from '@/components/storefront/WhyChooseUs';
 import { TestimonialsSection } from '@/components/storefront/TestimonialsSection';
 import { StoreLocation } from '@/components/storefront/StoreLocation';
@@ -19,7 +18,6 @@ const Index = () => {
       <MosaicPromoGrid />
       <FeaturedCollection title="BEST SELLERS" featured />
       <PromoBanner />
-      <ShopByBike />
       <BrandSlider />
       <FeaturedCollection title="NEW ARRIVALS" featured moreLink="/products" />
       <WhyChooseUs />
