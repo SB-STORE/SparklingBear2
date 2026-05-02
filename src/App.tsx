@@ -19,6 +19,7 @@ const PolicyPage = lazy(() => import('./pages/PolicyPage'));
 const FeedbackPage = lazy(() => import('./pages/FeedbackPage'));
 const CustomerLogin = lazy(() => import('./pages/account/Login'));
 const CustomerRegister = lazy(() => import('./pages/account/Register'));
+const ResetPassword = lazy(() => import('./pages/account/ResetPassword'));
 const AccountPage = lazy(() => import('./pages/account/Account'));
 const CartPage = lazy(() => import('./pages/CartPage'));
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
@@ -74,6 +75,7 @@ const App = () => (
                 <Route path="/feedback" element={<FeedbackPage />} />
                 <Route path="/account/login" element={<CustomerLogin />} />
                 <Route path="/account/register" element={<CustomerRegister />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
