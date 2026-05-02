@@ -3,14 +3,14 @@ import { ArrowRight } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 
 const bikes = [
-  { name: 'Royal Enfield', slug: 'Royal Enfield', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Royal_Enfield_Classic_350_%282017_Model_Year%29.jpg/800px-Royal_Enfield_Classic_350_%282017_Model_Year%29.jpg' },
-  { name: 'KTM', slug: 'KTM', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Ktm_duke_390.jpg/800px-Ktm_duke_390.jpg' },
-  { name: 'Yamaha', slug: 'Yamaha', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Yamaha_R15_V3.0.jpg/800px-Yamaha_R15_V3.0.jpg' },
-  { name: 'Honda', slug: 'Honda', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Honda_CB600F_Hornet_2011.JPG/800px-Honda_CB600F_Hornet_2011.JPG' },
-  { name: 'Bajaj', slug: 'Bajaj', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Bajaj-NS400Z.jpg/800px-Bajaj-NS400Z.jpg' },
-  { name: 'TVS', slug: 'TVS', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Apache_rtr_310.jpg/800px-Apache_rtr_310.jpg' },
-  { name: 'Hero', slug: 'Hero', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Hero_Splendor_Plus_i3s_and_IBS_2018.jpg' },
-  { name: 'Suzuki', slug: 'Suzuki', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Osaka_Motor_Show_2015_%28136%29_-_Suzuki_GIXXER.JPG/800px-Osaka_Motor_Show_2015_%28136%29_-_Suzuki_GIXXER.JPG' },
+  { name: 'Royal Enfield', slug: 'Royal Enfield', image: '/bikes/royal-enfield.jpg' },
+  { name: 'KTM', slug: 'KTM', image: '/bikes/ktm.jpg' },
+  { name: 'Yamaha', slug: 'Yamaha', image: '/bikes/yamaha.jpg' },
+  { name: 'Honda', slug: 'Honda', image: '/bikes/honda.jpg' },
+  { name: 'Bajaj', slug: 'Bajaj', image: '/bikes/bajaj.jpg' },
+  { name: 'TVS', slug: 'TVS', image: '/bikes/tvs.jpg' },
+  { name: 'Hero', slug: 'Hero', image: '/bikes/hero.jpg' },
+  { name: 'Suzuki', slug: 'Suzuki', image: '/bikes/suzuki.jpg' },
 ];
 
 export function ShopByBike() {
