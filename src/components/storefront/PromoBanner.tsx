@@ -14,7 +14,7 @@ export function PromoBanner() {
       <div
         className="absolute inset-0 bg-cover bg-center transition-transform duration-[2s]"
         style={{
-          backgroundImage: `url('https://rynoxgear.com/cdn/shop/files/HomePage_banner_1280x.jpg?v=1772866035')`,
+          backgroundImage: `url('/banners/hero-adventure.jpg')`,
           transform: isVisible ? 'scale(1)' : 'scale(1.1)',
         }}
       />

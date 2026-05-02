@@ -13,7 +13,7 @@ import 'swiper/css/effect-fade';
 
 const slides = [
   {
-    image: 'https://powersports.in/cdn/shop/files/korda-stormtrooper.jpg',
+    image: '/banners/hero-helmets.jpg',
     position: 'center 30%',
     title: 'Helmets That Protect',
     subtitle: 'LS2, Axor, SMK & more — ISI & ECE certified',
@@ -21,7 +21,7 @@ const slides = [
     link: '/products?category=helmets',
   },
   {
-    image: 'https://rynoxgear.com/cdn/shop/files/HomePage_banner_1280x.jpg?v=1772866035',
+    image: '/banners/hero-adventure.jpg',
     position: 'center 40%',
     title: 'Gear Up For Adventure',
     subtitle: 'Rynox, Cramster, Viaterra — riding jackets, gloves & boots',
@@ -29,7 +29,7 @@ const slides = [
     link: '/products?category=riding-gears-luggage',
   },
   {
-    image: 'https://evotech-performance.com/cdn/shop/files/EVOTECH_KTM_DUKE390_WEB_BANNER_dbf0617d-c61d-49c8-96b4-707925e1d7dd_2048x.jpg',
+    image: '/banners/hero-protection.jpg',
     position: 'center 50%',
     title: 'Protect Your Ride',
     subtitle: 'Zana, Moto Care — crash guards, frame sliders & more',
@@ -37,7 +37,7 @@ const slides = [
     link: '/products?category=bike-protection-fitments',
   },
   {
-    image: 'https://d32yu5nuptb5qv.cloudfront.net/banners/70efdf2ec9b086079795c442636b55fb17278726687%20(1).jpg',
+    image: '/banners/hero-aux-lights.jpg',
     position: 'center 50%',
     title: 'Light Up The Night',
     subtitle: 'MADDOG, HJG & Future Eyes — premium auxiliary lights',
