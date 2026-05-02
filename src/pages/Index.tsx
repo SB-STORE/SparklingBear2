@@ -5,6 +5,7 @@ import { MosaicPromoGrid } from '@/components/storefront/MosaicPromoGrid';
 import { BrandSlider } from '@/components/storefront/BrandSlider';
 import { FeaturedCollection } from '@/components/storefront/FeaturedCollection';
 import { PromoBanner } from '@/components/storefront/PromoBanner';
+import { VideoSection } from '@/components/storefront/VideoSection';
 import { WhyChooseUs } from '@/components/storefront/WhyChooseUs';
 import { TestimonialsSection } from '@/components/storefront/TestimonialsSection';
 import { StoreLocation } from '@/components/storefront/StoreLocation';
@@ -17,7 +18,7 @@ const Index = () => {
       <TrustStrip />
       <MosaicPromoGrid />
       <FeaturedCollection title="BEST SELLERS" featured />
-      <PromoBanner />
+      <VideoSection />
       <BrandSlider />
       <FeaturedCollection title="NEW ARRIVALS" featured moreLink="/products" />
       <WhyChooseUs />

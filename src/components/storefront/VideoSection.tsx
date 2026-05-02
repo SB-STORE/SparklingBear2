@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
-const VIDEO_URL = 'https://cdn.pixabay.com/video/2021/05/20/74578-552712232_large.mp4';
-const POSTER_URL = 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1920&q=80&auto=format&fit=crop';
+const VIDEO_URL = '/videos/hero-zana-ktm-adv.mp4';
+const POSTER_URL = '/banners/hero-protection.jpg';
 
 export function VideoSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -30,7 +30,7 @@ export function VideoSection() {
   }, []);
 
   return (
-    <section className="relative h-[300px] md:h-[400px] overflow-hidden">
+    <section className="relative h-[420px] md:h-[600px] overflow-hidden">
       <video
         ref={videoRef}
         src={VIDEO_URL}
@@ -46,11 +46,11 @@ export function VideoSection() {
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
 
       <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
-        <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-3 md:mb-4 max-w-3xl leading-tight">
-          Freedom Feels Like Wind On Your Face
+        <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-3 md:mb-4 max-w-3xl leading-tight uppercase tracking-tight">
+          Ride Bold. Shine Hard.<br />Rule the Road.
         </h2>
-        <p className="text-sm sm:text-base md:text-lg text-white/70 mb-5 md:mb-6 max-w-xl">
-          Explore our curated collection of riding gear and accessories built for the open road.
+        <p className="text-sm sm:text-base md:text-lg text-white/80 mb-5 md:mb-7 max-w-xl">
+          Premium motorcycle accessories from India's most trusted brands — built for the road, tested by riders.
         </p>
         <Button
           asChild
