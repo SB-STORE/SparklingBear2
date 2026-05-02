@@ -69,6 +69,7 @@ export function QuickViewModal({ product, open, onClose }: QuickViewModalProps) 
                 src={product.image_url}
                 alt={product.name}
                 className="w-full h-full object-contain"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/placeholder.svg'; }}
               />
             ) : (
               <span className="text-muted-foreground">No Image</span>

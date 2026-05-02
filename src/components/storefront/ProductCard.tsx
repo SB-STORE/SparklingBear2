@@ -68,6 +68,7 @@ export function ProductCard({ product }: ProductCardProps) {
                       : 'group-hover:scale-105'
                   )}
                   loading="lazy"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/placeholder.svg'; }}
                 />
                 {product.additional_images?.[0] && (
                   <img
@@ -75,6 +76,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     alt={`${product.name} - angle 2`}
                     className="absolute inset-0 w-full h-full object-contain p-2 md:p-3 opacity-0 group-hover:opacity-100 transition-all duration-500"
                     loading="lazy"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/placeholder.svg'; }}
                   />
                 )}
               </>

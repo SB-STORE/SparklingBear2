@@ -36,6 +36,7 @@ export default function CartPage() {
                           src={item.imageUrl}
                           alt={item.name}
                           className="w-24 h-24 object-contain rounded bg-muted flex-shrink-0"
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/placeholder.svg'; }}
                         />
                       </Link>
                     )}
