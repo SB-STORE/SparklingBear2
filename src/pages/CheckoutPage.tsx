@@ -17,6 +17,7 @@ import { INDIAN_STATES } from '@/types';
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { toast } from 'sonner';
+import { friendlyErrorMessage } from '@/lib/error-messages';
 
 const checkoutSchema = z.object({
   name: z.string().min(2, 'Name is required'),
@@ -64,8 +65,8 @@ export default function CheckoutPage() {
       clearCart();
       toast.success('Order placed successfully!');
       navigate(`/orders/${order.order_number}`);
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to place order');
+    } catch (err) {
+      toast.error(friendlyErrorMessage(err, "We couldn't place your order. Please try again or call us for help."));
     }
   };
 
