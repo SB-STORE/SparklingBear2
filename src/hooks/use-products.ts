@@ -85,6 +85,9 @@ export function useBrandsByCategory(categorySlug: string | undefined) {
         .single();
       if (!category) return [];
       return brandsForCategoryId(category.id);
+    },
+    enabled: !!categorySlug,
+  });
 }
 
 export function useProducts(filters?: ProductFilters) {
