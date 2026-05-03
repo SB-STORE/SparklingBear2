@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
@@ -19,9 +19,9 @@ const BikeRoute = lazy(() => import('./pages/BikeRoute'));
 const PolicyPage = lazy(() => import('./pages/PolicyPage'));
 const FeedbackPage = lazy(() => import('./pages/FeedbackPage'));
 const CustomerLogin = lazy(() => import('./pages/account/Login'));
-const CustomerRegister = lazy(() => import('./pages/account/Register'));
-const ResetPassword = lazy(() => import('./pages/account/ResetPassword'));
-const AccountPage = lazy(() => import('./pages/account/Account'));
+// AccountPage import retained as a file but not lazy-loaded yet — when
+// customer accounts are re-enabled, restore the import + the /account
+// route below to use it instead of the placeholder redirect.
 const CartPage = lazy(() => import('./pages/CartPage'));
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 const OrderConfirmationPage = lazy(() => import('./pages/OrderConfirmationPage'));
@@ -75,10 +75,13 @@ const App = () => (
                 <Route path="/privacy-policy" element={<PolicyPage />} />
                 <Route path="/terms-of-service" element={<PolicyPage />} />
                 <Route path="/feedback" element={<FeedbackPage />} />
+                {/* Customer accounts disabled while site stabilises.
+                    /account/login shows a "coming soon" placeholder.
+                    /account redirects there too — guest checkout is the
+                    only customer flow today. Admin login at
+                    /sb-admin-panel is unaffected. */}
                 <Route path="/account/login" element={<CustomerLogin />} />
-                <Route path="/account/register" element={<CustomerRegister />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/account" element={<AccountPage />} />
+                <Route path="/account" element={<Navigate to="/account/login" replace />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/orders/:orderNumber" element={<OrderConfirmationPage />} />

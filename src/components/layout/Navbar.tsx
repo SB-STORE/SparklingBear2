@@ -4,7 +4,6 @@ import {
   ShoppingCart,
   Menu,
   Search,
-  User,
   ChevronDown,
   X,
 } from 'lucide-react';
@@ -24,7 +23,6 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { useCart } from '@/contexts/CartContext';
-import { useAuth } from '@/contexts/AuthContext';
 import { useCategories, useBrands } from '@/hooks/use-products';
 import { BIKE_BRANDS, getBikesByBrand } from '@/data/bikes';
 import { CartDrawer } from '@/components/cart/CartDrawer';
@@ -73,7 +71,6 @@ export function Navbar() {
   const [activeMega, setActiveMega] = useState<string | null>(null);
   const megaTimeout = useRef<ReturnType<typeof setTimeout>>();
   const { itemCount } = useCart();
-  const { user } = useAuth();
   const { data: categories } = useCategories();
   const { data: brands } = useBrands();
   const location = useLocation();
@@ -458,12 +455,10 @@ export function Navbar() {
               )}
             </Button>
 
-            {/* Account icon */}
-            <Button variant="ghost" size="icon" asChild>
-              <Link to={user ? '/account' : '/account/login'}>
-                <User className="h-5 w-5" />
-              </Link>
-            </Button>
+            {/* Account icon hidden — customer accounts are disabled while
+                the storefront stabilises. Restore this when accounts come
+                back; the /account/login route still resolves but renders a
+                "coming soon" placeholder if a deep-linked URL is hit. */}
 
             {/* Cart button */}
             <Button

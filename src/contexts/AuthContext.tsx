@@ -8,10 +8,11 @@ interface AuthContextValue {
   isAdmin: boolean;
   isCustomer: boolean;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, metadata?: { full_name?: string; phone?: string }) => Promise<void>;
+  // Customer side: Google SSO only.
   signInWithGoogle: () => Promise<void>;
-  resetPassword: (email: string) => Promise<void>;
+  // Admin side: email/password at /sb-admin-panel only. Not exposed to
+  // customers anywhere in the storefront UI.
+  signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
