@@ -43,7 +43,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const isAdmin = user?.user_metadata?.role === 'admin';
+  // IMPORTANT: read role from app_metadata, NOT user_metadata.
+  // user_metadata is writable by the user themselves via
+  // supabase.auth.updateUser({ data: ... }) — using it to gate admin
+  // access lets any signed-in customer promote themselves. The
+  // server-side is_admin() function also checks app_metadata; this
+  // client-side flag is purely cosmetic (UI gating), real auth is RLS.
+  const isAdmin = user?.app_metadata?.role === 'admin';
   const isCustomer = !!user && !isAdmin;
 
   const signIn = async (email: string, password: string) => {

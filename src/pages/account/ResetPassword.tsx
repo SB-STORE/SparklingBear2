@@ -8,6 +8,7 @@ import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
+import { friendlyErrorMessage } from '@/lib/error-messages';
 
 type Phase = 'verifying' | 'ready' | 'invalid';
 
@@ -67,8 +68,8 @@ export default function ResetPassword() {
       toast.success('Password updated. Please sign in.');
       await supabase.auth.signOut();
       navigate('/account/login');
-    } catch (err: any) {
-      toast.error(err.message || 'Could not update password');
+    } catch (err) {
+      toast.error(friendlyErrorMessage(err, 'Could not update password. The reset link may have expired.'));
     } finally {
       setSubmitting(false);
     }

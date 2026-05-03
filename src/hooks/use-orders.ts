@@ -114,17 +114,47 @@ export function useCustomerOrders(email: string | undefined) {
   });
 }
 
-export function useOrderByNumber(orderNumber: string | undefined) {
+// Fetch a single order by number. Two paths exist because the underlying
+// orders/order_items tables are scoped by RLS:
+//   - If email or phone is supplied (guest who just checked out), call
+//     the SECURITY DEFINER RPC which returns the order + items only when
+//     the order_number matches AND at least one contact field matches.
+//   - Otherwise (logged-in user revisiting), query directly — the
+//     "Read own orders" / "Read own order_items" policies match the
+//     order to the JWT email automatically.
+// Either path returns `null` for a non-match, so the caller can render
+// the not-found state without leaking whether the order_number exists.
+export function useOrderByNumber(
+  orderNumber: string | undefined,
+  contact?: { email?: string; phone?: string },
+) {
+  const email = contact?.email ?? '';
+  const phone = contact?.phone ?? '';
+  const hasContact = Boolean(email || phone);
+
   return useQuery({
-    queryKey: ['order', orderNumber],
-    queryFn: async (): Promise<Order> => {
+    queryKey: ['order', orderNumber, email, phone],
+    queryFn: async (): Promise<Order | null> => {
+      if (!orderNumber) return null;
+
+      if (hasContact) {
+        // @ts-expect-error - RPC name not in generated Database types yet.
+        const { data, error } = await supabase.rpc(
+          'get_order_by_number_and_contact',
+          { p_order_number: orderNumber, p_email: email, p_phone: phone },
+        );
+        if (error) throw error;
+        return (data ?? null) as Order | null;
+      }
+
       const { data: order, error } = await supabase
         .from('orders')
         .select('*')
-        .eq('order_number', orderNumber!)
-        .single();
+        .eq('order_number', orderNumber)
+        .maybeSingle();
 
       if (error) throw error;
+      if (!order) return null;
 
       const { data: items } = await supabase
         .from('order_items')

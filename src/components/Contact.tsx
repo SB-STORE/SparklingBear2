@@ -3,6 +3,13 @@ import { Card } from "@/components/ui/card";
 import { Phone, MapPin, Clock, Instagram, Facebook } from "lucide-react";
 import { useSiteSettings } from "@/hooks/use-content";
 
+// Maps API key comes from env, not the DB. Vite-prefixed env vars are
+// shipped to the client bundle (necessary — the maps Embed URL has to
+// contain the key), so the only real protection is the HTTP-referer
+// restriction configured in Google Cloud Console for this key. Never
+// store this key in a publicly-readable site_settings row.
+const GOOGLE_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY ?? '';
+
 const FALLBACK = {
   phone: '+91 91082 47377',
   address: '#2, Utharahalli Kengeri Main Rd, Opposite Shell Petrol Bunk, Banashankari 6th Stage, Srinivaspura, Bengaluru, Karnataka 560060',
@@ -10,7 +17,6 @@ const FALLBACK = {
   hours_close: '8 PM',
   instagram_url: 'https://www.instagram.com/spa_rklebear?igsh=MWk0dXJ0em9xOGJmZQ==',
   facebook_url: 'https://www.facebook.com/share/1GJKzAg3cs/',
-  google_maps_key: 'AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8',
 };
 
 const Contact = () => {
@@ -111,7 +117,7 @@ const Contact = () => {
 
           <Card className="bg-background border-gradient p-2 overflow-hidden hover:shadow-elevated transition-all duration-500">
             <iframe
-              src={`https://www.google.com/maps/embed/v1/place?key=${s.google_maps_key}&q=${encodeURIComponent(s.address)}`}
+              src={`https://www.google.com/maps/embed/v1/place?key=${GOOGLE_MAPS_KEY}&q=${encodeURIComponent(s.address)}`}
               width="100%"
               height="100%"
               style={{ border: 0, minHeight: "450px", borderRadius: "0.5rem" }}

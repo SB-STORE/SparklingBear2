@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
+import { friendlyErrorMessage } from '@/lib/error-messages';
 
 export default function CustomerLogin() {
   usePageTitle('Sign In');
@@ -49,8 +50,10 @@ export default function CustomerLogin() {
       await signIn(email, password);
       toast.success('Welcome back!');
       navigate('/account');
-    } catch (err: any) {
-      toast.error(err.message || 'Invalid credentials');
+    } catch (err) {
+      // Deliberately ambiguous: don't say which of email/password was wrong,
+      // and don't reveal whether the email exists. Prevents account enumeration.
+      toast.error(friendlyErrorMessage(err, 'Invalid email or password.'));
     } finally {
       setLoading(false);
     }
@@ -65,11 +68,13 @@ export default function CustomerLogin() {
     setForgotLoading(true);
     try {
       await resetPassword(forgotEmail);
-      toast.success('Password reset link sent to your email!');
+      // Generic message regardless of whether the email is on file — prevents
+      // attackers from probing which addresses have accounts.
+      toast.success('If an account exists for that email, we sent a reset link.');
       setShowForgot(false);
       setForgotEmail('');
-    } catch (err: any) {
-      toast.error(err.message || 'Could not send reset link');
+    } catch (err) {
+      toast.error(friendlyErrorMessage(err, 'Could not send reset link. Please try again.'));
     } finally {
       setForgotLoading(false);
     }
@@ -78,8 +83,8 @@ export default function CustomerLogin() {
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
-    } catch (err: any) {
-      toast.error(err.message || 'Google sign-in failed');
+    } catch (err) {
+      toast.error(friendlyErrorMessage(err, 'Google sign-in failed.'));
     }
   };
 

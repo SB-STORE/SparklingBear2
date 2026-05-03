@@ -1,5 +1,7 @@
-import { useParams, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { CheckCircle2, Package, Truck, MapPin, Clock } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -27,9 +29,31 @@ const STATUS_COLORS: Record<string, string> = {
   cancelled: 'bg-red-500/20 text-red-500',
 };
 
+interface OrderContact { email?: string; phone?: string }
+
+function readContactFromStorage(orderNumber: string | undefined): OrderContact | null {
+  if (!orderNumber) return null;
+  try {
+    const raw = sessionStorage.getItem(`order-contact:${orderNumber}`);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as OrderContact;
+    if (parsed && (parsed.email || parsed.phone)) return parsed;
+  } catch {
+    // Ignored — sessionStorage may be unavailable in private mode.
+  }
+  return null;
+}
+
 export default function OrderConfirmationPage() {
   const { orderNumber } = useParams<{ orderNumber: string }>();
-  const { data: order, isLoading } = useOrderByNumber(orderNumber);
+  const location = useLocation();
+  const stateContact = (location.state as { contact?: OrderContact } | null)?.contact;
+  const initialContact = stateContact ?? readContactFromStorage(orderNumber) ?? null;
+
+  const [contact, setContact] = useState<OrderContact | null>(initialContact);
+  const [phoneInput, setPhoneInput] = useState('');
+
+  const { data: order, isLoading } = useOrderByNumber(orderNumber, contact ?? undefined);
   usePageTitle(orderNumber ? `Order #${orderNumber}` : 'Order');
 
   if (isLoading) {
@@ -44,13 +68,54 @@ export default function OrderConfirmationPage() {
     );
   }
 
+  // No contact saved (e.g. user opened the URL fresh, sessionStorage cleared,
+  // or somebody else's link). Ask for the phone we collected at checkout
+  // before we'll look up the order. Email is also accepted.
+  if (!contact) {
+    return (
+      <StorefrontLayout>
+        <div className="container mx-auto px-4 py-16 max-w-md">
+          <h1 className="text-2xl font-bold text-foreground mb-2 text-center">View Your Order</h1>
+          <p className="text-sm text-muted-foreground mb-6 text-center">
+            For your privacy, please confirm the phone number or email used at checkout.
+          </p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const value = phoneInput.trim();
+              if (!value) return;
+              const looksLikeEmail = value.includes('@');
+              setContact(looksLikeEmail ? { email: value } : { phone: value });
+            }}
+            className="space-y-3"
+          >
+            <Input
+              value={phoneInput}
+              onChange={(e) => setPhoneInput(e.target.value)}
+              placeholder="Phone number or email"
+              autoComplete="tel"
+            />
+            <Button type="submit" className="w-full">View Order</Button>
+          </form>
+        </div>
+      </StorefrontLayout>
+    );
+  }
+
   if (!order) {
     return (
       <StorefrontLayout>
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-3xl font-bold text-foreground mb-4">Order Not Found</h1>
-          <p className="text-muted-foreground mb-6">We couldn't find an order with that number.</p>
-          <Button asChild><Link to="/">Go Home</Link></Button>
+          <p className="text-muted-foreground mb-6">
+            We couldn't find an order matching that number and contact info.
+          </p>
+          <div className="flex gap-2 justify-center">
+            <Button variant="outline" onClick={() => { setContact(null); setPhoneInput(''); }}>
+              Try Again
+            </Button>
+            <Button asChild><Link to="/">Go Home</Link></Button>
+          </div>
         </div>
       </StorefrontLayout>
     );

@@ -64,7 +64,22 @@ export default function CheckoutPage() {
       });
       clearCart();
       toast.success('Order placed successfully!');
-      navigate(`/orders/${order.order_number}`);
+
+      // RLS on orders requires contact match for guest reads. Persist
+      // {email, phone} so the confirmation page can fetch the order via
+      // the RPC even after a refresh. Cleared once we navigate away.
+      const contact = { email: data.email || '', phone: data.phone };
+      try {
+        sessionStorage.setItem(
+          `order-contact:${order.order_number}`,
+          JSON.stringify(contact),
+        );
+      } catch {
+        // sessionStorage unavailable (private browsing, etc.); state still works
+        // for the immediate navigation below.
+      }
+
+      navigate(`/orders/${order.order_number}`, { state: { contact } });
     } catch (err) {
       toast.error(friendlyErrorMessage(err, "We couldn't place your order. Please try again or call us for help."));
     }

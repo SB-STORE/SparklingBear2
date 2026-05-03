@@ -9,6 +9,7 @@ import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { toast } from 'sonner';
+import { friendlyErrorMessage } from '@/lib/error-messages';
 
 export default function CustomerRegister() {
   usePageTitle('Create Account');
@@ -31,8 +32,8 @@ export default function CustomerRegister() {
       await signUp(email, password, { full_name: name, phone });
       toast.success('Account created! You can now sign in.');
       navigate('/account/login');
-    } catch (err: any) {
-      toast.error(err.message || 'Could not create account');
+    } catch (err) {
+      toast.error(friendlyErrorMessage(err, 'Could not create account. If you already have one, try signing in.'));
     } finally {
       setLoading(false);
     }
@@ -52,7 +53,7 @@ export default function CustomerRegister() {
         <Button
           variant="outline"
           className="w-full mb-4 border-border hover:bg-muted"
-          onClick={() => signInWithGoogle().catch((err: any) => toast.error(err.message))}
+          onClick={() => signInWithGoogle().catch((err) => toast.error(friendlyErrorMessage(err, 'Google sign-in failed.')))}
         >
           <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
