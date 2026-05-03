@@ -34,14 +34,39 @@ export function useCategory(slug: string | undefined) {
   });
 }
 
+// Brands that have at least one active product in the given category.
+// Derived from the products table because some brands (Rynox, Viaterra,
+// Cramster, Raida, Moto Torque) span multiple categories and live with
+// brands.category_id = NULL — we can't filter by that column anymore.
+async function brandsForCategoryId(categoryId: string) {
+  const { data, error } = await supabase
+    .from('products')
+    .select('brand:brands(id, name, slug, logo_url, description, display_order)')
+    .eq('category_id', categoryId)
+    .eq('is_active', true);
+  if (error) throw error;
+  const seen = new Map<string, NonNullable<(typeof data)[number]['brand']>>();
+  for (const row of data ?? []) {
+    const b = row.brand as unknown as { id: string } | null;
+    if (b && !seen.has(b.id)) seen.set(b.id, b as never);
+  }
+  return Array.from(seen.values()).sort(
+    (a, b) => ((a as { display_order: number }).display_order ?? 999) - ((b as { display_order: number }).display_order ?? 999)
+  );
+}
+
 export function useBrands(categoryId?: string) {
   return useQuery({
     queryKey: ['brands', categoryId],
     queryFn: async () => {
       if (!isSupabaseConfigured) return [];
-      let query = supabase.from('brands').select('*, category:categories(*)').order('display_order');
-      if (categoryId) query = query.eq('category_id', categoryId);
-      const { data, error } = await query;
+      if (categoryId) return brandsForCategoryId(categoryId);
+      // No category filter — return all brands (storefront brands page).
+      const { data, error } = await supabase
+        .from('brands')
+        .select('*, category:categories(*)')
+        .eq('is_active', true)
+        .order('display_order');
       if (error) throw error;
       return data;
     },
@@ -59,16 +84,7 @@ export function useBrandsByCategory(categorySlug: string | undefined) {
         .eq('slug', categorySlug!)
         .single();
       if (!category) return [];
-      const { data, error } = await supabase
-        .from('brands')
-        .select('*')
-        .eq('category_id', category.id)
-        .order('display_order');
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!categorySlug,
-  });
+      return brandsForCategoryId(category.id);
 }
 
 export function useProducts(filters?: ProductFilters) {
