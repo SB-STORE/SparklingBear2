@@ -5,9 +5,11 @@ import { Card } from '@/components/ui/card';
 import { useCart } from '@/contexts/CartContext';
 import { formatPrice } from '@/lib/price';
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
+import { usePageTitle } from '@/hooks/use-page-title';
 
 export default function CartPage() {
   const { items, subtotal, updateQuantity, removeItem, clearCart } = useCart();
+  usePageTitle(items.length > 0 ? `Cart (${items.length})` : 'Shopping Cart');
 
   return (
     <StorefrontLayout>

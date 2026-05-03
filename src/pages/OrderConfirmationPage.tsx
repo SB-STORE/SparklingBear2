@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useOrderByNumber } from '@/hooks/use-orders';
 import { formatPrice } from '@/lib/price';
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
+import { usePageTitle } from '@/hooks/use-page-title';
 import type { OrderStatus } from '@/types';
 
 const STATUS_STEPS: { key: OrderStatus; label: string; icon: React.ElementType }[] = [
@@ -29,6 +30,7 @@ const STATUS_COLORS: Record<string, string> = {
 export default function OrderConfirmationPage() {
   const { orderNumber } = useParams<{ orderNumber: string }>();
   const { data: order, isLoading } = useOrderByNumber(orderNumber);
+  usePageTitle(orderNumber ? `Order #${orderNumber}` : 'Order');
 
   if (isLoading) {
     return (

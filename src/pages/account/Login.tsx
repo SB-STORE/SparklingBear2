@@ -7,10 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 
 export default function CustomerLogin() {
+  usePageTitle('Sign In');
   const navigate = useNavigate();
   const { signIn, signInWithGoogle, resetPassword } = useAuth();
   const [identifier, setIdentifier] = useState(''); // email or phone

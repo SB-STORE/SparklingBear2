@@ -20,7 +20,6 @@ import { BrandSlider } from '@/components/storefront/BrandSlider';
 import { useProducts, useCategories, useCategory } from '@/hooks/use-products';
 
 export default function ProductsPage() {
-  usePageTitle('All Products');
   const [searchParams, setSearchParams] = useSearchParams();
   const [filterOpen, setFilterOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
@@ -32,6 +31,16 @@ export default function ProductsPage() {
 
   const { data: categories } = useCategories();
   const { data: category } = useCategory(categorySlug);
+
+  usePageTitle(
+    search
+      ? `Search: ${search}`
+      : category?.name
+        ? category.name
+        : brandSlug
+          ? brandSlug
+          : 'All Products'
+  );
   const { data: products, isLoading } = useProducts({
     categorySlug,
     brandSlug,

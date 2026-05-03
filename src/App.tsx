@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 const ProductsPage = lazy(() => import('./pages/ProductsPage'));
 const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage'));
 const BrandsPage = lazy(() => import('./pages/BrandsPage'));
+const BikeRoute = lazy(() => import('./pages/BikeRoute'));
 const PolicyPage = lazy(() => import('./pages/PolicyPage'));
 const FeedbackPage = lazy(() => import('./pages/FeedbackPage'));
 const CustomerLogin = lazy(() => import('./pages/account/Login'));
@@ -68,6 +69,7 @@ const App = () => (
                 <Route path="/products" element={<ProductsPage />} />
                 <Route path="/products/:slug" element={<ProductDetailPage />} />
                 <Route path="/brands" element={<BrandsPage />} />
+                <Route path="/bikes/:slug" element={<BikeRoute />} />
                 <Route path="/shipping-policy" element={<PolicyPage />} />
                 <Route path="/return-refund" element={<PolicyPage />} />
                 <Route path="/privacy-policy" element={<PolicyPage />} />

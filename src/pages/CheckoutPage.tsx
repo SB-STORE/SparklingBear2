@@ -15,6 +15,7 @@ import { useCreateOrder } from '@/hooks/use-orders';
 import { formatPrice } from '@/lib/price';
 import { INDIAN_STATES } from '@/types';
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { toast } from 'sonner';
 
 const checkoutSchema = z.object({
@@ -36,6 +37,7 @@ export default function CheckoutPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const createOrder = useCreateOrder();
+  usePageTitle('Checkout');
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<CheckoutForm>({
     resolver: zodResolver(checkoutSchema),

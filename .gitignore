@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Local image backups (rollback safety nets, not for shipping)
+**/.backup
+**/.backup_*

@@ -7,9 +7,11 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { toast } from 'sonner';
 
 export default function CustomerRegister() {
+  usePageTitle('Create Account');
   const navigate = useNavigate();
   const { signUp, signInWithGoogle } = useAuth();
   const [name, setName] = useState('');

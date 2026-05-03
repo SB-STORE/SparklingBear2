@@ -9,6 +9,7 @@ import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import { ComplaintModal } from '@/components/storefront/ComplaintModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCustomerOrders } from '@/hooks/use-orders';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { formatPrice } from '@/lib/price';
 import { toast } from 'sonner';
 
@@ -23,6 +24,7 @@ const statusColors: Record<string, string> = {
 
 export default function AccountPage() {
   const navigate = useNavigate();
+  usePageTitle('My Account');
   const { user, signOut } = useAuth();
   const { data: orders, isLoading } = useCustomerOrders(user?.email);
   const [complaintOrder, setComplaintOrder] = useState<any>(null);

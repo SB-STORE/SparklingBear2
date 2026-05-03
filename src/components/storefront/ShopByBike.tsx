@@ -3,14 +3,14 @@ import { ArrowRight } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 
 const bikes = [
-  { name: 'Royal Enfield', slug: 'Royal Enfield', image: '/bikes/royal-enfield.jpg' },
-  { name: 'KTM', slug: 'KTM', image: '/bikes/ktm.jpg' },
-  { name: 'Yamaha', slug: 'Yamaha', image: '/bikes/yamaha.jpg' },
-  { name: 'Honda', slug: 'Honda', image: '/bikes/honda.jpg' },
-  { name: 'Bajaj', slug: 'Bajaj', image: '/bikes/bajaj.jpg' },
-  { name: 'TVS', slug: 'TVS', image: '/bikes/tvs.jpg' },
-  { name: 'Hero', slug: 'Hero', image: '/bikes/hero.jpg' },
-  { name: 'Suzuki', slug: 'Suzuki', image: '/bikes/suzuki.jpg' },
+  { name: 'Royal Enfield', slug: 'royal-enfield', image: '/bikes/royal-enfield.jpg' },
+  { name: 'KTM', slug: 'ktm', image: '/bikes/ktm.jpg' },
+  { name: 'Yamaha', slug: 'yamaha', image: '/bikes/yamaha.jpg' },
+  { name: 'Honda', slug: 'honda', image: '/bikes/honda.jpg' },
+  { name: 'Bajaj', slug: 'bajaj', image: '/bikes/bajaj.jpg' },
+  { name: 'TVS', slug: 'tvs', image: '/bikes/tvs.jpg' },
+  { name: 'Hero', slug: 'hero', image: '/bikes/hero.jpg' },
+  { name: 'Suzuki', slug: 'suzuki', image: '/bikes/suzuki.jpg' },
 ];
 
 export function ShopByBike() {
@@ -35,15 +35,15 @@ export function ShopByBike() {
           {bikes.map((bike, i) => (
             <Link
               key={bike.slug}
-              to={`/products?search=${encodeURIComponent(bike.slug)}`}
+              to={`/bikes/${bike.slug}`}
               className={`group relative bg-card rounded-xl overflow-hidden border border-border/30 hover:border-primary/50 transition-all duration-500 hover:-translate-y-1 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               style={{ transitionDelay: isVisible ? `${i * 80 + 150}ms` : '0ms' }}
             >
-              <div className="aspect-[4/3] overflow-hidden bg-gradient-to-b from-card to-muted/30">
+              <div className="aspect-[4/3] overflow-hidden bg-white">
                 <img
                   src={bike.image}
                   alt={bike.name}
-                  className="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
               </div>

@@ -7,6 +7,10 @@ import {
   Plus,
   Check,
   Zap,
+  Truck,
+  RotateCcw,
+  ShieldCheck,
+  Wallet,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +26,7 @@ import { ProductGallery } from '@/components/storefront/ProductGallery';
 import { RelatedProducts } from '@/components/storefront/RelatedProducts';
 import { useProduct } from '@/hooks/use-products';
 import { useCart } from '@/contexts/CartContext';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { formatPrice } from '@/lib/price';
 import { SizeSelector } from '@/components/storefront/SizeSelector';
 
@@ -30,6 +35,7 @@ export default function ProductDetailPage() {
   const navigate = useNavigate();
   const { data: product, isLoading } = useProduct(slug);
   const { addItem } = useCart();
+  usePageTitle(product?.name);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<{
@@ -110,8 +116,39 @@ export default function ProductDetailPage() {
     ...(product.additional_images || []),
   ].filter(Boolean) as string[];
 
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const productSchema = {
+    '@context': 'https://schema.org/',
+    '@type': 'Product',
+    name: product.name,
+    image: allImages.length > 0 ? allImages.map(src => src.startsWith('http') ? src : `${origin}${src}`) : undefined,
+    description: product.description || undefined,
+    sku: product.sku || undefined,
+    brand: product.brand?.name ? { '@type': 'Brand', name: product.brand.name } : undefined,
+    offers: {
+      '@type': 'Offer',
+      url: `${origin}/products/${product.slug}`,
+      priceCurrency: 'INR',
+      price: (product.price / 100).toFixed(2),
+      availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      itemCondition: 'https://schema.org/NewCondition',
+    },
+  };
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org/',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${origin}/` },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${origin}/products` },
+      ...(product.category ? [{ '@type': 'ListItem', position: 3, name: product.category.name, item: `${origin}/products?category=${product.category.slug}` }] : []),
+      { '@type': 'ListItem', position: product.category ? 4 : 3, name: product.name, item: `${origin}/products/${product.slug}` },
+    ],
+  };
+
   return (
     <StorefrontLayout>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <div className="container mx-auto px-4 py-6 md:py-8">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-1 text-sm text-muted-foreground mb-6 flex-wrap">
@@ -310,7 +347,28 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* Accordion: Details + Features */}
+            {/* Trust badges */}
+            <div className="grid grid-cols-2 gap-2 mb-6 text-xs">
+              {[
+                { icon: Truck, label: 'Free Shipping', sub: 'on orders ₹999+' },
+                { icon: Wallet, label: 'Cash on Delivery', sub: 'available' },
+                { icon: RotateCcw, label: '7-Day Returns', sub: 'easy refunds' },
+                { icon: ShieldCheck, label: '100% Genuine', sub: 'brand-authorized' },
+              ].map(({ icon: Icon, label, sub }) => (
+                <div
+                  key={label}
+                  className="flex items-center gap-2 p-2.5 rounded-lg border border-border/60 bg-card/50"
+                >
+                  <Icon className="h-4 w-4 text-primary flex-shrink-0" />
+                  <div className="leading-tight">
+                    <div className="font-semibold text-foreground">{label}</div>
+                    <div className="text-[10px] text-muted-foreground">{sub}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Accordion: Details + Features + Specs + Shipping + Brand */}
             <Accordion
               type="multiple"
               defaultValue={['details', 'features']}
@@ -344,6 +402,90 @@ export default function ProductDetailPage() {
                         </li>
                       ))}
                     </ul>
+                  </AccordionContent>
+                </AccordionItem>
+              )}
+
+              <AccordionItem value="specs">
+                <AccordionTrigger className="text-sm font-semibold uppercase tracking-wider">
+                  Specifications
+                </AccordionTrigger>
+                <AccordionContent>
+                  <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                    {product.brand?.name && (
+                      <div className="flex justify-between border-b border-border/40 py-1.5">
+                        <dt className="text-muted-foreground">Brand</dt>
+                        <dd className="text-foreground font-medium">{product.brand.name}</dd>
+                      </div>
+                    )}
+                    {product.category?.name && (
+                      <div className="flex justify-between border-b border-border/40 py-1.5">
+                        <dt className="text-muted-foreground">Category</dt>
+                        <dd className="text-foreground font-medium">{product.category.name}</dd>
+                      </div>
+                    )}
+                    {product.sku && (
+                      <div className="flex justify-between border-b border-border/40 py-1.5">
+                        <dt className="text-muted-foreground">SKU</dt>
+                        <dd className="text-foreground font-medium">{product.sku}</dd>
+                      </div>
+                    )}
+                    <div className="flex justify-between border-b border-border/40 py-1.5">
+                      <dt className="text-muted-foreground">Availability</dt>
+                      <dd className={inStock ? 'text-green-500 font-medium' : 'text-red-500 font-medium'}>
+                        {inStock ? 'In Stock' : 'Out of Stock'}
+                      </dd>
+                    </div>
+                    {product.has_variants && product.variants && product.variants.length > 0 && (
+                      <div className="flex justify-between border-b border-border/40 py-1.5 sm:col-span-2">
+                        <dt className="text-muted-foreground">Sizes Available</dt>
+                        <dd className="text-foreground font-medium">
+                          {product.variants.map(v => v.size).join(', ')}
+                        </dd>
+                      </div>
+                    )}
+                  </dl>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="shipping">
+                <AccordionTrigger className="text-sm font-semibold uppercase tracking-wider">
+                  Shipping & Returns
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
+                    <p>
+                      <span className="font-semibold text-foreground">Delivery:</span> Orders ship within 24–48 hours from Bangalore. Standard delivery 4–7 business days pan-India. Free shipping on orders above ₹999.
+                    </p>
+                    <p>
+                      <span className="font-semibold text-foreground">Cash on Delivery:</span> Available across India. Inspect the product on delivery before payment.
+                    </p>
+                    <p>
+                      <span className="font-semibold text-foreground">Returns:</span> 7-day easy returns from delivery date. Item must be unused, in original packaging with all tags. Helmets cannot be returned once the visor seal is broken.
+                    </p>
+                    <p>
+                      Read the full <Link to="/shipping-policy" className="text-primary hover:underline">shipping policy</Link> and <Link to="/return-refund" className="text-primary hover:underline">return policy</Link>.
+                    </p>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              {product.brand && (
+                <AccordionItem value="brand">
+                  <AccordionTrigger className="text-sm font-semibold uppercase tracking-wider">
+                    About {product.brand.name}
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                      Sparkling Bear is an authorised dealer of {product.brand.name}. Every product is sourced directly from the brand or its India distributor — no greys, no replicas.
+                    </p>
+                    <Link
+                      to={`/products?brand=${product.brand.slug}`}
+                      className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                    >
+                      Browse all {product.brand.name} products
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    </Link>
                   </AccordionContent>
                 </AccordionItem>
               )}

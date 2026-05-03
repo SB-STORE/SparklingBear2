@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Eye } from 'lucide-react';
+import {
+  ShoppingCart, Eye,
+  Lightbulb, HardHat, Shield, Briefcase, Package,
+} from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -9,6 +12,22 @@ import { formatPrice } from '@/lib/price';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
 import { QuickViewModal } from './QuickViewModal';
+import { getProductImageOverride } from '@/data/product-image-overrides';
+
+// Icon picker for the no-image fallback. Uses category slug to keep all
+// products in a category visually consistent (helmets all show helmet icon,
+// aux lights all show bulb, etc.).
+const CATEGORY_ICON: Record<string, typeof Shield> = {
+  'aux-lights':                Lightbulb,
+  'helmets':                   HardHat,
+  'riding-gears-luggage':      Briefcase,
+  'bike-protection-fitments':  Shield,
+};
+
+function isPlaceholderUrl(src: string | null | undefined): boolean {
+  if (!src) return true;
+  return src.includes('/placeholder.') || src.endsWith('placeholder.svg');
+}
 
 interface ProductCardProps {
   product: Product;
@@ -18,6 +37,15 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
   const [quickView, setQuickView] = useState(false);
+  const [imgError, setImgError] = useState(false);
+
+  // Resolve image source: live DB value, but if missing/placeholder, check
+  // the slug-keyed override map for a self-hosted brand-original image.
+  const override = getProductImageOverride(product.slug);
+  const dbHasReal = product.image_url && !isPlaceholderUrl(product.image_url);
+  const resolvedSrc = !imgError && dbHasReal
+    ? product.image_url
+    : (override ?? null);
 
   const inStock = product.has_variants
     ? (product.variants?.some(v => v.stock_quantity > 0) ?? product.stock_quantity > 0)
@@ -56,10 +84,10 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Image area */}
         <Link to={`/products/${product.slug}`} className="relative block">
           <div className="relative aspect-[4/5] bg-gradient-to-b from-white to-neutral-200 overflow-hidden border-b border-border/30">
-            {product.image_url ? (
+            {resolvedSrc ? (
               <>
                 <img
-                  src={product.image_url}
+                  src={resolvedSrc}
                   alt={product.name}
                   className={cn(
                     'w-full h-full object-contain p-2 md:p-3 transition-all duration-500',
@@ -68,22 +96,36 @@ export function ProductCard({ product }: ProductCardProps) {
                       : 'group-hover:scale-105'
                   )}
                   loading="lazy"
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/placeholder.svg'; }}
+                  onError={() => setImgError(true)}
                 />
-                {product.additional_images?.[0] && (
+                {product.additional_images?.[0] && !imgError && (
                   <img
                     src={product.additional_images[0]}
                     alt={`${product.name} - angle 2`}
                     className="absolute inset-0 w-full h-full object-contain p-2 md:p-3 opacity-0 group-hover:opacity-100 transition-all duration-500"
                     loading="lazy"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/placeholder.svg'; }}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                   />
                 )}
               </>
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-neutral-100 text-neutral-400 text-sm">
-                No Image
-              </div>
+              // No real image + no override → designed icon fallback. Brand
+              // wordmark + category icon. Visually consistent across products
+              // missing photography.
+              (() => {
+                const Icon = CATEGORY_ICON[product.category?.slug ?? ''] ?? Package;
+                return (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-neutral-100 to-neutral-300 p-4">
+                    <Icon className="h-14 w-14 text-neutral-400 mb-2" strokeWidth={1.25} />
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-neutral-500 font-bold text-center">
+                      {product.brand?.name ?? 'Sparkling Bear'}
+                    </span>
+                    <span className="text-[9px] text-neutral-400 mt-0.5">
+                      Image coming soon
+                    </span>
+                  </div>
+                );
+              })()
             )}
 
             {/* Badges */}

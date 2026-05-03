@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import { Button } from '@/components/ui/button';
 import { Home, Search } from 'lucide-react';
+import { usePageTitle } from '@/hooks/use-page-title';
 
 const NotFound = () => {
+  usePageTitle('Page Not Found');
   return (
     <StorefrontLayout>
       <div className="container mx-auto px-4 py-20 md:py-32 text-center">

@@ -26,6 +26,7 @@ import {
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCategories, useBrands } from '@/hooks/use-products';
+import { BIKE_BRANDS, getBikesByBrand } from '@/data/bikes';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { SearchBar } from '@/components/storefront/SearchBar';
 import { cn } from '@/lib/utils';
@@ -34,7 +35,7 @@ import { cn } from '@/lib/utils';
 const NAV_ITEMS = [
   {
     label: 'SHOP BY BIKE',
-    href: '/products',
+    href: '/bikes/royal-enfield',
     megaKey: 'bike',
   },
   {
@@ -110,126 +111,30 @@ export function Navbar() {
   };
 
   // ── Contextual mega menu data per nav item ──
+  // Bike columns are derived from the BIKES registry — adding a new bike there
+  // automatically appears in the mega-menu, with no Navbar edits required.
+  const bikeColumns = BIKE_BRANDS
+    .map(b => {
+      const models = getBikesByBrand(b.slug);
+      if (models.length === 0) return null;
+      return {
+        title: b.name,
+        // Brand row links to the brand overview page
+        titleHref: `/bikes/${b.slug}`,
+        links: models.map(m => ({
+          label: m.name,
+          href: `/bikes/${m.slug}`,
+          image: m.image, // bike thumbnail for visual scannability in mega-menu
+        })),
+      };
+    })
+    .filter((c): c is NonNullable<typeof c> => c !== null);
+
   const megaMenuData: Record<string, {
-    columns: { title: string; links: { label: string; href: string }[] }[];
+    columns: { title: string; titleHref?: string; links: { label: string; href: string; image?: string }[] }[];
   }> = {
     bike: {
-      columns: [
-        {
-          title: 'KTM',
-          links: [
-            { label: '2025 KTM 390/250 Adventure', href: '/products?search=KTM+390+Adventure' },
-            { label: 'Duke (390/200)', href: '/products?search=KTM+Duke+390' },
-            { label: 'Duke 250/390', href: '/products?search=KTM+Duke+250' },
-            { label: 'KTM RC (390/200)', href: '/products?search=KTM+RC+390' },
-            { label: 'KTM 390/250 Adventure', href: '/products?search=KTM+250+Adventure' },
-            { label: 'KTM Duke 390/250 Gen-3', href: '/products?search=KTM+Duke+Gen+3' },
-          ],
-        },
-        {
-          title: 'Royal Enfield',
-          links: [
-            { label: 'Himalayan', href: '/products?search=Himalayan' },
-            { label: 'Himalayan 450', href: '/products?search=Himalayan+450' },
-            { label: 'Guerrilla 450', href: '/products?search=Guerrilla+450' },
-            { label: 'Bear 650', href: '/products?search=Bear+650' },
-            { label: 'SCRAM 440/411', href: '/products?search=SCRAM+440' },
-            { label: 'Bullet Classic', href: '/products?search=Bullet+Classic' },
-            { label: 'Interceptor 650', href: '/products?search=Interceptor+650' },
-            { label: 'Continental GT 650', href: '/products?search=Continental+GT+650' },
-            { label: 'Classic 350 Reborn', href: '/products?search=Classic+350' },
-            { label: 'Hunter 350', href: '/products?search=Hunter+350' },
-            { label: 'Meteor 350', href: '/products?search=Meteor+350' },
-            { label: 'Super Meteor 650', href: '/products?search=Super+Meteor+650' },
-            { label: 'Classic (350/500)', href: '/products?search=Classic+350' },
-            { label: 'Shotgun 650', href: '/products?search=Shotgun+650' },
-            { label: 'Classic 650', href: '/products?search=Classic+650' },
-            { label: 'Himalayan 450 Rally Edition', href: '/products?search=Himalayan+450+Rally' },
-          ],
-        },
-        {
-          title: 'Honda',
-          links: [
-            { label: 'Honda CB300R', href: '/products?search=Honda+CB300R' },
-            { label: "Honda H'ness", href: '/products?search=Honda+Hness' },
-            { label: 'Honda CB350 RS', href: '/products?search=Honda+CB350+RS' },
-            { label: 'Honda CB300F', href: '/products?search=Honda+CB300F' },
-            { label: 'Honda NX-500', href: '/products?search=Honda+NX+500' },
-            { label: 'Honda CB 200X', href: '/products?search=Honda+CB+200X' },
-          ],
-        },
-        {
-          title: 'Triumph',
-          links: [
-            { label: 'Triumph Speed 400 / Speed T4', href: '/products?search=Triumph+Speed+400' },
-            { label: 'Triumph Scrambler 400 X', href: '/products?search=Triumph+Scrambler+400X' },
-          ],
-        },
-        {
-          title: 'Yamaha',
-          links: [
-            { label: 'Yamaha MT 15', href: '/products?search=Yamaha+MT+15' },
-            { label: 'Yamaha FZs / FZ V4', href: '/products?search=Yamaha+FZ' },
-            { label: 'Yamaha XSR 155', href: '/products?search=Yamaha+XSR+155' },
-          ],
-        },
-        {
-          title: 'Hero',
-          links: [
-            { label: 'Xpulse 210', href: '/products?search=Xpulse+210' },
-            { label: 'Xpulse', href: '/products?search=Xpulse' },
-            { label: 'Xpulse Rally Edition / Pro', href: '/products?search=Xpulse+Rally' },
-          ],
-        },
-        {
-          title: 'BMW',
-          links: [
-            { label: 'BMW G310 GS', href: '/products?search=BMW+G310+GS' },
-          ],
-        },
-        {
-          title: 'TVS',
-          links: [
-            { label: 'TVS Ronin', href: '/products?search=TVS+Ronin' },
-            { label: 'Apache RTR 200 4V', href: '/products?search=Apache+RTR+200' },
-            { label: 'Apache RTX 300', href: '/products?search=Apache+RTX+300' },
-          ],
-        },
-        {
-          title: 'Suzuki',
-          links: [
-            { label: 'Suzuki V Strom SX 250', href: '/products?search=Suzuki+V+Strom' },
-          ],
-        },
-        {
-          title: 'Bajaj',
-          links: [
-            { label: 'Dominar', href: '/products?search=Bajaj+Dominar' },
-            { label: 'Pulsar NS 200', href: '/products?search=Pulsar+NS+200' },
-            { label: 'Pulsar NS 400', href: '/products?search=Pulsar+NS+400' },
-          ],
-        },
-        {
-          title: 'Jawa',
-          links: [
-            { label: 'Yezdi Adventure', href: '/products?search=Yezdi+Adventure' },
-          ],
-        },
-        {
-          title: 'Harley-Davidson',
-          links: [
-            { label: 'Harley Davidson X440', href: '/products?search=Harley+X440' },
-          ],
-        },
-        {
-          title: 'Kawasaki',
-          links: [
-            { label: 'Kawasaki KLX', href: '/products?search=Kawasaki+KLX' },
-            { label: 'Kawasaki Z-900', href: '/products?search=Kawasaki+Z+900' },
-            { label: 'Kawasaki Versys 650', href: '/products?search=Kawasaki+Versys+650' },
-          ],
-        },
-      ],
+      columns: bikeColumns,
     },
     accessories: {
       columns: [
@@ -365,25 +270,60 @@ export function Navbar() {
     const isBikeMenu = key === 'bike';
 
     return (
-      <div className={cn('container mx-auto px-4 py-6', isBikeMenu && 'max-h-[70vh] overflow-y-auto')}>
+      <div className={cn('container mx-auto px-4 py-6', isBikeMenu && 'max-h-[75vh] overflow-y-auto')}>
         <div className={cn(
-          'grid gap-x-8 gap-y-4',
-          isBikeMenu ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-5' : 'grid-cols-2 md:grid-cols-3'
+          'grid gap-x-6 gap-y-5',
+          isBikeMenu ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4' : 'grid-cols-2 md:grid-cols-3'
         )}>
           {menuData.columns.map((col) => (
             <div key={col.title} className="mb-2">
-              <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">
-                {col.title}
+              <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-2.5">
+                {col.titleHref ? (
+                  <Link
+                    to={col.titleHref}
+                    className="hover:underline flex items-center gap-1"
+                    onClick={() => setActiveMega(null)}
+                  >
+                    {col.title}
+                    {isBikeMenu && (
+                      <span className="text-[10px] text-muted-foreground font-normal normal-case tracking-normal">
+                        ({col.links.length})
+                      </span>
+                    )}
+                  </Link>
+                ) : col.title}
               </h4>
-              <ul className="space-y-1.5">
+              <ul className={cn(isBikeMenu ? 'space-y-1' : 'space-y-1.5')}>
                 {col.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       to={link.href}
-                      className="text-xs text-muted-foreground hover:text-primary transition-colors leading-tight"
+                      className={cn(
+                        'group transition-colors leading-tight',
+                        isBikeMenu
+                          ? 'flex items-center gap-2 py-1 px-1 -mx-1 rounded hover:bg-card/50'
+                          : 'text-xs text-muted-foreground hover:text-primary'
+                      )}
                       onClick={() => setActiveMega(null)}
                     >
-                      {link.label}
+                      {isBikeMenu && link.image && (
+                        <span className="w-9 h-7 flex-shrink-0 bg-white rounded overflow-hidden border border-border/30 group-hover:border-primary/40 transition-colors">
+                          <img
+                            src={link.image}
+                            alt=""
+                            className="w-full h-full object-contain"
+                            loading="lazy"
+                          />
+                        </span>
+                      )}
+                      <span className={cn(
+                        'truncate',
+                        isBikeMenu
+                          ? 'text-xs text-foreground/80 group-hover:text-primary'
+                          : 'text-xs text-muted-foreground hover:text-primary'
+                      )}>
+                        {link.label}
+                      </span>
                     </Link>
                   </li>
                 ))}

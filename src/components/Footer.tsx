@@ -178,6 +178,51 @@ const Footer = () => {
         </div>
       </div>
 
+      {/* Payment methods + trust band */}
+      <Separator />
+      <div className="container mx-auto px-4 py-5">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 text-xs text-muted-foreground uppercase tracking-wider">
+            <span>We Accept</span>
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded bg-white text-[10px] font-bold text-[#1a1f71] tracking-tighter">VISA</span>
+              <span className="px-1.5 py-1 rounded bg-white flex items-center gap-0.5">
+                <span className="w-3 h-3 rounded-full bg-[#eb001b]" />
+                <span className="w-3 h-3 rounded-full bg-[#f79e1b] -ml-1.5 mix-blend-multiply" />
+              </span>
+              <span className="px-2 py-1 rounded bg-white text-[10px] font-bold tracking-tight">
+                <span className="text-[#097939]">Ru</span>
+                <span className="text-[#ed1c24]">Pay</span>
+              </span>
+              <span className="px-2 py-1 rounded bg-white text-[10px] font-bold tracking-tight">
+                <span className="text-[#097939]">U</span>
+                <span className="text-[#ed752e]">P</span>
+                <span className="text-[#000]">I</span>
+              </span>
+              <span className="px-2 py-1 rounded bg-white text-[10px] font-bold tracking-tight text-[#5f259f]">
+                PhonePe
+              </span>
+              <span className="px-2 py-1 rounded bg-white text-[10px] font-bold tracking-tight">
+                <span className="text-[#4285f4]">G</span>
+                <span className="text-[#ea4335]">o</span>
+                <span className="text-[#fbbc04]">o</span>
+                <span className="text-[#4285f4]">g</span>
+                <span className="text-[#34a853]">l</span>
+                <span className="text-[#ea4335]">e</span>
+                <span className="text-foreground/80 ml-0.5">Pay</span>
+              </span>
+              <span className="px-2 py-1 rounded bg-white text-[10px] font-bold text-foreground/80 tracking-wider">COD</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-border/60 bg-card/50">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              100% Secure Checkout
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* Copyright bar */}
       <Separator />
       <div className="container mx-auto px-4 py-4">

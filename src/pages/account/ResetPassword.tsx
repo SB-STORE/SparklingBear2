@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 
 type Phase = 'verifying' | 'ready' | 'invalid';
 
 export default function ResetPassword() {
+  usePageTitle('Reset Password');
   const navigate = useNavigate();
   const [phase, setPhase] = useState<Phase>('verifying');
   const [password, setPassword] = useState('');
