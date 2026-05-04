@@ -1,12 +1,9 @@
 import { useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
-  ShoppingCart,
+  MessageCircle,
+  Phone,
   ChevronRight,
-  Minus,
-  Plus,
-  Check,
-  Zap,
   Truck,
   RotateCcw,
   ShieldCheck,
@@ -25,44 +22,22 @@ import { StorefrontLayout } from '@/components/layout/StorefrontLayout';
 import { ProductGallery } from '@/components/storefront/ProductGallery';
 import { RelatedProducts } from '@/components/storefront/RelatedProducts';
 import { useProduct } from '@/hooks/use-products';
-import { useCart } from '@/contexts/CartContext';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { formatPrice } from '@/lib/price';
 import { SizeSelector } from '@/components/storefront/SizeSelector';
 
+const INQUIRY_PHONE = '+919108247377';
+const INQUIRY_PHONE_DISPLAY = '+91 91082 47377';
+
 export default function ProductDetailPage() {
   const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
   const { data: product, isLoading } = useProduct(slug);
-  const { addItem } = useCart();
   usePageTitle(product?.name);
-  const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<{
     id: string;
     size: string;
     stock: number;
   } | null>(null);
-
-  const handleAdd = () => {
-    if (!product) return;
-    if (product.has_variants && !selectedVariant) return;
-    addItem(
-      {
-        productId: product.id,
-        variantId: selectedVariant?.id ?? null,
-        size: selectedVariant?.size ?? null,
-        name: product.name,
-        price: product.price,
-        imageUrl: product.image_url,
-        brandName: product.brand?.name || '',
-        slug: product.slug,
-      },
-      quantity
-    );
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
-  };
 
   if (isLoading) {
     return (
@@ -99,10 +74,6 @@ export default function ProductDetailPage() {
     );
   }
 
-  const inStock = product.has_variants
-    ? (product.variants?.some(v => v.stock_quantity > 0) ?? false)
-    : product.stock_quantity > 0;
-  const maxQty = selectedVariant?.stock ?? product.stock_quantity;
   const hasDiscount =
     product.compare_at_price && product.compare_at_price > product.price;
   const discountPercent = hasDiscount
@@ -130,7 +101,7 @@ export default function ProductDetailPage() {
       url: `${origin}/products/${product.slug}`,
       priceCurrency: 'INR',
       price: (product.price / 100).toFixed(2),
-      availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      availability: 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
     },
   };
@@ -193,11 +164,6 @@ export default function ProductDetailPage() {
                   SAVE {discountPercent}%
                 </Badge>
               )}
-              {!inStock && (
-                <Badge className="bg-red-600 text-white text-xs">
-                  SOLD OUT
-                </Badge>
-              )}
             </div>
 
             {/* Brand */}
@@ -233,119 +199,52 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            {/* Stock */}
-            <div className="mb-6">
-              {inStock ? (
-                <Badge
-                  variant="outline"
-                  className="text-green-500 border-green-500"
-                >
-                  {product.has_variants
-                    ? selectedVariant ? `In Stock (${selectedVariant.stock})` : 'Select a size'
-                    : `In Stock (${product.stock_quantity})`
-                  }
-                </Badge>
-              ) : (
-                <Badge
-                  variant="outline"
-                  className="text-red-500 border-red-500"
-                >
-                  Out of Stock
-                </Badge>
-              )}
-            </div>
-
-            {/* Size Selector (for variant products) */}
+            {/* Size Selector (for variant products). Sizes are shown for
+                reference; final size is confirmed in chat. */}
             {product.has_variants && product.variants && product.variants.length > 0 && (
               <SizeSelector
                 variants={product.variants}
                 selectedSize={selectedVariant?.size ?? null}
                 onSelect={(size, variantId, stock) => {
                   setSelectedVariant({ id: variantId, size, stock });
-                  setQuantity(1);
                 }}
               />
             )}
 
-            {/* Quantity + Add to Cart */}
-            {inStock && (
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center border border-border rounded-lg">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-10 w-10"
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </Button>
-                    <span className="w-12 text-center font-semibold">
-                      {quantity}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-10 w-10"
-                      onClick={() =>
-                        setQuantity(
-                          Math.min(maxQty, quantity + 1)
-                        )
-                      }
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Button
-                    size="lg"
-                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
-                    onClick={handleAdd}
-                    disabled={product.has_variants && !selectedVariant}
-                  >
-                    {added ? (
-                      <>
-                        <Check className="mr-2 h-5 w-5" />
-                        Added to Cart!
-                      </>
-                    ) : (
-                      <>
-                        <ShoppingCart className="mr-2 h-5 w-5" />
-                        Add to Cart
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="flex-1 border-primary text-primary hover:bg-primary/10"
-                    disabled={product.has_variants && !selectedVariant}
-                    onClick={() => {
-                      if (product.has_variants && !selectedVariant) return;
-                      addItem(
-                        {
-                          productId: product.id,
-                          variantId: selectedVariant?.id ?? null,
-                          size: selectedVariant?.size ?? null,
-                          name: product.name,
-                          price: product.price,
-                          imageUrl: product.image_url,
-                          brandName: product.brand?.name || '',
-                          slug: product.slug,
-                        },
-                        quantity
-                      );
-                      navigate('/checkout');
-                    }}
-                  >
-                    <Zap className="mr-2 h-5 w-5" />
-                    Buy Now
-                  </Button>
-                </div>
-              </div>
-            )}
+            {/* Inquiry CTAs — Sparkling Bear has no online checkout
+                today; orders are confirmed on WhatsApp / phone. The
+                pre-filled message includes the product link + selected
+                size if the customer picked one. */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-6 mt-4">
+              <Button
+                asChild
+                size="lg"
+                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <a
+                  href={`https://wa.me/${INQUIRY_PHONE.replace('+', '')}?text=${encodeURIComponent(
+                    `Hi Sparkling Bear, I'd like to enquire about:\n\n${product.name}${product.brand?.name ? ` (${product.brand.name})` : ''}\nMRP: ₹${product.price.toLocaleString('en-IN')}${selectedVariant?.size ? `\nSize: ${selectedVariant.size}` : ''}\nLink: ${origin}/products/${product.slug}\n\nPlease confirm availability + delivery.`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle className="mr-2 h-5 w-5" />
+                  Inquire on WhatsApp
+                </a>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary/10"
+                title={INQUIRY_PHONE_DISPLAY}
+              >
+                <a href={`tel:${INQUIRY_PHONE}`}>
+                  <Phone className="mr-2 h-5 w-5" />
+                  Call Us
+                </a>
+              </Button>
+            </div>
 
             {/* Trust badges */}
             <div className="grid grid-cols-2 gap-2 mb-6 text-xs">
@@ -432,8 +331,8 @@ export default function ProductDetailPage() {
                     )}
                     <div className="flex justify-between border-b border-border/40 py-1.5">
                       <dt className="text-muted-foreground">Availability</dt>
-                      <dd className={inStock ? 'text-green-500 font-medium' : 'text-red-500 font-medium'}>
-                        {inStock ? 'In Stock' : 'Out of Stock'}
+                      <dd className="text-foreground font-medium">
+                        Inquire for stock
                       </dd>
                     </div>
                     {product.has_variants && product.variants && product.variants.length > 0 && (

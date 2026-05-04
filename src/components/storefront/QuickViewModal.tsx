@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Minus, Plus, ShoppingCart, Check } from 'lucide-react';
+import { MessageCircle, Phone } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -8,10 +7,11 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useCart } from '@/contexts/CartContext';
 import { formatPrice } from '@/lib/price';
 import type { Product } from '@/types';
+
+const INQUIRY_PHONE = '+919108247377';
+const INQUIRY_PHONE_DISPLAY = '+91 91082 47377';
 
 interface QuickViewModalProps {
   product: Product;
@@ -20,40 +20,13 @@ interface QuickViewModalProps {
 }
 
 export function QuickViewModal({ product, open, onClose }: QuickViewModalProps) {
-  const { addItem } = useCart();
-  const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
-
-  const inStock = product.stock_quantity > 0;
   const hasDiscount =
     product.compare_at_price && product.compare_at_price > product.price;
 
-  const handleAdd = () => {
-    // For variant products, redirect to detail page for size selection
-    if (product.has_variants) {
-      onClose();
-      window.location.href = `/products/${product.slug}`;
-      return;
-    }
-    addItem(
-      {
-        productId: product.id,
-        variantId: null,
-        size: null,
-        name: product.name,
-        price: product.price,
-        imageUrl: product.image_url,
-        brandName: product.brand?.name || '',
-        slug: product.slug,
-      },
-      quantity
-    );
-    setAdded(true);
-    setTimeout(() => {
-      setAdded(false);
-      setQuantity(1);
-    }, 1500);
-  };
+  const inquiryText = encodeURIComponent(
+    `Hi Sparkling Bear, I'd like to enquire about:\n\n${product.name}${product.brand?.name ? ` (${product.brand.name})` : ''}\nMRP: ₹${product.price.toLocaleString('en-IN')}\nLink: ${typeof window !== 'undefined' ? window.location.origin : ''}/products/${product.slug}\n\nPlease confirm availability + delivery.`
+  );
+  const waUrl = `https://wa.me/${INQUIRY_PHONE.replace('+', '')}?text=${inquiryText}`;
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
@@ -98,60 +71,34 @@ export function QuickViewModal({ product, open, onClose }: QuickViewModalProps) 
               )}
             </div>
 
-            {!inStock && (
-              <Badge variant="outline" className="text-red-500 border-red-500 w-fit mb-4">
-                Out of Stock
-              </Badge>
+            {product.description && (
+              <p className="text-sm text-muted-foreground mb-5 line-clamp-4">
+                {product.description}
+              </p>
             )}
 
-            {inStock && (
-              <>
-                {/* Quantity selector */}
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-sm text-muted-foreground">Qty:</span>
-                  <div className="flex items-center border border-border rounded-lg">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    >
-                      <Minus className="h-3 w-3" />
-                    </Button>
-                    <span className="w-10 text-center text-sm font-semibold">
-                      {quantity}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() =>
-                        setQuantity(Math.min(product.stock_quantity, quantity + 1))
-                      }
-                    >
-                      <Plus className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-
-                <Button
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground mb-3"
-                  onClick={handleAdd}
-                >
-                  {added ? (
-                    <>
-                      <Check className="mr-2 h-4 w-4" />
-                      Added!
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingCart className="mr-2 h-4 w-4" />
-                      Add to Cart
-                    </>
-                  )}
-                </Button>
-              </>
-            )}
+            {/* Inquiry CTAs — storefront has no checkout flow today; orders
+                are confirmed in chat. */}
+            <div className="flex gap-2 mb-3">
+              <Button
+                asChild
+                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <a href={waUrl} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  Inquire on WhatsApp
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                title={INQUIRY_PHONE_DISPLAY}
+              >
+                <a href={`tel:${INQUIRY_PHONE}`}>
+                  <Phone className="h-4 w-4" />
+                </a>
+              </Button>
+            </div>
 
             <Button
               variant="outline"

@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  ShoppingCart,
   Menu,
   Search,
   ChevronDown,
   X,
+  Phone,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,11 +22,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { useCart } from '@/contexts/CartContext';
 import { useCategories, useBrands } from '@/hooks/use-products';
 import { BIKE_BRANDS, getBikesByBrand } from '@/data/bikes';
-import { CartDrawer } from '@/components/cart/CartDrawer';
 import { SearchBar } from '@/components/storefront/SearchBar';
+
+// Inquiry phone shown next to the search icon — storefront has no
+// checkout today; orders are confirmed via WhatsApp / call.
+const INQUIRY_PHONE = '+919108247377';
 import { cn } from '@/lib/utils';
 
 // Static nav structure
@@ -66,11 +68,9 @@ const NAV_ITEMS = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [activeMega, setActiveMega] = useState<string | null>(null);
   const megaTimeout = useRef<ReturnType<typeof setTimeout>>();
-  const { itemCount } = useCart();
   const { data: categories } = useCategories();
   const { data: brands } = useBrands();
   const location = useLocation();
@@ -460,19 +460,13 @@ export function Navbar() {
                 back; the /account/login route still resolves but renders a
                 "coming soon" placeholder if a deep-linked URL is hit. */}
 
-            {/* Cart button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative"
-              onClick={() => setCartOpen(true)}
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {itemCount > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
-                  {itemCount}
-                </Badge>
-              )}
+            {/* Direct phone CTA replaces the cart button — storefront is
+                inquiry-only today, so a tap-to-call shortcut serves the
+                same role as "go to checkout" did. */}
+            <Button variant="ghost" size="icon" asChild title="Call Sparkling Bear">
+              <a href={`tel:${INQUIRY_PHONE}`}>
+                <Phone className="h-5 w-5" />
+              </a>
             </Button>
           </div>
         </div>
@@ -532,13 +526,6 @@ export function Navbar() {
       {scrolled && <div className="h-16 lg:h-[108px]" />}
 
     </header>
-
-    {/* Cart drawer — rendered outside header to avoid Sheet nesting issues */}
-    <Sheet open={cartOpen} onOpenChange={setCartOpen}>
-      <SheetContent side="right" className="w-full sm:max-w-md bg-background border-border">
-        <CartDrawer onClose={() => setCartOpen(false)} />
-      </SheetContent>
-    </Sheet>
     </>
   );
 }

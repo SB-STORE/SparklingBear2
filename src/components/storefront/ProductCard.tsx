@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ShoppingCart, Eye,
+  Eye, MessageCircle, Phone,
   Lightbulb, HardHat, Shield, Briefcase, Package,
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useCart } from '@/contexts/CartContext';
 import { formatPrice } from '@/lib/price';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
 import { QuickViewModal } from './QuickViewModal';
 import { getProductImageOverride } from '@/data/product-image-overrides';
+
+// Inquiry contact for the storefront — mirrors SupplementalProductCard.
+// Centralise here when more pages need it.
+const INQUIRY_PHONE = '+919108247377';
+const INQUIRY_PHONE_DISPLAY = '+91 91082 47377';
 
 // Icon picker for the no-image fallback. Uses category slug to keep all
 // products in a category visually consistent (helmets all show helmet icon,
@@ -35,7 +39,6 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { addItem } = useCart();
   const [quickView, setQuickView] = useState(false);
   const [imgError, setImgError] = useState(false);
 
@@ -47,9 +50,6 @@ export function ProductCard({ product }: ProductCardProps) {
     ? product.image_url
     : (override ?? null);
 
-  const inStock = product.has_variants
-    ? (product.variants?.some(v => v.stock_quantity > 0) ?? product.stock_quantity > 0)
-    : product.stock_quantity > 0;
   const hasDiscount =
     product.compare_at_price && product.compare_at_price > product.price;
   const discountPercent = hasDiscount
@@ -58,25 +58,13 @@ export function ProductCard({ product }: ProductCardProps) {
       )
     : 0;
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // For variant products, redirect to product page to select size
-    if (product.has_variants) {
-      window.location.href = `/products/${product.slug}`;
-      return;
-    }
-    addItem({
-      productId: product.id,
-      variantId: null,
-      size: null,
-      name: product.name,
-      price: product.price,
-      imageUrl: product.image_url,
-      brandName: product.brand?.name || '',
-      slug: product.slug,
-    });
-  };
+  // Storefront is inquiry-only — no payment integration today. Customer
+  // taps "Inquire" → WhatsApp pre-filled with product details. SB confirms
+  // availability + price + delivery in chat.
+  const inquiryText = encodeURIComponent(
+    `Hi Sparkling Bear, I'd like to enquire about:\n\n${product.name}${product.brand?.name ? ` (${product.brand.name})` : ''}\nMRP: ₹${product.price.toLocaleString('en-IN')}\nLink: ${typeof window !== 'undefined' ? window.location.origin : ''}/products/${product.slug}\n\nPlease confirm availability + delivery.`
+  );
+  const waUrl = `https://wa.me/${INQUIRY_PHONE.replace('+', '')}?text=${inquiryText}`;
 
   return (
     <>
@@ -140,11 +128,6 @@ export function ProductCard({ product }: ProductCardProps) {
                   SALE -{discountPercent}%
                 </Badge>
               )}
-              {!inStock && (
-                <Badge className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
-                  SOLD OUT
-                </Badge>
-              )}
             </div>
 
             {/* Quick View - hover only, hidden on mobile */}
@@ -191,23 +174,29 @@ export function ProductCard({ product }: ProductCardProps) {
             )}
           </div>
 
-          {inStock ? (
+          <div className="flex gap-2">
             <Button
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-sm h-10 rounded-full hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(204,34,51,0.3)] active:scale-95 transition-all duration-200"
-              onClick={handleAddToCart}
-            >
-              <ShoppingCart className="mr-2 h-4 w-4" />
-              {product.has_variants ? 'Select Size' : 'Add to Cart'}
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              className="w-full text-sm h-10 rounded-full"
               asChild
+              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground text-sm h-10 rounded-full hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(204,34,51,0.3)] active:scale-95 transition-all duration-200"
+              onClick={(e) => e.stopPropagation()}
             >
-              <Link to={`/products/${product.slug}`}>View Details</Link>
+              <a href={waUrl} target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="mr-2 h-4 w-4" />
+                Inquire
+              </a>
             </Button>
-          )}
+            <Button
+              asChild
+              variant="outline"
+              className="h-10 px-3 rounded-full"
+              title={INQUIRY_PHONE_DISPLAY}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <a href={`tel:${INQUIRY_PHONE}`}>
+                <Phone className="h-4 w-4" />
+              </a>
+            </Button>
+          </div>
         </div>
       </Card>
 

@@ -22,8 +22,11 @@ const CustomerLogin = lazy(() => import('./pages/account/Login'));
 // AccountPage import retained as a file but not lazy-loaded yet — when
 // customer accounts are re-enabled, restore the import + the /account
 // route below to use it instead of the placeholder redirect.
-const CartPage = lazy(() => import('./pages/CartPage'));
-const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
+// Cart/Checkout pages kept on disk but unrouted — storefront is
+// inquiry-only (no payment integration today). Re-enable by restoring
+// the routes when checkout comes online.
+// const CartPage = lazy(() => import('./pages/CartPage'));
+// const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 const OrderConfirmationPage = lazy(() => import('./pages/OrderConfirmationPage'));
 
 // Lazy load admin pages
@@ -82,8 +85,10 @@ const App = () => (
                     /sb-admin-panel is unaffected. */}
                 <Route path="/account/login" element={<CustomerLogin />} />
                 <Route path="/account" element={<Navigate to="/account/login" replace />} />
-                <Route path="/cart" element={<CartPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
+                {/* Cart + checkout disabled — inquiry-only catalog. Anyone
+                    deep-linking to these URLs goes back to /products. */}
+                <Route path="/cart"     element={<Navigate to="/products" replace />} />
+                <Route path="/checkout" element={<Navigate to="/products" replace />} />
                 <Route path="/orders/:orderNumber" element={<OrderConfirmationPage />} />
 
                 {/* Admin Auth — hidden URL, not linked anywhere in UI */}
