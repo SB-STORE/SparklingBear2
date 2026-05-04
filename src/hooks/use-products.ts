@@ -7,12 +7,25 @@ export function useCategories() {
     queryKey: ['categories'],
     queryFn: async () => {
       if (!isSupabaseConfigured) return [];
+      // Pull categories that have at least one active product. Empty
+      // categories (e.g., Helmet Comm before it's seeded) shouldn't
+      // appear in the storefront nav — clicking them would land on
+      // an empty PLP. Admin tooling can still query the table directly
+      // via supabase.from('categories') without this hook.
       const { data, error } = await supabase
         .from('categories')
-        .select('*')
+        .select('*, products!inner(id)')
+        .eq('products.is_active', true)
         .order('display_order');
       if (error) throw error;
-      return data;
+      // Dedupe (the inner join can return one row per matching product
+      // depending on PostgREST rendering — collapse to category id).
+      const seen = new Map<string, (typeof data)[number]>();
+      for (const c of data ?? []) {
+        if (!seen.has(c.id)) seen.set(c.id, c);
+      }
+      // Strip the join field before handing back.
+      return Array.from(seen.values()).map(({ products: _ignored, ...rest }) => rest as Omit<typeof data[number], 'products'>);
     },
   });
 }

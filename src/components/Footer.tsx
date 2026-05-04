@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Facebook,
@@ -7,12 +6,13 @@ import {
   MapPin,
   Phone,
   Mail,
-  Send,
+  MessageCircle,
 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { toast } from 'sonner';
+
+const INQUIRY_PHONE = '+919108247377';
+const INQUIRY_PHONE_DISPLAY = '+91 91082 47377';
 
 const quickLinks = [
   { label: 'Shop All', href: '/products' },
@@ -31,51 +31,39 @@ const policyLinks = [
 ];
 
 const Footer = () => {
-  const [email, setEmail] = useState('');
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim()) return;
-    toast.success('Thanks for subscribing!', {
-      description: 'You\'ll receive updates on new arrivals and deals.',
-    });
-    setEmail('');
-  };
-
   return (
     <footer className="bg-background border-t border-border">
-      {/* Newsletter bar — crimson accent band */}
+      {/* Inquiry bar — crimson accent band. Replaces the previous fake
+          newsletter form (it just toast'd, didn't store the email). */}
       <div className="bg-primary">
-        <div className="container mx-auto px-4 py-10 md:py-14">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-center md:text-left">
+        <div className="container mx-auto px-4 py-8 md:py-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div>
               <h3 className="text-xl md:text-2xl font-bold text-white">
-                Subscribe to Our Newsletter
+                Talk to a real human
               </h3>
-              <p className="text-sm text-white/80">
-                Get updates on new arrivals, deals & exclusive offers.
+              <p className="text-sm text-white/85">
+                We confirm fitment, sizes, colours, and delivery on WhatsApp or call. Mon–Sun, 10 AM – 8 PM.
               </p>
             </div>
-            <form
-              onSubmit={handleSubscribe}
-              className="flex w-full md:w-auto max-w-md gap-2"
-            >
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 flex-1 md:w-64"
-              />
-              <Button
-                type="submit"
-                className="bg-white text-primary hover:bg-white/90 font-bold"
-              >
-                <Send className="h-4 w-4 mr-2" />
-                Subscribe
+            <div className="flex gap-2 w-full md:w-auto">
+              <Button asChild className="bg-white text-primary hover:bg-white/90 font-bold flex-1 md:flex-initial">
+                <a
+                  href={`https://wa.me/${INQUIRY_PHONE.replace('+', '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  WhatsApp Us
+                </a>
               </Button>
-            </form>
+              <Button asChild variant="outline" className="bg-transparent text-white border-white/40 hover:bg-white/10 font-semibold" title={INQUIRY_PHONE_DISPLAY}>
+                <a href={`tel:${INQUIRY_PHONE}`}>
+                  <Phone className="h-4 w-4 mr-2" />
+                  Call
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
