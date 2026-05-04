@@ -1,12 +1,15 @@
-import { Link } from 'react-router-dom';
 import { ArrowRight, Package2 } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 import { formatPrice } from '@/lib/price';
 
-// Pre-curated combo bundles — easy upsell that increases basket size. Each
-// bundle is a "kit" of 3-5 SKUs around a use-case (adventure rider, first
-// bike, daily commuter, touring). Click goes to a contact page where the
-// shop confirms availability and gives the bundle discount.
+// Pre-curated combo bundles — easy upsell that increases basket size.
+// Each bundle is a "kit" of 3-5 active products around a use-case.
+// Tap → WhatsApp pre-filled with the bundle name + items, mirroring the
+// product-card inquiry flow. SB confirms availability + bundle discount
+// in chat. Bundle items reference real active products only — broken
+// product references (deactivated SKUs, generic strings) were replaced.
+
+const INQUIRY_PHONE = '+919108247377';
 
 interface BundleItem {
   name: string;
@@ -21,25 +24,23 @@ interface Bundle {
   bundlePrice: number;
   badge: string;
   image: string;
-  href: string;
 }
 
 const BUNDLES: Bundle[] = [
   {
     slug: 'adventure-starter',
     name: 'Adventure Starter Kit',
-    body: 'Everything a new ADV rider needs to hit the road safely. Pick your size, we install it.',
+    body: 'Everything a new ADV rider needs to hit the road safely. Pick your size, we confirm fitment.',
     items: [
-      { name: 'LS2 MX436 Pioneer II Adventure Helmet' },
+      { name: 'LS2 MX701 Explorer Adventure Helmet' },
       { name: 'Rynox Air GT 4 Riding Jacket' },
-      { name: 'Rynox Storm Pro Gloves' },
-      { name: 'Studds Knee Guard' },
+      { name: 'Rynox Air GT Gloves' },
+      { name: 'Maddog Scout Aux Lights 10W' },
     ],
-    totalPrice: 25450,
-    bundlePrice: 22500,
-    badge: 'Save ₹2,950',
+    totalPrice: 32450,
+    bundlePrice: 28999,
+    badge: 'Save ₹3,451',
     image: '/banners/hero-adventure.jpg',
-    href: '/feedback?subject=Adventure+Starter+Kit',
   },
   {
     slug: 'himalayan-touring',
@@ -48,32 +49,36 @@ const BUNDLES: Bundle[] = [
     items: [
       { name: 'Zana Crash Guard - Himalayan 450' },
       { name: 'Zana Saddle Stay V2 - Himalayan 450' },
-      { name: 'Zana Radiator Guard' },
+      { name: 'Zana Radiator Guard - Himalayan 450' },
       { name: 'Maddog Scout-X Aux Lights 20W' },
     ],
     totalPrice: 16847,
     bundlePrice: 14999,
     badge: 'Save ₹1,848',
     image: '/banners/hero-protection.jpg',
-    href: '/feedback?subject=Himalayan+450+Touring+Pack',
   },
   {
     slug: 'first-bike',
     name: 'First Bike Essentials',
-    body: 'New rider? Start with the basics — helmet, gloves, frame protection. Tested for daily city use.',
+    body: 'New rider? Start with the basics — helmet, gloves, mobile mount. Tested for daily city use.',
     items: [
       { name: 'Studds Ninja 3G Helmet (ISI)' },
       { name: 'Moto Torque Hostile Gloves' },
-      { name: 'Frame Slider for your bike' },
-      { name: 'Mobile Mount + USB Charger' },
+      { name: 'BOBO BM4 Mobile Mount' },
+      { name: 'Maddog Scout Aux Lights 10W' },
     ],
     totalPrice: 8170,
     bundlePrice: 6999,
     badge: 'Save ₹1,170',
     image: '/banners/category-helmets.jpg',
-    href: '/feedback?subject=First+Bike+Essentials',
   },
 ];
+
+function inquiryUrl(b: Bundle): string {
+  const items = b.items.map(i => `• ${i.name}`).join('\n');
+  const text = `Hi Sparkling Bear, I'd like to enquire about the ${b.name} bundle:\n\n${items}\n\nBundle price: ₹${b.bundlePrice.toLocaleString('en-IN')} (MRP ₹${b.totalPrice.toLocaleString('en-IN')})\n\nPlease confirm availability + sizes.`;
+  return `https://wa.me/${INQUIRY_PHONE.replace('+', '')}?text=${encodeURIComponent(text)}`;
+}
 
 export function BundlesSection() {
   const { ref, isVisible } = useScrollAnimation();
@@ -104,9 +109,11 @@ export function BundlesSection() {
             const savings = b.totalPrice - b.bundlePrice;
             const savePct = Math.round((savings / b.totalPrice) * 100);
             return (
-              <Link
+              <a
                 key={b.slug}
-                to={b.href}
+                href={inquiryUrl(b)}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`group bg-card rounded-2xl overflow-hidden border border-border/40 hover:border-primary/40 transition-all duration-500 hover:-translate-y-0.5 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
                 style={{ transitionDelay: isVisible ? `${i * 100 + 100}ms` : '0ms' }}
               >
@@ -159,11 +166,11 @@ export function BundlesSection() {
                       </div>
                     </div>
                     <span className="inline-flex items-center gap-1 text-xs font-bold text-primary group-hover:underline">
-                      Inquire <ArrowRight className="h-3 w-3" />
+                      Inquire on WhatsApp <ArrowRight className="h-3 w-3" />
                     </span>
                   </div>
                 </div>
-              </Link>
+              </a>
             );
           })}
         </div>
