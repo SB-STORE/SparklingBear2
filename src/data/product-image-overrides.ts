@@ -78,6 +78,24 @@ export const PRODUCT_IMAGE_OVERRIDES: Record<string, string> = {
   'hjg-4-led-sports':       '/products/aux-lights/hjg-4-led-sports.jpg',
   'hjg-mini-drive-40w':     '/products/aux-lights/hjg-mini-drive-40w.jpg',
 
+  // ─── Round-1 placeholder rescue (2026-05-05) — DB image_url was '/placeholder.svg' so
+  // the customer was seeing the "Image coming soon" fallback. Sourced from each
+  // brand's own product page where possible (visually verified against
+  // Sparkling Bear product names), with one third-party retailer where the
+  // brand site no longer hosts the SKU.
+  // BOBO — bobogears.com
+  'bobo-bm17h-pro':            '/products/mobile-mounts/bobo-bm17h-pro.jpg',
+  // Raida — raidagears.com (brand-original)
+  'raida-airwave-gloves':      '/products/riding-gear/raida-airwave-gloves.png',
+  'raida-tourer-boots':        '/products/riding-gear/raida-tourer-boots.png',
+  'raida-seasonpro-cover':     '/products/riding-gear/raida-seasonpro-cover.png',
+  // Raida Compass V70 — not on raidagears.com catalog; sourced from rydersarena.in retailer
+  'raida-compass-v70':         '/products/luggage/raida-compass-v70.webp',
+  // Viaterra — viaterragear.com (Shopify CDN, brand-original)
+  'viaterra-leh-saddlebags':   '/products/luggage/viaterra-leh-saddlebags.jpg',
+  'viaterra-hammerhead-45l':   '/products/luggage/viaterra-hammerhead-45l.webp',
+  'viaterra-fly-tank-bag':     '/products/luggage/viaterra-fly-tank-bag.webp',
+
   // NOTE: All bike-protection / fitment overrides previously sourced from
   // Autonity were REMOVED on 2026-05-03 — manual audit found 7 of 9 inspected
   // were wrong products (top-boxes labeled as saddle stays, fluid caps as
