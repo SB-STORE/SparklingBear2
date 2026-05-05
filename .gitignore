@@ -28,3 +28,6 @@ dist-ssr
 # Local image backups (rollback safety nets, not for shipping)
 **/.backup
 **/.backup_*
+
+# Local image backups (banner originals before HD swap)
+*.bak

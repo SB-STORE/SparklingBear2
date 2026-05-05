@@ -40,6 +40,7 @@ const BUNDLES: Bundle[] = [
     totalPrice: 32450,
     bundlePrice: 28999,
     badge: 'Save ₹3,451',
+    // 2400×3600 mountain river crossing — Unsplash, Rohit Kumar
     image: '/banners/hero-adventure.jpg',
   },
   {
@@ -55,7 +56,8 @@ const BUNDLES: Bundle[] = [
     totalPrice: 16847,
     bundlePrice: 14999,
     badge: 'Save ₹1,848',
-    image: '/banners/hero-protection.jpg',
+    // 2400×1800 POV from touring bike at high-altitude lake — Unsplash, Husain Aziz
+    image: '/banners/hero-touring.jpg',
   },
   {
     slug: 'first-bike',
@@ -70,7 +72,8 @@ const BUNDLES: Bundle[] = [
     totalPrice: 8170,
     bundlePrice: 6999,
     badge: 'Save ₹1,170',
-    image: '/banners/category-helmets.jpg',
+    // 2400×1600 Himalayan with helmet + gloves staged — Unsplash, Akash Gowda
+    image: '/banners/hero-rider.jpg',
   },
 ];
 
