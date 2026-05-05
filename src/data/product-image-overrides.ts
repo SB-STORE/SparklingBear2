@@ -96,6 +96,20 @@ export const PRODUCT_IMAGE_OVERRIDES: Record<string, string> = {
   'viaterra-hammerhead-45l':   '/products/luggage/viaterra-hammerhead-45l.webp',
   'viaterra-fly-tank-bag':     '/products/luggage/viaterra-fly-tank-bag.webp',
 
+  // ─── Round-2 placeholder rescue (2026-05-05) ───
+  // Raida — brand uses "CruisePro" (single R) but SB DB slug has "cruiserpro"
+  'raida-cruiserpro-ii':       '/products/riding-gear/raida-cruiserpro-ii.png',
+  // Raida TourBine: not on raidagears.com catalog; sourced from motocentral.in
+  'raida-tourbine-jacket':     '/products/riding-gear/raida-tourbine-jacket.jpg',
+  // Viaterra — viaterragear.com (Shopify CDN, brand-original)
+  'viaterra-spencer-jacket':   '/products/riding-gear/viaterra-spencer-jacket.jpg',
+  'viaterra-spencer-pants':    '/products/riding-gear/viaterra-spencer-pants.webp',
+  'viaterra-claw-mini':        '/products/luggage/viaterra-claw-mini.webp',
+  'viaterra-claw-tailbag':     '/products/luggage/viaterra-claw-tailbag.webp',
+  'viaterra-holeshot-pro':     '/products/riding-gear/viaterra-holeshot-pro.webp',
+  // Still pending (need more sourcing): raida-revlox-rain-jacket,
+  // moto-torque-superior-pro, moto-torque-hostile
+
   // NOTE: All bike-protection / fitment overrides previously sourced from
   // Autonity were REMOVED on 2026-05-03 — manual audit found 7 of 9 inspected
   // were wrong products (top-boxes labeled as saddle stays, fluid caps as
