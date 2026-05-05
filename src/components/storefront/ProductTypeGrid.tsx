@@ -11,9 +11,9 @@ import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 // homepage feel like a real motorcycle shop you can browse, not just a banner
 // reel.
 //
-// `image`: real generic product photo for that type (preferred). Renders as a
-// small white "mini product card" inside the tile so users see what they're
-// shopping for at a glance. `icon` is kept as a graceful fallback.
+// `image`: generic product photo for that type. Tile is split into a full-bleed
+// white photo area (top) and a dark label band (bottom). `icon` is kept as a
+// graceful fallback if the image fails to load.
 
 const TYPES = [
   { label: 'Crash Guards',    icon: Shield,      image: '/products/fitments/zana-crash-guard-himalayan-450.jpg', href: '/products?category=bike-protection-fitments&type=crash-guard' },
@@ -30,25 +30,29 @@ const TYPES = [
   { label: 'Communication',   icon: Volume2,     image: '/product-types/communication.jpg',                       href: '/products?category=helmets' },
 ];
 
-function TypeImage({ image, label, Icon }: { image?: string; label: string; Icon: typeof Shield }) {
+function TileBody({ image, label, Icon }: { image?: string; label: string; Icon: typeof Shield }) {
   const [errored, setErrored] = useState(false);
-  if (image && !errored) {
-    return (
-      <span className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-white flex items-center justify-center p-1.5 shadow-sm overflow-hidden">
-        <img
-          src={image}
-          alt={label}
-          loading="lazy"
-          onError={() => setErrored(true)}
-          className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
-        />
-      </span>
-    );
-  }
   return (
-    <span className="w-12 h-12 rounded-full flex items-center justify-center bg-primary/10 group-hover:bg-primary/20 transition-colors">
-      <Icon className="h-5 w-5 text-primary" />
-    </span>
+    <>
+      <div className="flex-1 bg-white flex items-center justify-center p-3 overflow-hidden">
+        {image && !errored ? (
+          <img
+            src={image}
+            alt={label}
+            loading="lazy"
+            onError={() => setErrored(true)}
+            className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <Icon className="h-10 w-10 text-foreground/40" strokeWidth={1.25} />
+        )}
+      </div>
+      <div className="bg-card/95 px-2 py-2.5 text-center border-t border-border/40">
+        <span className="text-xs md:text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
+          {label}
+        </span>
+      </div>
+    </>
   );
 }
 
@@ -72,18 +76,15 @@ export function ProductTypeGrid() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {TYPES.map((t, i) => (
             <Link
               key={t.label}
               to={t.href}
-              className={`group flex flex-col items-center justify-center gap-2 p-4 md:p-5 rounded-xl border border-border/40 bg-card/40 hover:border-primary/50 hover:bg-card transition-all duration-300 hover:-translate-y-0.5 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`group flex flex-col aspect-square rounded-xl overflow-hidden border border-border/40 bg-card hover:border-primary/50 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               style={{ transitionDelay: isVisible ? `${i * 40 + 100}ms` : '0ms' }}
             >
-              <TypeImage image={t.image} label={t.label} Icon={t.icon} />
-              <span className="text-xs md:text-sm font-semibold text-foreground group-hover:text-primary transition-colors text-center leading-tight">
-                {t.label}
-              </span>
+              <TileBody image={t.image} label={t.label} Icon={t.icon} />
             </Link>
           ))}
         </div>
