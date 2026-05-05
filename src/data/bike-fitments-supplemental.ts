@@ -1,34 +1,43 @@
 // Supplemental fitment catalog — virtual products that aren't yet in the
-// live Supabase inventory but are sourced from MotoTorque, Zana, Moto Care,
-// Auto Engina, and other accessory brands Sparkling Bear can order on
-// request. These render alongside live DB products on /bikes/:slug pages,
-// distinguished by an "Order Inquiry" CTA instead of Add to Cart.
+// live Supabase inventory but are products SB can source on request from
+// Zana, Moto Torque, and Moto Care. These render alongside live DB
+// products on /bikes/:slug pages, distinguished by an "Order Inquiry"
+// CTA that opens WhatsApp pre-filled.
 //
-// Adding a new fitment brand or product: just append to FITMENTS — the
-// brand auto-appears in filters, the bike page auto-shows it. Zero code
-// changes required for new fitments.
+// Image policy: if a brand-original image exists in
+//   public/products/fitments/<slug>.<ext>
+// reference it. Otherwise leave `image: ''` and SupplementalProductCard
+// renders the designed icon fallback (brand wordmark + category icon).
+// Don't fabricate CDN URLs that 404 — visible broken-image icons are
+// worse than a clean fallback.
+//
+// Adding a new fitment: append to SUPPLEMENTAL_FITMENTS. Brand
+// auto-appears in filters, the bike page auto-shows it. Zero code
+// changes for new fitments.
 
 export interface SupplementalFitment {
   slug: string;          // unique identifier
   name: string;          // display name (must include the bike model — drives our matchers)
-  brand: string;         // accessory brand: Zana, Moto Torque, Auto Engina, Moto Care, etc.
-  price: number;         // INR (rupees, not paisa)
+  brand: string;         // accessory brand: Zana, Moto Torque, Moto Care
+  price: number;         // INR (rupees, not paisa) — supplemental cards format their own
   mrp?: number;          // optional MRP for discount badge
-  image: string;         // image URL (brand CDN or self-hosted)
+  image: string;         // image path under public/, or '' for icon fallback
   type: string;          // product-type slug (matches BIKE_PRODUCT_TYPES.slug)
   description?: string;
   compatibleBikes: string[]; // list of our bike slugs this fits
 }
 
+// Brand list intentionally excludes Auto Engina — Sparkling Bear does
+// not deal with that brand.
 export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
-  // ─────────── Himalayan 450 — extras beyond DB ───────────
+  // ─────────── Himalayan 450 ───────────
   {
     slug: 'mototorque-himalayan-450-aux-light-mount',
     name: 'Moto Torque Aux Light Mount - Himalayan 450',
     brand: 'Moto Torque',
     price: 1599,
     mrp: 1899,
-    image: '/products/fitments/mototorque-himalayan-450-aux-light-mount.jpg',
+    image: '',
     type: 'mounts-chargers',
     description: 'Bracket-mount kit for aux lights on Himalayan 450',
     compatibleBikes: ['himalayan-450'],
@@ -73,29 +82,11 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     compatibleBikes: ['ktm-390-adventure', 'ktm-390-adventure-2025'],
   },
   {
-    slug: 'auto-engina-crash-guard-ktm-390',
-    name: 'Auto Engina Crash Guard - KTM 390 Adventure',
-    brand: 'Auto Engina',
-    price: 8500,
-    image: '/products/fitments/auto-engina-crash-guard-ktm-390.jpg',
-    type: 'crash-guard',
-    compatibleBikes: ['ktm-390-adventure', 'ktm-390-adventure-2025'],
-  },
-  {
-    slug: 'auto-engina-pannier-rack-ktm-390',
-    name: 'Auto Engina Pannier + Top Rack - KTM 390 Adventure',
-    brand: 'Auto Engina',
-    price: 10000,
-    image: 'https://autoengina.com/cdn/shop/files/AutoEngina_PannierTopRack_KTM390.jpg',
-    type: 'panniers',
-    compatibleBikes: ['ktm-390-adventure', 'ktm-390-adventure-2025'],
-  },
-  {
     slug: 'moto-care-tyre-hugger-ktm-adv',
     name: 'Moto Care Tyre Hugger - KTM 390/250 Adventure',
     brand: 'Moto Care',
     price: 2000,
-    image: '/products/fitments/moto-care-tyre-hugger-ktm-adv.jpg',
+    image: '/products/fitments/moto-care-tyre-hugger-ktm.png',
     type: 'fenders-extenders',
     compatibleBikes: ['ktm-390-adventure', 'ktm-390-adventure-2025'],
   },
@@ -106,7 +97,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Moto Torque Frame Slider - KTM Duke 390/200',
     brand: 'Moto Torque',
     price: 1899,
-    image: '/products/fitments/mototorque-frame-slider-duke-390.jpg',
+    image: '',
     type: 'frame-slider',
     compatibleBikes: ['ktm-duke-390', 'ktm-duke-250', 'ktm-duke-gen3'],
   },
@@ -115,7 +106,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Moto Torque Tail Tidy - KTM Duke 390/200',
     brand: 'Moto Torque',
     price: 1499,
-    image: 'https://mototorque.in/cdn/shop/files/MotoTorque_TailTidy_Duke390.jpg',
+    image: '',
     type: 'tail-tidy',
     compatibleBikes: ['ktm-duke-390', 'ktm-duke-250', 'ktm-duke-gen3'],
   },
@@ -126,7 +117,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Moto Care Crash Guard - Hero Xpulse 210',
     brand: 'Moto Care',
     price: 5600,
-    image: '/products/fitments/moto-care-crash-guard-xpulse.webp',
+    image: '/products/fitments/moto-care-crash-guard-xpulse.png',
     type: 'crash-guard',
     compatibleBikes: ['xpulse-210', 'xpulse-200', 'xpulse-rally'],
   },
@@ -135,7 +126,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Moto Care Saddle Stay - Hero Xpulse 210',
     brand: 'Moto Care',
     price: 3000,
-    image: '/products/fitments/moto-care-saddle-stay-xpulse.jpg',
+    image: '/products/fitments/moto-care-saddle-stay-xpulse.png',
     type: 'saddle-stay',
     compatibleBikes: ['xpulse-210', 'xpulse-200', 'xpulse-rally'],
   },
@@ -146,7 +137,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Moto Care Carrier Backrest - Guerrilla 450',
     brand: 'Moto Care',
     price: 4500,
-    image: '/products/fitments/moto-care-carrier-backrest-guerrilla.webp',
+    image: '/products/fitments/moto-care-carrier-guerrilla.png',
     type: 'top-rack',
     compatibleBikes: ['guerrilla-450'],
   },
@@ -155,36 +146,18 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Zana Engine Guard - Guerrilla 450',
     brand: 'Zana',
     price: 4799,
-    image: '/products/fitments/zana-engine-guard-guerrilla.jpg',
+    image: '',
     type: 'crash-guard',
     compatibleBikes: ['guerrilla-450'],
   },
 
   // ─────────── Hunter 350 ───────────
   {
-    slug: 'auto-engina-brake-cap-hunter',
-    name: 'Auto Engina Brake Reservoir Cap - Hunter 350',
-    brand: 'Auto Engina',
-    price: 699,
-    image: 'https://autoengina.com/cdn/shop/files/AutoEngina_BrakeCap_Hunter.jpg',
-    type: 'fluid-guards-caps',
-    compatibleBikes: ['hunter-350'],
-  },
-  {
-    slug: 'auto-engina-fog-clamps-hunter',
-    name: 'Auto Engina Fog Lamp Clamps - Hunter 350',
-    brand: 'Auto Engina',
-    price: 799,
-    image: '/products/fitments/auto-engina-fog-clamps-hunter.jpg',
-    type: 'mounts-chargers',
-    compatibleBikes: ['hunter-350'],
-  },
-  {
     slug: 'zana-saddle-stay-hunter-350',
     name: 'Zana Saddle Stay - Hunter 350',
     brand: 'Zana',
     price: 2999,
-    image: 'https://zanamotorcycles.com/cdn/shop/files/Zana_SaddleStay_Hunter350.jpg',
+    image: '',
     type: 'saddle-stay',
     compatibleBikes: ['hunter-350'],
   },
@@ -193,7 +166,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Moto Torque Tank Bag - Hunter 350',
     brand: 'Moto Torque',
     price: 2499,
-    image: 'https://mototorque.in/cdn/shop/files/MotoTorque_TankBag_Hunter350.jpg',
+    image: '',
     type: 'tank-bag',
     compatibleBikes: ['hunter-350'],
   },
@@ -204,7 +177,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Zana Crash Guard - Classic 350',
     brand: 'Zana',
     price: 4499,
-    image: 'https://zanamotorcycles.com/cdn/shop/files/Zana_CrashGuard_Classic350.jpg',
+    image: '',
     type: 'crash-guard',
     compatibleBikes: ['classic-350-reborn', 'classic-350-500'],
   },
@@ -213,7 +186,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Zana Saddle Bag Rack - Classic 350',
     brand: 'Zana',
     price: 2299,
-    image: 'https://zanamotorcycles.com/cdn/shop/files/Zana_SaddleBagRack_Classic350.jpg',
+    image: '',
     type: 'top-rack',
     compatibleBikes: ['classic-350-reborn', 'classic-350-500'],
   },
@@ -224,7 +197,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Zana Engine Guard - Meteor 350',
     brand: 'Zana',
     price: 3899,
-    image: '/products/fitments/zana-engine-guard-meteor-350.jpg',
+    image: '',
     type: 'crash-guard',
     compatibleBikes: ['meteor-350'],
   },
@@ -233,7 +206,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Zana Pillion Backrest - Meteor 350',
     brand: 'Zana',
     price: 2799,
-    image: '/products/fitments/zana-backrest-meteor-350.webp',
+    image: '',
     type: 'top-rack',
     compatibleBikes: ['meteor-350'],
   },
@@ -242,7 +215,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Zana Engine Guard - Super Meteor 650',
     brand: 'Zana',
     price: 5499,
-    image: 'https://zanamotorcycles.com/cdn/shop/files/Zana_EngineGuard_SuperMeteor650.jpg',
+    image: '',
     type: 'crash-guard',
     compatibleBikes: ['super-meteor-650'],
   },
@@ -262,27 +235,18 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Moto Torque Bar-End Mirrors - RE 650',
     brand: 'Moto Torque',
     price: 1799,
-    image: 'https://mototorque.in/cdn/shop/files/MotoTorque_BarEndMirrors_RE650.jpg',
+    image: '',
     type: 'mirror',
     compatibleBikes: ['interceptor-650', 'continental-gt-650'],
   },
 
   // ─────────── Triumph Speed 400 / Scrambler 400 X ───────────
   {
-    slug: 'auto-engina-gps-mount-triumph',
-    name: 'Auto Engina GPS Mount - Triumph 400X',
-    brand: 'Auto Engina',
-    price: 2000,
-    image: 'https://autoengina.com/cdn/shop/files/AutoEngina_GPSMount_Triumph400X.jpg',
-    type: 'mounts-chargers',
-    compatibleBikes: ['triumph-scrambler-400x', 'triumph-speed-400'],
-  },
-  {
     slug: 'zana-crash-guard-triumph-400',
     name: 'Zana Crash Guard - Triumph Speed/Scrambler 400',
     brand: 'Zana',
     price: 4999,
-    image: 'https://zanamotorcycles.com/cdn/shop/files/Zana_CrashGuard_Triumph400.jpg',
+    image: '',
     type: 'crash-guard',
     compatibleBikes: ['triumph-speed-400', 'triumph-scrambler-400x'],
   },
@@ -293,7 +257,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Moto Torque Frame Slider - Pulsar NS200/400',
     brand: 'Moto Torque',
     price: 1899,
-    image: 'https://mototorque.in/cdn/shop/files/MotoTorque_FrameSlider_PulsarNS.jpg',
+    image: '',
     type: 'frame-slider',
     compatibleBikes: ['pulsar-ns200', 'pulsar-ns400'],
   },
@@ -304,7 +268,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Zana Crash Guard - BMW G310 GS',
     brand: 'Zana',
     price: 6299,
-    image: '/products/fitments/zana-crash-guard-bmw-g310gs.jpg',
+    image: '',
     type: 'crash-guard',
     compatibleBikes: ['bmw-g310gs'],
   },
@@ -315,7 +279,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: "Zana Crash Guard - Honda H'ness/CB350RS",
     brand: 'Zana',
     price: 4199,
-    image: 'https://zanamotorcycles.com/cdn/shop/files/Zana_CrashGuard_HondaCB350.jpg',
+    image: '',
     type: 'crash-guard',
     compatibleBikes: ['honda-hness', 'honda-cb350rs'],
   },
@@ -326,7 +290,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Moto Torque Saddle Stay - Bajaj Dominar 400',
     brand: 'Moto Torque',
     price: 2599,
-    image: '/products/fitments/mototorque-saddle-stay-dominar.webp',
+    image: '',
     type: 'saddle-stay',
     compatibleBikes: ['bajaj-dominar'],
   },
@@ -337,7 +301,7 @@ export const SUPPLEMENTAL_FITMENTS: SupplementalFitment[] = [
     name: 'Moto Torque Tail Tidy - Apache RTX 300',
     brand: 'Moto Torque',
     price: 1799,
-    image: 'https://mototorque.in/cdn/shop/files/MotoTorque_TailTidy_ApacheRTX.jpg',
+    image: '',
     type: 'tail-tidy',
     compatibleBikes: ['apache-rtx-300'],
   },

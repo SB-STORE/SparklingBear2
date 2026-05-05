@@ -93,8 +93,8 @@ export function SupplementalProductCard({ fitment }: Props) {
   return (
     <Card className="group relative overflow-hidden border-border/40 hover:border-primary/40 transition-all duration-300 hover:-translate-y-0.5">
       {/* Image / fallback */}
-      <div className={`relative aspect-square overflow-hidden bg-card ${imgError ? '' : 'bg-white'}`}>
-        {!imgError ? (
+      <div className={`relative aspect-square overflow-hidden bg-card ${imgError || !fitment.image ? '' : 'bg-white'}`}>
+        {!imgError && fitment.image ? (
           <img
             src={fitment.image}
             alt={fitment.name}
