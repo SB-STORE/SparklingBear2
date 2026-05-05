@@ -1,4 +1,5 @@
 import { Instagram, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 
 // Bento-style mosaic with varied tile sizes, captions, and treatments —
@@ -13,10 +14,13 @@ interface Tile {
   tag?: string;          // category pill — optional (not every tile has one)
   handle?: string;       // IG handle — optional (not every tile has one)
   location?: string;     // ride location — used in place of handle on some tiles
+  href: string;          // where this tile takes the user — rider IG, product page, or bike page
 }
 
+const SB_IG = 'https://www.instagram.com/thesparklingbear';
+
 const tiles: Tile[] = [
-  // Big anchor: Ladakh-style adventure feature
+  // Big anchor: Ladakh-style adventure feature → rider's IG
   {
     img: '/banners/gallery-ls2-rider.jpg',
     span: 'col-span-2 row-span-2',
@@ -24,31 +28,35 @@ const tiles: Tile[] = [
     sub: 'LS2 MX700 Subverter + Rynox Stealth Evo',
     handle: '@dakhargyan',
     tag: 'Adventure',
+    href: 'https://www.instagram.com/dakhargyan',
   },
-  // Tall portrait — aux lights night shot
+  // Tall portrait — aux lights night shot → aux lights PLP
   {
     img: '/banners/category-aux-lights.jpg',
     span: 'col-span-1 row-span-2',
     caption: 'Night runs, sorted.',
     sub: 'Maddog Scout-X 20W · 4800 lm/pair',
     tag: 'Aux Lights',
+    href: '/products?category=aux-lights',
   },
-  // Square — riding gear casual
+  // Square — riding gear casual → rider IG
   {
     img: '/banners/gallery-00-00-30.jpg',
     span: 'col-span-1 row-span-1',
     caption: 'Saturday breakfast run',
     handle: '@bangalore_riders',
+    href: 'https://www.instagram.com/bangalore_riders',
   },
-  // Square — jacket close-up
+  // Square — jacket close-up → riding-gear PLP
   {
     img: '/banners/category-riding-gear.jpg',
     span: 'col-span-1 row-span-1',
     caption: 'Cramster Eclipse',
     sub: 'CE-2 armour, rain liner',
     tag: 'Jacket',
+    href: '/products?category=riding-gears-luggage',
   },
-  // Wide — fitments on the road
+  // Wide — fitments on the Himalayan → bike page
   {
     img: '/banners/hero-protection.jpg',
     span: 'col-span-2 row-span-1',
@@ -56,23 +64,31 @@ const tiles: Tile[] = [
     sub: 'Zana radiator guard + crash guard, Himalayan 450',
     tag: 'Fitments',
     location: 'Coorg, Karnataka',
+    href: '/bikes/himalayan-450',
   },
-  // Square — second helmet
+  // Square — helmet → helmets PLP
   {
     img: '/banners/category-helmets.jpg',
     span: 'col-span-1 row-span-1',
     caption: 'Axor Apex Dual Visor',
     tag: 'Helmet',
+    href: '/products?category=helmets',
   },
-  // Square — luggage / touring
+  // Square — luggage / touring → riding-gear PLP (luggage lives in this category)
   {
     img: '/banners/gallery-00-00-07.jpg',
     span: 'col-span-1 row-span-1',
     caption: 'Loaded for the long way home',
     sub: 'Viaterra Claw 50L',
     tag: 'Luggage',
+    href: '/products?category=riding-gears-luggage',
   },
 ];
+
+// Internal hrefs use react-router; external (Instagram) open in a new tab.
+function isExternal(href: string): boolean {
+  return href.startsWith('http://') || href.startsWith('https://');
+}
 
 export function RidersGallery() {
   const { ref, isVisible } = useScrollAnimation();
@@ -94,15 +110,11 @@ export function RidersGallery() {
         </div>
 
         <div className="grid grid-flow-dense grid-cols-2 md:grid-cols-4 auto-rows-[140px] md:auto-rows-[180px] gap-3">
-          {tiles.map((t, i) => (
-            <a
-              key={i}
-              href="https://www.instagram.com/thesparklingbear"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`group relative overflow-hidden rounded-xl border border-border/30 hover:border-primary/40 transition-all duration-500 ${t.span} ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-6'}`}
-              style={{ transitionDelay: isVisible ? `${i * 70 + 100}ms` : '0ms' }}
-            >
+          {tiles.map((t, i) => {
+            const className = `group relative overflow-hidden rounded-xl border border-border/30 hover:border-primary/40 transition-all duration-500 ${t.span} ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-6'}`;
+            const style = { transitionDelay: isVisible ? `${i * 70 + 100}ms` : '0ms' };
+            const inner = (
+              <>
               <img
                 src={t.img}
                 alt={t.caption}
@@ -147,8 +159,18 @@ export function RidersGallery() {
                   </div>
                 )}
               </div>
-            </a>
-          ))}
+              </>
+            );
+            return isExternal(t.href) ? (
+              <a key={i} href={t.href} target="_blank" rel="noopener noreferrer" className={className} style={style}>
+                {inner}
+              </a>
+            ) : (
+              <Link key={i} to={t.href} className={className} style={style}>
+                {inner}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Category quick-jump strip below gallery */}
