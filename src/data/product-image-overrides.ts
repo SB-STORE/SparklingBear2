@@ -107,8 +107,13 @@ export const PRODUCT_IMAGE_OVERRIDES: Record<string, string> = {
   'viaterra-claw-mini':        '/products/luggage/viaterra-claw-mini.webp',
   'viaterra-claw-tailbag':     '/products/luggage/viaterra-claw-tailbag.webp',
   'viaterra-holeshot-pro':     '/products/riding-gear/viaterra-holeshot-pro.webp',
-  // Still pending (need more sourcing): raida-revlox-rain-jacket,
-  // moto-torque-superior-pro, moto-torque-hostile
+  // Raida Revlox Rain Jacket — htrzmodz.com retailer (Raida brand product page returns 404)
+  'raida-revlox-rain-jacket':  '/products/riding-gear/raida-revlox-rain-jacket.jpg',
+  // Still pending: moto-torque-superior-pro, moto-torque-hostile
+  // Brand site mototorque.in/collections/riding-gloves shows zero products
+  // (collection currently empty); listings appear in search but product
+  // pages 404. Need either a working retailer URL or images supplied
+  // by Sparkling Bear directly.
 
   // NOTE: All bike-protection / fitment overrides previously sourced from
   // Autonity were REMOVED on 2026-05-03 — manual audit found 7 of 9 inspected
