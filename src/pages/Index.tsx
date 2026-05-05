@@ -14,7 +14,6 @@ import { BuyersGuides } from '@/components/storefront/BuyersGuides';
 import { FeaturedCollection } from '@/components/storefront/FeaturedCollection';
 import { VideoSection } from '@/components/storefront/VideoSection';
 import { StatsStrip } from '@/components/storefront/StatsStrip';
-import { RidersGallery } from '@/components/storefront/RidersGallery';
 import { WhyChooseUs } from '@/components/storefront/WhyChooseUs';
 import { TestimonialsSection } from '@/components/storefront/TestimonialsSection';
 import { StoreLocation } from '@/components/storefront/StoreLocation';
@@ -108,9 +107,8 @@ const Index = () => {
       <StatsStrip />
       <VideoSection />
 
-      {/* ── New arrivals + community ── */}
+      {/* ── New arrivals ── */}
       <FeaturedCollection title="NEW ARRIVALS" featured moreLink="/products" />
-      <RidersGallery />
 
       {/* ── Help & guides ── */}
       <BuyersGuides />
